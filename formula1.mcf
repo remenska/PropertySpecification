@@ -1,0 +1,5 @@
+exists d:Pos.val(d<5)=>[true*.ccc(d)]false
+
+%[true*.forall d:Pos.val(d<5)=>ccc(d).true*.forall d:Pos.val(d<5)=>ccc(d+1)]false
+% exists d:Nat.val(d<55)=>[true*.ccc(d).true*.ccc(3)]false
+% forall d:Nat.val(d<55)=>[true*.ccc(d).true*.ccc(d+1)]false

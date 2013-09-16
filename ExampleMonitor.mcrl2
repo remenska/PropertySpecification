@@ -1,0 +1,78 @@
+% comment
+act send,read,c,cc,ccc:Nat;
+act error;
+
+sort Action = struct cc(data:Nat);
+
+% TW: Added 'True' as an ActionFormula, as it is used in the formula
+
+sort ActionFormula = struct action(act1:Action)  |
+  and(phi1:ActionFormula,phi2:ActionFormula) | 
+    or(phi1:ActionFormula,phi2:ActionFormula) | 
+			    not(ActionFormula) |
+			    Forall(ActionFormula) |
+			    Exists(ActionFormula) |
+                            True;
+
+map satisfy: Action # ActionFormula -> Bool;
+var c1,c2,action1:Action;
+  f,g:ActionFormula;
+  data1,data2:Nat;
+eqn
+    satisfy(c1,action(c2)) = c1 == c2 && data(c1) == data(c2); 
+    satisfy(c1,and(f,g)) = satisfy(c1,f) && satisfy(c1,g);
+    satisfy(c1,not(f)) = !satisfy(c1,f);
+    satisfy(c1,or(f,g)) = satisfy(c1,f) || satisfy(c1,g);
+    satisfy(c1,True) = true;
+    satisfy(cc(data1),action(cc(data2))) = data1==data2;
+    satisfy(c1,Forall(action(cc(data1)))) = exists x:Nat.(data1==x && satisfy(c1,action(cc(data1))));
+    satisfy(c1,Exists(action(cc(data1)))) = forall x:Nat.!satisfy(c1,Forall(action(cc(data1))));
+%     
+% proc Proc_alpha =  satisfy(p,not(or(action(p),action(r)))) -> p
+% 		  + satisfy(q,not(or(action(p),action(r)))) -> q
+% 		  + satisfy(r,not(or(action(p),action(r)))) -> r
+% ;    
+% 
+
+% act a,b;
+%[true*.c(3)]false = [c(3)+true^+.c(3)]false
+
+
+% how about this monitor:
+% [true*.c(3).true*.c(5)]false
+% == [(c(3)+true^+.c(3)).(c(5)+true^+.c(5))]false
+% formula1.mcf
+
+% how about this monitor:
+% forall d:Nat.[true*.ccc(d)]false
+proc P(n:Nat) = send(n).(n<5)-> P(n+1);
+proc Q = (sum m:Nat.read(m)).Q;
+
+%OK
+% proc Proc_true = satisfy(cc(3),True) -> cc(3);
+% ??
+proc Proc_true = sum m:Nat.satisfy(cc(m),True) -> cc(m);
+
+%OK
+proc Proc_true_plus = Proc_true.Proc_true_plus + Proc_true;
+
+proc Proc_c3 = sum m:Nat.satisfy(cc(m),Forall(action(cc(m)))) -> cc(m);
+
+%proc Proc_c3 = (forall m:Nat.satisfy(cc(m),action(cc(m)))) -> cc(3);
+
+% proc Proc_c_d(m:Nat) = (satisfy(cc(m),for_all) && m<5)-> cc(m);
+proc Proc_true_plus_c3 = Proc_true_plus. Proc_c3;
+proc Proc_true_plus_c5 = Proc_true_plus. Proc_c5;
+proc Proc_c5 = cc(5);
+
+% OK
+proc Mon =  (Proc_true_plus_c3 + Proc_c3).error;
+
+% NOT OK
+% Mon_c3 = cc(3);
+
+init allow({error,ccc}, comm({c|cc -> ccc}, Mon || allow({c}, comm({send|read -> c}, P(1) || Q)) ) );
+
+% init Mon;
+
+
