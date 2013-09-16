@@ -1,0 +1,16 @@
+% % comment
+% act a,b,c,d;
+% 
+% proc P = a.b;
+% 
+% proc Q = c.d;
+% 
+% init P || Q;
+
+
+act send,read,c:Nat;
+
+proc P(n:Nat) = send(n).(n<5)-> P(n+1);
+proc Q = (sum m:Nat.read(m)).Q;
+
+init allow({c}, comm({send|read -> c}, P(1) || Q))  ;

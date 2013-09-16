@@ -1,0 +1,78 @@
+% comment
+% Existence: P occurs (between Q and R)
+% formula [true*. Q. (not (P or R))*. R] false
+%
+% TW: Actually, the above formula does not exactly meet the pattern I
+% proposed, due to the '*' operator; indeed, the solution you propose
+% works, but does have the drawback that it 'polutes' the counterexample
+% trace in the end. I'll try and think of an alternative (apart from
+% the alternative to rewrite the formula to:
+% [Q.R]false && [Q.(not(P or R))+.R] && [true+.Q.R]false && [true+.Q.(not P or R))+.R]false
+% for that formula, we could generate four monitors and run those in
+% parallel to the system (but that solution is a bit ugly). You can get
+% rid of this extra information in the monitor by generating the state
+% space (provided it is finite) and reduce modulo branching bisimulation
+% or weak trace.
+
+% [true*.Q.(not (P or R))*. R] false 
+% true*.Q = Q+true^+.P
+% not(P or R)*.R = R+(not(P or R)^+.R
+% now: = [(Q+true^+.P).(R+(not(P or R))^+.R)] false
+% to 
+% [(Q.R)+(Q.(not (P or R))^+.R) + (true^+.Q.R) + (true^+.(not (P or R))^+.R)]false
+
+sort Action = struct p | q | r;
+
+% TW: Added 'True' as an ActionFormula, as it is used in the formula
+
+sort ActionFormula = struct action(act1:Action)  |
+  and(phi1:ActionFormula,phi2:ActionFormula) | 
+    or(phi1:ActionFormula,phi2:ActionFormula) | 
+			    not(ActionFormula) |
+                            True;
+
+map satisfy: Action # ActionFormula -> Bool;
+var c1,c2:Action;
+  f,g:ActionFormula;
+
+eqn
+    satisfy(c1,action(c2)) = c1 == c2; 
+    satisfy(c1,and(f,g)) = satisfy(c1,f) && satisfy(c1,g);
+    satisfy(c1,not(f)) = !satisfy(c1,f);
+    satisfy(c1,or(f,g)) = satisfy(c1,f) || satisfy(c1,g);
+    satisfy(c1,True) = true;
+
+act p,q,r,error,internal;
+
+%OK
+proc Proc_true = satisfy(p,True) -> p + 
+		  satisfy(q,True) -> q + 
+		  satisfy(r,True) -> r
+;
+
+%OK
+proc Proc_true_plus = Proc_true.Proc_true_plus + Proc_true;
+
+%OK
+proc Proc_Q = q;
+proc Proc_R = r;
+
+%OK
+proc Proc_alpha =  satisfy(p,not(or(action(p),action(r)))) -> p
+		  + satisfy(q,not(or(action(p),action(r)))) -> q
+		  + satisfy(r,not(or(action(p),action(r)))) -> r
+;
+
+%OK
+proc Proc_alpha_plus = Proc_alpha.Proc_alpha_plus + Proc_alpha;
+
+proc Proc_monitor = 
+	  Proc_Q.Proc_R.error + 
+	  Proc_Q.Proc_alpha_plus.Proc_R.error + 
+	  Proc_true_plus.Proc_Q.Proc_R.error +
+	  Proc_true_plus.Proc_Q.Proc_alpha_plus.Proc_R.error
+	  ;
+
+
+init hide ({internal},
+Proc_monitor);

@@ -1,0 +1,66 @@
+% comment
+act send,read,c,cc,ccc:FiniteDomain;
+act error;
+
+sort Action = struct cc(d:FiniteDomain);
+
+sort FiniteDomain = struct One | Two | Three | Four | Five;
+
+% TW: Added 'True' as an ActionFormula, as it is used in the formula
+
+sort ActionFormula = struct action(act1:Action)  |
+  and(phi1:ActionFormula,phi2:ActionFormula) | 
+    or(phi1:ActionFormula,phi2:ActionFormula) | 
+			    not(ActionFormula) |
+                            True;
+
+map satisfy: Action # ActionFormula -> Bool;
+var c1,c2:Action;
+  f,g:ActionFormula;
+eqn
+    satisfy(c1,action(c2)) = c1 == c2; 
+    satisfy(c1,and(f,g)) = satisfy(c1,f) && satisfy(c1,g);
+    satisfy(c1,not(f)) = !satisfy(c1,f);
+    satisfy(c1,or(f,g)) = satisfy(c1,f) || satisfy(c1,g);
+    satisfy(c1,True) = true;
+
+% act a,b;
+%[true*.c(3)]false = [c(3)+true^+.c(3)]false
+
+
+% how about this monitor:
+% [true*.c(3).true*.c(5)]false
+% == [(c(3)+true^+.c(3)).(c(5)+true^+.c(5))]false
+% formula1.mcf
+
+proc P = (send(One).send(Two).send(Three).send(Four).send(Five));
+proc Q = (sum fd:FiniteDomain.read(fd)).Q;
+
+%OK
+% proc Proc_true = satisfy(cc(3),True) -> cc(3);
+% ??
+proc Proc_true = sum m:FiniteDomain.satisfy(cc(m),True) -> cc(m);
+
+%OK
+proc Proc_true_plus = Proc_true.Proc_true_plus + Proc_true;
+
+proc Proc_c3 = cc(Three);
+
+proc Proc_true_plus_c3 = Proc_true_plus. Proc_c3;
+proc Proc_true_plus_c5 = Proc_true_plus. Proc_c5;
+
+proc Proc_c5 = cc(Five);
+
+% OK
+proc Mon =  (Proc_true_plus_c3 + Proc_c3).(Proc_true_plus_c5 + Proc_c5).error;
+
+% NOT OK
+% Mon_c3 = cc(3);
+
+
+
+init allow({error,ccc}, comm({c|cc -> ccc}, Mon || allow({c}, comm({send|read -> c}, P || Q)) ) );
+
+% init Mon;
+
+
