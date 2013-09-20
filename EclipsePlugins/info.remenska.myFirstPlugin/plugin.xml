@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="Resource Manager Category"
+            id="info.remenska.myFirstPlugin">
+      </category>
+      <view
+            name="ResourceManager View"
+            icon="icons/sample.gif"
+            category="info.remenska.myFirstPlugin"
+            class="info.remenska.myfirstplugin.views.ResourceManagerView"
+            id="info.remenska.myfirstplugin.views.ResourceManagerView">
+      </view>
+      <view
+            category="info.remenska.myFirstPlugin"
+            class="info.remenska.myfirstplugin.views.PropertyManagerView"
+            icon="icons/sample.gif"
+            id="info.remenska.myFirstPlugin.views.PropertyManagerView"
+            name="Property Manager View"
+            restorable="true">
+      </view>
+      <view
+            category="info.remenska.myFirstPlugin"
+            class="org.eclipse.ui.navigator.CommonNavigator"
+            id="info.remenska.myFirstPlugin.view2"
+            name="CommonNavigatorDaniela"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.help.contexts">
+      <contexts
+            file="contexts.xml">
+      </contexts>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="com.ibm.xtools.modeler.internal.ui.perspectives.ClassicModelingPerspective">
+         <view
+               id="info.remenska.myFirstPlugin.views.ResourceManagerView"
+               minimized="false"
+               relationship="stack"
+               relative="org.eclipse.ui.views.TaskList"
+               visible="true">
+         </view>
+      </perspectiveExtension>
+      <perspectiveExtension
+            targetID="org.eclipse.ui.resourcePerspective">
+         <view
+               id="info.remenska.myFirstPlugin.views.ResourceManagerView"
+               minimized="false"
+               relationship="stack"
+               relative="org.eclipse.ui.views.TaskList"
+               visible="true">
+         </view>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            description="This is the resource manager action set"
+            id="info.remenska.myFirstPlugin.workbenchActionSet"
+            label="Resource Manager ActionSet"
+            visible="true">
+         <menu
+               id="info.remenska.myFirstPlugin.workbenchMenu"
+               label="Resource Manager"
+               path="additions">
+            <groupMarker
+                  name="content">
+            </groupMarker>
+            <separator
+                  name="additions">
+            </separator>
+         </menu>
+         <action
+               class="info.remenska.myfirstplugin.actions.OpenResourceManagerViewActionDelegate"
+               icon="icons/sample.gif"
+               id="info.remenska.myFirstPlugin.openResourceManagementView"
+               label="Open &amp;Resource Manager View"
+               menubarPath="info.remenska.myFirstPlugin.workbenchMenu/content"
+               style="push"
+               toolbarPath="Normal/additions"
+               tooltip="Open the resource manager view">
+         </action>
+      </actionSet>
+   </extension>
+   <extension
+         point="org.eclipse.ui.viewActions">
+      <viewContribution
+            id="info.remenska.myFirstPlugin.ResourceManagerViewContribution"
+            targetID="info.remenska.myfirstplugin.views.ResourceManagerView">
+         <action
+               class="info.remenska.myfirstplugin.ResourceManagerViewActionDelgate"
+               icon="icons/sample.gif"
+               id="info.remenska.myFirstPlugin.ResourceManagerViewAction"
+               label="Click Me!"
+               style="push"
+               toolbarPath="additions">
+         </action>
+      </viewContribution>
+      <viewContribution
+            id="info.remenska.myFirstPlugin.DanielaContribution"
+            targetID="org.eclipse.ui.navigator.ProjectExplorer">
+         <action
+               class="info.remenska.myfirstplugin.ResourceManagerViewActionDelgate"
+               icon="icons/sample.gif"
+               id="info.remenska.myFirstPlugin.action1"
+               label="Daniela&apos;s Extension"
+               menubarPath="additions"
+               style="push"
+               toolbarPath="additions">
+         </action>
+      </viewContribution>
+   </extension>
+
+</plugin>
