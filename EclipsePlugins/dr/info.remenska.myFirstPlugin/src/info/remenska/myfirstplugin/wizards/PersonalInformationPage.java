@@ -37,7 +37,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 //import org.eclipse.emf.search.ecore.common.ui.dialogs.ModelSearchFilteredEClassifierSelectionDialog;
@@ -66,57 +68,50 @@ public class PersonalInformationPage extends WizardPage {
 		secondNameText = new Text(composite, SWT.NONE);
 		final Button button = new Button(composite, SWT.PUSH);
 		button.setText("Click me");
-		button.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) {
-				button.setText("You clicked me!");
-				// org.eclipse.ui.navigator.CommonNavigator comm = new
-				// org.eclipse.ui.navigator.CommonNavigator();
-				// comm.setFocus();
-				// ModelSearchFilteredUMLClassSelectionDialog dialog = new
-//				// ModelSearchFilteredUMLClassSelectionDialog(Display.getDefault().getActiveShell(),false);
+		final Text selectedOperation = new Text(composite, SWT.NONE);
+		selectedOperation.setEditable(false);
+		Listener operationListener = new Listener() {
+			@Override
+			public void handleEvent(Event event) {
 //				EclassName:Class : B
 //				EclassName:Class : C
 //				EclassName:Operation : getAnotherValue
 				
 				Collection<Model> models = UMLModeler.getOpenedModels();
-				ResourceSet resourceSet = UMLModeler.getEditingDomain().getResourceSet();
-
-				List selectedElements = UMLModeler.getUMLUIHelper().getSelectedElements();
-				for (Iterator iter = selectedElements.iterator(); iter.hasNext();) {
-					
-					EObject eObject = (EObject) iter.next();
-					String eClassName = eObject.eClass().getName();
-					System.out.print("EclassName:"+eClassName + " : ");
-
-					if (eObject instanceof Diagram) {
-						System.out.println(((Diagram) eObject).getName());
-
-					} else if (eObject instanceof View) {
-						View view = (View) eObject;
-						String viewType = view.getType();
-						if (viewType.trim().length() > 0) {
-							System.out.print("(" + view.getType() + ")");
-						}
-
-						EObject element = view.getElement();
-						if (null != element) {
-							System.out.print(" of " + element);
-						}
-						System.out.println();
-
-					} else if (eObject instanceof Element) {
-						if (eObject instanceof NamedElement) {
-							System.out.println(((NamedElement) eObject).getName());
-						} else {
-							System.out.println(eObject);
-						}
-					}
-				}
-				
-//				UMLSelectExistingElementDialog dialog = new UMLSelectExistingElementDialog(
-//						new ArrayList(models));
-				ArrayList aman = new ArrayList();
-//				aman.add(org.eclipse.uml2.uml.Operation.getType());
+//				ResourceSet resourceSet = UMLModeler.getEditingDomain().getResourceSet();
+//
+//				List selectedElements = UMLModeler.getUMLUIHelper().getSelectedElements();
+//				for (Iterator iter = selectedElements.iterator(); iter.hasNext();) {
+//					
+//					EObject eObject = (EObject) iter.next();
+//					String eClassName = eObject.eClass().getName();
+//					System.out.print("EclassName:"+eClassName + " : ");
+//
+//					if (eObject instanceof Diagram) {
+//						System.out.println(((Diagram) eObject).getName());
+//
+//					} else if (eObject instanceof View) {
+//						View view = (View) eObject;
+//						String viewType = view.getType();
+//						if (viewType.trim().length() > 0) {
+//							System.out.print("(" + view.getType() + ")");
+//						}
+//
+//						EObject element = view.getElement();
+//						if (null != element) {
+//							System.out.print(" of " + element);
+//						}
+//						System.out.println();
+//
+//					} else if (eObject instanceof Element) {
+//						if (eObject instanceof NamedElement) {
+//							System.out.println(((NamedElement) eObject).getName());
+//						} else {
+//							System.out.println(eObject);
+//						}
+//					}
+//				}
+				 System.out.println("OpenModelRoots:"+UMLModeler.getOpenModelRoots());
 				 UMLSelectExistingElementDialog dialog = new
 				 UMLSelectExistingElementDialog(Collections.singletonList(UMLElementTypes.OPERATION));
 //				 List<?> elements = dialog.getSelectedElements();
@@ -131,20 +126,99 @@ public class PersonalInformationPage extends WizardPage {
 				// dialog.refresh();
 				 dialog.setBlockOnOpen(true);
 				 dialog.create();
-//				int returnCode = dialog.open();
-				// dialog.getResult();
-//				System.out.println(returnCode);
+
 				if(dialog.open()==Window.OK){
-					List<Operation> selected  = (List<Operation>) dialog.getSelectedElements();
+					List<Operation> selected = (List<Operation>) dialog.getSelectedElements();
 					System.out.println(selected.get(0).getName()+" : "+selected.get(0).getQualifiedName());
 					
 					System.out.println(selected.get(0).getOwner().eClass().getName());
+					selectedOperation.setText(selected.get(0).getName());
+					dialog.close();
 				}
-//				new Label(composite, SWT.NONE).setText();
+
+//				EclassName:Package : DefaultPackage
+//				justTestin : DefaultPackage::ClassE::justTestin
+//				Class
+			}
+
+		};
+		selectedOperation.addListener(SWT.MouseDoubleClick,operationListener);
+		selectedOperation.addListener(SWT.KeyDown,operationListener);
+
+
+		button.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
+//				EclassName:Class : B
+//				EclassName:Class : C
+//				EclassName:Operation : getAnotherValue
+				
+				Collection<Model> models = UMLModeler.getOpenedModels();
+//				ResourceSet resourceSet = UMLModeler.getEditingDomain().getResourceSet();
+//
+//				List selectedElements = UMLModeler.getUMLUIHelper().getSelectedElements();
+//				for (Iterator iter = selectedElements.iterator(); iter.hasNext();) {
+//					
+//					EObject eObject = (EObject) iter.next();
+//					String eClassName = eObject.eClass().getName();
+//					System.out.print("EclassName:"+eClassName + " : ");
+//
+//					if (eObject instanceof Diagram) {
+//						System.out.println(((Diagram) eObject).getName());
+//
+//					} else if (eObject instanceof View) {
+//						View view = (View) eObject;
+//						String viewType = view.getType();
+//						if (viewType.trim().length() > 0) {
+//							System.out.print("(" + view.getType() + ")");
+//						}
+//
+//						EObject element = view.getElement();
+//						if (null != element) {
+//							System.out.print(" of " + element);
+//						}
+//						System.out.println();
+//
+//					} else if (eObject instanceof Element) {
+//						if (eObject instanceof NamedElement) {
+//							System.out.println(((NamedElement) eObject).getName());
+//						} else {
+//							System.out.println(eObject);
+//						}
+//					}
+//				}
+				 System.out.println("OpenModelRoots:"+UMLModeler.getOpenModelRoots());
+				 UMLSelectExistingElementDialog dialog = new
+				 UMLSelectExistingElementDialog(Collections.singletonList(UMLElementTypes.OPERATION));
+//				 List<?> elements = dialog.getSelectedElements();
+//				 System.out.println("Selected stuff: " + elements.toString());
+				//
+				// ModelSearchFilteredUMLClassSelectionDialog dialog = new
+				// ModelSearchFilteredUMLClassSelectionDialog(Display.getDefault().getActiveShell(),
+				// true);
+				// dialog.setTitle("Select Existing Operation YAH!");
+				// dialog.setMessage("Enter operation name prefix or pattern (* or ?):");
+				// dialog.setInitialPattern("?");
+				// dialog.refresh();
+				 dialog.setBlockOnOpen(true);
+				 dialog.create();
+
+				if(dialog.open()==Window.OK){
+					List<Operation> selected = (List<Operation>) dialog.getSelectedElements();
+					System.out.println(selected.get(0).getName()+" : "+selected.get(0).getQualifiedName());
+					
+					System.out.println(selected.get(0).getOwner().eClass().getName());
+					selectedOperation.setText(selected.get(0).getName());
+					dialog.close();
+				}
+
+//				EclassName:Package : DefaultPackage
+//				justTestin : DefaultPackage::ClassE::justTestin
+//				Class
 			}
 
 		});
-
+		
+		
 	}
 
 }
