@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -60,10 +59,10 @@ public class DanielaSelectionDialog extends FilteredItemsSelectionDialog {
 
 					List selectedElements = UMLModeler.getUMLUIHelper().getSelectedElements();
 					Collection<Model> models = UMLModeler.getOpenedModels();
-					
 					for (Iterator iter = models.iterator(); iter.hasNext();) {
 						Model model = (Model) iter.next();
-						System.out.println("MODEL"+model.getName());
+						
+						System.out.println("MODEL: "+model.getQualifiedName());
 						for (Iterator iter1 = model.getOwnedElements().iterator(); iter1.hasNext();) {
 							EObject eObject = (EObject) iter1.next();
 							String eClassName = eObject.eClass().getName();
