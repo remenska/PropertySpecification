@@ -32,7 +32,7 @@ public class AddressInformationPage extends WizardPage {
 		super(pageName);
 		setTitle("Address Information");
 		setDescription("Please enter your address information");
-		
+		setPageComplete(false);
 	}
 	@Override
 	public void createControl(Composite parent) {
@@ -58,9 +58,11 @@ public class AddressInformationPage extends WizardPage {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		ExpandBar expandBar = new ExpandBar(container, SWT.NONE);
 		final ExpandItem expandItem1 = new ExpandItem(expandBar, SWT.NONE);
-		expandItem1.setText("item 1");
-		new ExpandItem(expandBar, SWT.NONE).setText("item 2"); /* expandItem2 */
-
+		expandItem1.setText("Scope Timeline View");
+		new ExpandItem(expandBar, SWT.NONE).setText("Scope Question Tree View"); /* expandItem2 */
+		final ExpandItem expandItem2 = new ExpandItem(expandBar, SWT.NONE);
+		expandItem2.setText("Behavior Question Tree View");
+		
 		final StyledText text = new StyledText(expandBar, SWT.MULTI | SWT.WRAP);
 		expandItem1.setControl(text);
 		text.setText("initial text that will wrap if it's long enough");
@@ -95,7 +97,7 @@ public class AddressInformationPage extends WizardPage {
 		});
 		
 		Point size = text.computeSize(expandBar.getClientArea().width, SWT.DEFAULT);
-		expandItem1.setHeight(size.y);
+		expandItem1.setHeight(400);
 		expandItem1.setExpanded(true);
 
 	}

@@ -14,7 +14,7 @@ public class CaptureEmployeeInformationWizard extends Wizard {
 		addressInfoPage = new AddressInformationPage("Address Information");
 		addPage(addressInfoPage);
 		this.getShell().setFocus();
-
+		
 	}
 	@Override
 	public boolean performFinish() {
