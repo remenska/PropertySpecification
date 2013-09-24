@@ -8,7 +8,8 @@ public class TreeNode<T> implements Iterable<TreeNode<T>> {
 	public T data;
 	public TreeNode<T> parent;
 	public List<TreeNode<T>> children;
-
+	public boolean isQuestion;
+	
 	public boolean isRoot() {
 		return parent == null;
 	}
@@ -19,15 +20,16 @@ public class TreeNode<T> implements Iterable<TreeNode<T>> {
 
 	private List<TreeNode<T>> elementsIndex;
 
-	public TreeNode(T data) {
+	public TreeNode(T data, boolean isQuestion) {
 		this.data = data;
 		this.children = new LinkedList<TreeNode<T>>();
 		this.elementsIndex = new LinkedList<TreeNode<T>>();
 		this.elementsIndex.add(this);
+		this.isQuestion = isQuestion;
 	}
 
-	public TreeNode<T> addChild(T child) {
-		TreeNode<T> childNode = new TreeNode<T>(child);
+	public TreeNode<T> addChild(T child, boolean isQuestion) {
+		TreeNode<T> childNode = new TreeNode<T>(child, isQuestion);
 		childNode.parent = this;
 		this.children.add(childNode);
 		this.registerChildForSearch(childNode);
