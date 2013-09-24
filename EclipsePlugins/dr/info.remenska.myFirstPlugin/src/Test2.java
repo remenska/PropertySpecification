@@ -21,6 +21,7 @@ public class Test2 {
 	private static int DEPTH_TREE = 6;
 	private static int[] heightItem = new int[DEPTH_TREE];
 	public static TreeNode<String> questionnaire = new TreeNode<String>("Is the behavior only required to hold within the restricted interval(s) in the event sequence?", true);
+	public static int aman = 0;
 
 
 	private static String createIndent(int depth) {
@@ -49,7 +50,8 @@ public class Test2 {
 			String ident = createIndent(node.getLevel());
 			String hmmm = node.isQuestion?"Q: ":"A: ";
 			
-			System.out.println(ident+hmmm+node.data);
+			System.out.println(ident+hmmm+node.data + " "+aman); // <-- so it's depth first
+			aman++;
 		}
 	}
 	
