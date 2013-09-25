@@ -64,21 +64,32 @@ public class Test {
 				// ExpandBar contains: ExpandItem and Composite(contains:
 				// Buttons))
 				boolean isSelected = ((Button) e.getSource()).getSelection();
+				System.out.println("-----------");
+				System.out.println("Selected: "+  e.getSource());
 				if (isSelected) {
 					Control[] children = ((Button) e.getSource()).getParent()
 							.getChildren();
+					System.out.println("Parent: " +  ((Control) e.getSource()).getParent());
+					System.out.println("Parent's children: ");
 					for (Control child : children) {
 						child.setVisible(true);
-						System.out.println(child + "  ");
+						System.out.println("\t \t child: "+ child + "  ");
 						if (child instanceof ExpandBar) {
-							ExpandItem[] theirExpandItems = ((ExpandBar) child)
-									.getItems();
+							ExpandItem[] theirExpandItems = ((ExpandBar) child).getItems();
+							Control[] restOfChildren = ((ExpandBar) child).getChildren();
 							for (ExpandItem theirChild : theirExpandItems) {
-								System.out.print("Their children: "
+								System.out.println("\t \t \t Their children ExpandItems: "
 										+ theirChild);
 								theirChild.setExpanded(false);
 							}
+							
+							for (Control theirChild : restOfChildren) {
+								System.out.println("\t \t \t Their children (rest): "
+										+ theirChild);
+//								theirChild.setExpanded(false);
+							}
 						}
+
 
 					}
 					System.out.println("\n\n");
@@ -87,53 +98,89 @@ public class Test {
 			}
 
 		};
+		
+//		
 		final ExpandBar expandBar1 = new ExpandBar(shell, SWT.NONE);
 
 		final Composite composite1 = new Composite(expandBar1, SWT.NONE);
 		GridLayout layout1 = new GridLayout(1, true);
 		composite1.setLayout(layout1);
 		composite1.setVisible(true);
-		Button label1 = new Button(composite1, SWT.RADIO);
-		label1.setText("Yes, the behavior is only required to hold within restricted interval(s) in the event sequence");
-		Button label2 = new Button(composite1, SWT.RADIO);
-		label2.setText("No, the behavior is required to hold throughout the entire event sequence");
-
 		final ExpandItem expandItem1 = new ExpandItem(expandBar1, SWT.NONE, 0);
 		expandItem1
 				.setText("Is the behavior only required to hold within the restricted interval(s) in the event sequence?   ");
 		expandItem1
 				.setHeight(composite1.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
-		expandItem1.setControl(composite1);
+		expandItem1.setControl(composite1); //		Sets the control that is shown when the item is expanded.
 
-		/**
-		 * ExpandBar secondaire
-		 */
+		
+		Button label1 = new Button(composite1, SWT.RADIO);
+		label1.setText("Yes, the behavior is only required to hold within restricted interval(s) in the event sequence");
+		Button label2 = new Button(composite1, SWT.RADIO);
+		label2.setText("No, the behavior is required to hold throughout the entire event sequence");
+
+		label1.addSelectionListener(selectionListener);
+		label2.addSelectionListener(selectionListener);
+		
+//
 		final ExpandBar expandBar2 = new ExpandBar(composite1, SWT.NONE);
 		expandBar2.setLayoutData(new GridData(GridData.FILL, GridData.FILL,
 				true, true, 2, 1));
-
-		final Composite composite2 = new Composite(expandBar2, SWT.NONE);
-		composite2.setLayout(new GridLayout(2, true));
 		expandBar2.setVisible(false);
 
-		Button labelSec = new Button(composite2, SWT.RADIO);
-		labelSec.setText("SWT.ICON_INFORMATION");
-		labelSec.addSelectionListener(selectionListener);
-		labelSec = new Button(composite2, SWT.RADIO);
-		labelSec.setText("SWT.ICON_INFORMATION_1");
-		labelSec.addSelectionListener(selectionListener);
+//		final Composite composite2 = new Composite(expandBar2, SWT.NONE);
+//		composite2.setLayout(new GridLayout(1, true));
+		//
 
-		final ExpandItem expandItem2 = new ExpandItem(expandBar2, SWT.NONE, 0);
-		expandItem2
-				.setText("How many events of primary interest are there in this behavior?    ");
-		expandItem2.setControl(composite2);
-		expandItem2.setExpanded(false);
-		final ExpandBar expandBar3 = new ExpandBar(composite2, SWT.NONE);
+		Composite composite21 = new Composite(expandBar2, SWT.NONE);
+		composite21.setLayout(new GridLayout(1, true));
+		//
+		
+		
+		
+		final ExpandItem expandItem21 = new ExpandItem(expandBar2, SWT.NONE, 0);
+		expandItem21.setText("Which of the following choices best describes the restricted interval(s)?   ");
+		expandItem21.setControl(composite21); //	Sets the control that is shown when the item is expanded.
+
+		expandItem21.setExpanded(false);
+		
+		Button labelSec = new Button(composite21, SWT.RADIO);
+		labelSec.setText("There can be at most one restricted interval ");
+		labelSec.addSelectionListener(selectionListener);
+		labelSec = new Button(composite21, SWT.RADIO);
+		labelSec.setText("Can have both blabla ");
+		labelSec.addSelectionListener(selectionListener);
+		//
+	
+		Composite composite22 = new Composite(expandBar2, SWT.NONE);
+		composite22.setLayout(new GridLayout(1, false));
+		
+		final ExpandItem expandItem22 = new ExpandItem(expandBar2, SWT.NONE, 0);
+		expandItem22.setText("WOO Which of the following choices best describes the restricted interval(s)?   ");
+		expandItem22.setControl(composite22); //	Sets the control that is shown when the item is expanded.
+
+		expandItem22.setExpanded(false);
+		
+
+		Button labelSec1 = new Button(composite22, SWT.RADIO);
+		labelSec1.setText("WOO There can be at most one restricted interval ");
+		labelSec1.addSelectionListener(selectionListener);
+		labelSec1 = new Button(composite22, SWT.RADIO);
+		labelSec1.setText("WOO Can have both blabla ");
+		labelSec1.addSelectionListener(selectionListener);
+		
+//		
+		final ExpandBar expandBar3 = new ExpandBar(composite22, SWT.NONE);
 		expandBar3.setLayoutData(new GridData(GridData.FILL, GridData.FILL,
 				true, true, 2, 1));
 		final Composite composite3 = new Composite(expandBar3, SWT.NONE);
 		composite3.setLayout(new GridLayout(2, true));
 		expandBar3.setVisible(false);
+		final ExpandItem expandItem3 = new ExpandItem(expandBar3, SWT.NONE, 0);
+		expandItem3.setText("Yet another expand item");
+		expandItem3.setControl(composite3); //	Sets the control that is shown when the item is expanded.
+		expandItem3.setExpanded(false);
+		
 		Button labelThird = new Button(composite3, SWT.RADIO);
 		labelThird.addSelectionListener(selectionListener);
 
@@ -142,27 +189,28 @@ public class Test {
 		labelThird.setText("Third level yaah  ");
 		labelThird.addSelectionListener(selectionListener);
 
-		final ExpandItem expandItem3 = new ExpandItem(expandBar3, SWT.NONE, 0);
-		expandItem3.setText("Yet another expand item");
-		expandItem3.setControl(composite3);
-		expandItem3.setExpanded(false);
 
+
+		//
 		int heightItem3 = composite3.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
-		int heightItem2 = composite2.computeSize(SWT.DEFAULT, SWT.DEFAULT).y
-				+ heightItem3;
+		int heightItem21 = composite21.computeSize(SWT.DEFAULT, SWT.DEFAULT).y
+				;
+		int heightItem22 = composite22.computeSize(SWT.DEFAULT, SWT.DEFAULT).y
+				+ heightItem3 + heightItem21;
 		int heightItem1 = composite1.computeSize(SWT.DEFAULT, SWT.DEFAULT).y
-				+ heightItem2;
-		System.out.println(heightItem1 + "  " + heightItem2 + "  "
-				+ heightItem3);
+				+ heightItem21 + heightItem22;
+		
+//		System.out.println(heightItem1 + "  " + heightItem2 + "  "
+//				+ heightItem3);
 		expandItem1.setHeight(heightItem1);
 
-		expandItem2.setHeight(heightItem2);
+		expandItem21.setHeight(heightItem21);
+		expandItem22.setHeight(heightItem22);
+
 		expandItem3.setHeight(heightItem3);
 
 		// Fin d'implémentation du test
 
-		label1.addSelectionListener(selectionListener);
-		label2.addSelectionListener(selectionListener);
 
 		shell.open();
 		while (!shell.isDisposed()) {
