@@ -30,15 +30,18 @@ public class Test {
         return sb.toString();
 }
 	public static void createQuestionnaire(){
-	TreeNode<String> quest1 = questionnaire.addChild("Is the behavior only required to hold within the restricted interval(s) in the event sequence?", true);
-		TreeNode<String> answ11 = quest1.addChild("Yes, the behavior is only required to hold within restricted interval(s) in the event sequence. ", false);
-			TreeNode<String> quest111 = answ11.addChild("Which of the following choices best describes the restricted interval(s)?", true);
-				TreeNode<String> answ1111 = quest111.addChild("There can be at most one restricted interval ", false);
-				TreeNode<String> answ1112 = quest111.addChild("Can have both blabla ", false);
-		TreeNode<String> answ12 = quest1.addChild("No, the behavior is required to hold throughout the entire event sequence", false);
-			TreeNode<String> quest121 = answ11.addChild("Really are you sure? ", true);
-				TreeNode<String> answ1211 = quest121.addChild("Blaaah yah1", false);
-				TreeNode<String> answ1212 = quest121.addChild("Blaaah yah2", false);
+		TreeNode<String> answ11 = questionnaire.addChild("Yes, the behavior is only required to hold within restricted interval(s) in the event sequence. ", false);
+		TreeNode<String> quest111 = answ11.addChild("Which of the following choices best describes the restricted interval(s)?", true);
+			TreeNode<String> answ1111 = quest111.addChild("There can be at most one restricted interval ", false);
+			TreeNode<String> answ1112 = quest111.addChild("Can have both blabla ", false);
+			TreeNode<String> answ1113 = quest111.addChild("Anything can happen hello ", false);
+	TreeNode<String> answ12 = questionnaire.addChild("No, the behavior is required to hold throughout the entire event sequence", false);
+		TreeNode<String> quest121 = answ11.addChild("Really are you sure? ", true);
+			TreeNode<String> answ1211 = quest121.addChild("Blaaah yah1", false);
+			TreeNode<String> answ1212 = quest121.addChild("Blaaah yah2", false);
+	   TreeNode<String> quest122 = answ11.addChild("Really are you sure sure? ", true);
+			TreeNode<String> answ1221 = quest122.addChild("Blaaah blaah yah1", false);
+			TreeNode<String> answ1222 = quest122.addChild("Blaaah blaah yah2", false);	
 				
 				
 				
@@ -137,7 +140,7 @@ public class Test {
 		//
 		
 		
-		
+		//multiple questions from a single answer/button_1
 		final ExpandItem expandItem21 = new ExpandItem(expandBar2, SWT.NONE, 0);
 		expandItem21.setText("Which of the following choices best describes the restricted interval(s)?   ");
 		expandItem21.setControl(composite21); //	Sets the control that is shown when the item is expanded.
@@ -151,7 +154,9 @@ public class Test {
 		labelSec.setText("Can have both blabla ");
 		labelSec.addSelectionListener(selectionListener);
 		//
-	
+		
+		//multiple questions from a single answer/button_2
+
 		Composite composite22 = new Composite(expandBar2, SWT.NONE);
 		composite22.setLayout(new GridLayout(1, false));
 		
