@@ -50,7 +50,7 @@ public class Test2 {
 				TreeNode<String> answ1221 = quest122.addChild("Blaaah blaah yah1", false);
 				TreeNode<String> answ1222 = quest122.addChild("Blaaah blaah yah2", false);		
 				aman = 1;
-				
+		
 			    // traverse?
 
 				traverseBFS(questionnaire);
@@ -84,7 +84,8 @@ public class Test2 {
 				// Buttons))
 				boolean isSelected = ((Button) e.getSource()).getSelection();
 				System.out.println("-----------");
-				System.out.println("Selected: "+  e.getSource());
+				System.out.println("Selected: "+  ((Button) e.getSource()).getText());
+				System.out.println("Trying to find a TreeNode, it's children are..: "+ questionnaire.findTreeNode(((Button) e.getSource()).getText()).children);
 				if (isSelected) {
 					Control[] children = ((Button) e.getSource()).getParent()
 							.getChildren();
@@ -127,21 +128,28 @@ public class Test2 {
 		//beginning manual cycle:
 		ExpandBar expandBar1= new ExpandBar(shell, SWT.NONE);;
 		
+		// keep a list of Composites and ExpandItems so we can re-calculate the height
+		LinkedList<Composite> composites = new LinkedList<Composite>();
+		LinkedList<ExpandItem> expandItems = new LinkedList<ExpandItem>();
+		
 		// here dequeue, we know first one is a question(s)
 		LinkedList<TreeNode> nodes =  queue.remove();
 		// we need to dequeue all questions and put them in the same ExpandBar, different expandItems and Composite
 		Composite composite1 = null; 
+		ExpandItem expandItem1 = null;
 		for(TreeNode node:nodes){
-			composite1 = new Composite(expandBar1, SWT.NONE);;
+			composite1 = new Composite(expandBar1, SWT.NONE);
+			composites.add(composite1);
+
 			GridLayout layout1 = new GridLayout(1, true);
 			composite1.setLayout(layout1);
 			composite1.setVisible(true);
 			
-			ExpandItem expandItem1 = new ExpandItem(expandBar1, SWT.NONE, 0);
+			expandItem1 = new ExpandItem(expandBar1, SWT.NONE, 0);
 			expandItem1.setText((String) node.data);
 			expandItem1.setHeight(composite1.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 			expandItem1.setControl(composite1); //		Sets the control that is shown when the item is expanded.
-
+			expandItems.add(expandItem1);
 			// these kids are ANSWERS
 			List<TreeNode<String>> deca = node.children;
 //			System.out.println("KIDS: " + deca);
@@ -151,13 +159,11 @@ public class Test2 {
 				label1.addSelectionListener(selectionListener);
 				if(!dete.children.isEmpty())
 				queue.add((LinkedList<TreeNode>) dete.children); // there should be separate lists of questions for each answer, not just a single queue 
-											// with all the "next" questions. Because one Answer (dete) may need to show multiple questions
 											// so a queue-of-lists?  and in every dequeue, all questions from a list are in the same ExpandBar
 			}
 			
-			int heightItem1 = composite1.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
-			expandItem1.setHeight(heightItem1);
-					
+//			int heightItem1 = composite1.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
+//			expandItem1.setHeight(heightItem1);
 			System.out.println("QUEUE: " + queue);
 		}
 		
@@ -172,11 +178,13 @@ public class Test2 {
 			
 			for(TreeNode node:nodes){
 				composite1 = new Composite(expandBar1, SWT.NONE);;
+				composites.add(composite1);
 				GridLayout layout1 = new GridLayout(1, true);
 				composite1.setLayout(layout1);
 				composite1.setVisible(true);
 				
-				ExpandItem expandItem1 = new ExpandItem(expandBar1, SWT.NONE, 0);
+				 expandItem1 = new ExpandItem(expandBar1, SWT.NONE, 0);
+				expandItems.add(expandItem1);
 				expandItem1.setText((String) node.data);
 				expandItem1.setHeight(composite1.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 				expandItem1.setControl(composite1); //		Sets the control that is shown when the item is expanded.
@@ -194,46 +202,38 @@ public class Test2 {
 												// so a queue-of-lists?  and in every dequeue, all questions from a list are in the same ExpandBar
 				}
 				
-				int heightItem1 = composite1.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
-				expandItem1.setHeight(heightItem1);
+//				int heightItem1 = composite1.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
+//				expandItem1.setHeight(heightItem1);
 						
 				System.out.println("QUEUE: " + queue);
 			}
-//			TreeNode node = (TreeNode) queue.remove();
-//
-//			ExpandItem expandItem1;
-//			Button label1;
-//			if (node.isQuestion){
-//			
-////				if(queue.isEmpty()){
-//				
-//					expandBar1 = new ExpandBar(shell, SWT.NONE); // <-- NOOOO
-//					expandBar1.setLayoutData(new GridData(GridData.FILL, GridData.FILL,true, true, 2, 1));
-//					composite1 = new Composite(expandBar1, SWT.NONE);
-//
-////				}
-//				GridLayout layout1 = new GridLayout(1, true);
-//				composite1.setLayout(layout1);
-//
-//				expandItem1 = new ExpandItem(expandBar1, SWT.NONE, 0);
-//				expandItem1.setText((String) node.data);
-//				expandItem1.setHeight(100);
-//				expandItem1.setControl(composite1);
-//
-//				// these kids are ANSWERS
-//				List<TreeNode<String>> deca = node.children;
-//				for(TreeNode dete:deca){
-//					label1 = new Button(composite1, SWT.RADIO);
-//					label1.setText((String) dete.data);
-//					label1.addSelectionListener(selectionListener);
-//					queue.addAll(dete.children);
-//				}
-//			} 
-//
+
 		}
 		
-
-
+//
+//		int heightItem3 = composite3.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
+//		int heightItem21 = composite21.computeSize(SWT.DEFAULT, SWT.DEFAULT).y
+//				;
+//		int heightItem22 = composite22.computeSize(SWT.DEFAULT, SWT.DEFAULT).y
+//				+ heightItem3 + heightItem21;
+//		int heightItem1 = composite1.computeSize(SWT.DEFAULT, SWT.DEFAULT).y
+//				+ heightItem21 + heightItem22;
+//		
+////		System.out.println(heightItem1 + "  " + heightItem2 + "  "
+////				+ heightItem3);
+//
+//		expandItem21.setHeight(heightItem21);
+//		expandItem22.setHeight(heightItem22);
+//
+//		expandItem3.setHeight(heightItem3);
+		
+//		int height = composites.removeLast().computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
+//		expandItems.removeLast().setHeight(height);
+//		while(!composites.isEmpty()){
+//			height = height + composites.removeLast().computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
+//			expandItems.removeLast().setHeight(height);
+//		}
+		
 		shell.open();
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch())
@@ -242,14 +242,6 @@ public class Test2 {
 		display.dispose();
 	}
 
-	// heightItem_n = composite_n + heightItem_n+1
-	public static int computeHeightItem(int n) {
 
-		if (n == 0) {
-			return 183;
-		} else {
-			return n + computeHeightItem(n - 1);
-		}
-	}
 
 }

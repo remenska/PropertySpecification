@@ -1,3 +1,5 @@
+import java.util.LinkedList;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -207,12 +209,14 @@ public class Test {
 		
 //		System.out.println(heightItem1 + "  " + heightItem2 + "  "
 //				+ heightItem3);
-		expandItem1.setHeight(heightItem1);
+		expandItem1.setHeight(composite1.computeSize(SWT.DEFAULT, SWT.DEFAULT).y
+				+ heightItem21 + heightItem22);
 
-		expandItem21.setHeight(heightItem21);
-		expandItem22.setHeight(heightItem22);
+		expandItem21.setHeight(composite21.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+		expandItem22.setHeight(composite22.computeSize(SWT.DEFAULT, SWT.DEFAULT).y
+				+ heightItem3 + heightItem21);
 
-		expandItem3.setHeight(heightItem3);
+		expandItem3.setHeight(composite3.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 
 		// Fin d'implémentation du test
 
