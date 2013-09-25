@@ -1,9 +1,9 @@
 import java.util.ArrayDeque;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 import java.util.Queue;
-//import org.eclipse.core.internal.utils.Queue;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -52,14 +52,7 @@ public class Test2 {
 				aman = 1;
 				
 			    // traverse?
-//		TreeNode<String > treeRoot = questionnaire;
-//		for(TreeNode<String> node: treeRoot) {
-//			String ident = createIndent(node.getLevel());
-//			String hmmm = node.isQuestion?"Q: ":"A: ";
-//			
-////			System.out.println(ident+hmmm+node.data + " "+aman); // <-- so it's depth first
-//			aman++;
-//		}
+
 				traverseBFS(questionnaire);
 	}
 	
@@ -90,21 +83,32 @@ public class Test2 {
 				// ExpandBar contains: ExpandItem and Composite(contains:
 				// Buttons))
 				boolean isSelected = ((Button) e.getSource()).getSelection();
+				System.out.println("-----------");
+				System.out.println("Selected: "+  e.getSource());
 				if (isSelected) {
 					Control[] children = ((Button) e.getSource()).getParent()
 							.getChildren();
+					System.out.println("Parent: " +  ((Control) e.getSource()).getParent());
+					System.out.println("Parent's children: ");
 					for (Control child : children) {
 						child.setVisible(true);
-						System.out.println(child + "  ");
+						System.out.println("\t \t child: "+ child + "  ");
 						if (child instanceof ExpandBar) {
-							ExpandItem[] theirExpandItems = ((ExpandBar) child)
-									.getItems();
+							ExpandItem[] theirExpandItems = ((ExpandBar) child).getItems();
+							Control[] restOfChildren = ((ExpandBar) child).getChildren();
 							for (ExpandItem theirChild : theirExpandItems) {
-								System.out.print("Their children: "
+								System.out.println("\t \t \t Their children ExpandItems: "
 										+ theirChild);
 								theirChild.setExpanded(false);
 							}
+							
+							for (Control theirChild : restOfChildren) {
+								System.out.println("\t \t \t Their children (rest): "
+										+ theirChild);
+//								theirChild.setExpanded(false);
+							}
 						}
+
 
 					}
 					System.out.println("\n\n");
@@ -114,40 +118,118 @@ public class Test2 {
 
 		};
 
-		LinkedList<TreeNode> queue = new LinkedList<TreeNode>();
-		queue.add(questionnaire);
-		while(!queue.isEmpty()){
-			TreeNode node = (TreeNode) queue.remove();
+		LinkedList<LinkedList<TreeNode>> queue = new LinkedList<LinkedList<TreeNode>>();
+		LinkedList<TreeNode> grrrrr = new LinkedList<TreeNode>();
+		grrrrr.add(questionnaire);
+		queue.add(grrrrr);
+		System.out.println("QUEUE: " + queue);
 
-			ExpandBar expandBar1= new ExpandBar(shell, SWT.NONE);;
-			Composite composite1 = new Composite(expandBar1, SWT.NONE);;
-			ExpandItem expandItem1;
-			Button label1;
-			if (node.isQuestion){
+		//beginning manual cycle:
+		ExpandBar expandBar1= new ExpandBar(shell, SWT.NONE);;
+		
+		// here dequeue, we know first one is a question(s)
+		LinkedList<TreeNode> nodes =  queue.remove();
+		// we need to dequeue all questions and put them in the same ExpandBar, different expandItems and Composite
+		Composite composite1 = null; 
+		for(TreeNode node:nodes){
+			composite1 = new Composite(expandBar1, SWT.NONE);;
+			GridLayout layout1 = new GridLayout(1, true);
+			composite1.setLayout(layout1);
+			composite1.setVisible(true);
 			
-//				if(queue.isEmpty()){
-					expandBar1 = new ExpandBar(shell, SWT.NONE);
-					expandBar1.setLayoutData(new GridData(GridData.FILL, GridData.FILL,true, true, 2, 1));
-					composite1 = new Composite(expandBar1, SWT.NONE);
+			ExpandItem expandItem1 = new ExpandItem(expandBar1, SWT.NONE, 0);
+			expandItem1.setText((String) node.data);
+			expandItem1.setHeight(composite1.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+			expandItem1.setControl(composite1); //		Sets the control that is shown when the item is expanded.
 
-//				}
+			// these kids are ANSWERS
+			List<TreeNode<String>> deca = node.children;
+//			System.out.println("KIDS: " + deca);
+			for(TreeNode dete:deca){
+				Button label1 = new Button(composite1, SWT.RADIO);
+				label1.setText((String) dete.data);
+				label1.addSelectionListener(selectionListener);
+				if(!dete.children.isEmpty())
+				queue.add((LinkedList<TreeNode>) dete.children); // there should be separate lists of questions for each answer, not just a single queue 
+											// with all the "next" questions. Because one Answer (dete) may need to show multiple questions
+											// so a queue-of-lists?  and in every dequeue, all questions from a list are in the same ExpandBar
+			}
+			
+			int heightItem1 = composite1.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
+			expandItem1.setHeight(heightItem1);
+					
+			System.out.println("QUEUE: " + queue);
+		}
+		
+		//end manual cycle:
+
+		while(!queue.isEmpty()){
+			nodes =  queue.remove();
+			expandBar1= new ExpandBar(composite1, SWT.NONE);
+			expandBar1.setLayoutData(new GridData(GridData.FILL, GridData.FILL,
+					true, true, 2, 1));
+			expandBar1.setVisible(false);
+			
+			for(TreeNode node:nodes){
+				composite1 = new Composite(expandBar1, SWT.NONE);;
 				GridLayout layout1 = new GridLayout(1, true);
 				composite1.setLayout(layout1);
-
-				expandItem1 = new ExpandItem(expandBar1, SWT.NONE, 0);
+				composite1.setVisible(true);
+				
+				ExpandItem expandItem1 = new ExpandItem(expandBar1, SWT.NONE, 0);
 				expandItem1.setText((String) node.data);
-				expandItem1.setHeight(100);
-				expandItem1.setControl(composite1);
+				expandItem1.setHeight(composite1.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+				expandItem1.setControl(composite1); //		Sets the control that is shown when the item is expanded.
 
+				// these kids are ANSWERS
 				List<TreeNode<String>> deca = node.children;
+//				System.out.println("KIDS: " + deca);
 				for(TreeNode dete:deca){
-					label1 = new Button(composite1, SWT.RADIO);
+					Button label1 = new Button(composite1, SWT.RADIO);
 					label1.setText((String) dete.data);
 					label1.addSelectionListener(selectionListener);
-					queue.addAll(dete.children);
+					if(!dete.children.isEmpty())
+					queue.add((LinkedList<TreeNode>) dete.children); // there should be separate lists of questions for each answer, not just a single queue 
+												// with all the "next" questions. Because one Answer (dete) may need to show multiple questions
+												// so a queue-of-lists?  and in every dequeue, all questions from a list are in the same ExpandBar
 				}
-			} 
-
+				
+				int heightItem1 = composite1.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
+				expandItem1.setHeight(heightItem1);
+						
+				System.out.println("QUEUE: " + queue);
+			}
+//			TreeNode node = (TreeNode) queue.remove();
+//
+//			ExpandItem expandItem1;
+//			Button label1;
+//			if (node.isQuestion){
+//			
+////				if(queue.isEmpty()){
+//				
+//					expandBar1 = new ExpandBar(shell, SWT.NONE); // <-- NOOOO
+//					expandBar1.setLayoutData(new GridData(GridData.FILL, GridData.FILL,true, true, 2, 1));
+//					composite1 = new Composite(expandBar1, SWT.NONE);
+//
+////				}
+//				GridLayout layout1 = new GridLayout(1, true);
+//				composite1.setLayout(layout1);
+//
+//				expandItem1 = new ExpandItem(expandBar1, SWT.NONE, 0);
+//				expandItem1.setText((String) node.data);
+//				expandItem1.setHeight(100);
+//				expandItem1.setControl(composite1);
+//
+//				// these kids are ANSWERS
+//				List<TreeNode<String>> deca = node.children;
+//				for(TreeNode dete:deca){
+//					label1 = new Button(composite1, SWT.RADIO);
+//					label1.setText((String) dete.data);
+//					label1.addSelectionListener(selectionListener);
+//					queue.addAll(dete.children);
+//				}
+//			} 
+//
 		}
 		
 
