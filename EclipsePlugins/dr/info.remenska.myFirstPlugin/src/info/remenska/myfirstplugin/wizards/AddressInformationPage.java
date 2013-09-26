@@ -309,15 +309,67 @@ class MySelectionListener implements SelectionListener{
 			}
 			questionsHolder.layout();
 
-			//recalculate the height
+			//recalculate the height // <-- needs to be propagated to outer levels
 			if(theOneWeNeed!=null){
-//				int oldHeight = theOneWeNeed.getHeight();
+				int oldHeight = theOneWeNeed.getHeight();
 				theOneWeNeed.setHeight(questionsHolder.computeSize(SWT.DEFAULT, SWT.DEFAULT).y); // <-- this is fishy
+//				theOneWeNeed.setHeight(oldHeight+height); // <-- this is fishy
+
 			}
+			
+			recallibrateHeight(height, oldOldHeight, questionsHolder);
 			questionsHolder.layout();
 
 			System.out.println("\n");
 		}
+	}
+
+	private void recallibrateHeight(int height, int oldOldHeight,
+			Composite questionsHolder) {
+		// we need to propagate the height to all ExpandItem parents in the hierarchy
+		ExpandBar barHeigher = (ExpandBar) questionsHolder.getParent();
+		ExpandItem[] items = barHeigher.getItems();
+		ExpandItem itemExpanded = null;
+		for(ExpandItem item:items){
+			if(item.getControl().equals(questionsHolder))
+				itemExpanded = item;
+		}
+//		ExpandItem itemExpanded = (ExpandItem) e.item;
+		System.out.println("ItemExpanded: " + itemExpanded + "; height = " + itemExpanded.getHeight());
+		ExpandItem theOneWeLookFor = null; 
+		Composite compositeControlled = (Composite) itemExpanded.getControl();
+		int heightToAdd = compositeControlled.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
+		while(itemExpanded!=null){
+			theOneWeLookFor = null;
+			ExpandBar itemParentBar = itemExpanded.getParent();
+			System.out.println("ItemParentBar: " + itemParentBar);
+//			int heightToAdd = compositeControlled.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
+			Composite compositeParent =itemParentBar.getParent();
+			if(compositeParent!=null){
+				ExpandBar expandBarSuperParent = (ExpandBar) compositeParent.getParent();
+				if(expandBarSuperParent!=null){
+					ExpandItem[] allItemsOfSuperParent = expandBarSuperParent.getItems();
+					
+					for(ExpandItem item:allItemsOfSuperParent){
+						if(item.getControl().equals(compositeParent))
+							theOneWeLookFor = item;
+					}
+//					heightToAdd = compositeParent.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
+					System.out.println("Height to add:"+ heightToAdd);
+
+					System.out.println("The one we look for: "+ theOneWeLookFor);
+					System.out.println("ParentItem height BEFORE = " + theOneWeLookFor.getHeight());
+					theOneWeLookFor.setHeight(theOneWeLookFor.getHeight()+questionsHolder.computeSize(SWT.DEFAULT, SWT.DEFAULT).y - oldOldHeight);
+					System.out.println("ParentItem height AFTER = " + theOneWeLookFor.getHeight());
+
+					compositeParent.layout();
+				}
+				
+			}
+			itemExpanded = theOneWeLookFor; //TODO change this!!
+
+		}
+	
 	}
 
 	@Override
