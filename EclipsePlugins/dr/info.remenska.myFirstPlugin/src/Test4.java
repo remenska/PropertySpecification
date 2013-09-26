@@ -148,7 +148,7 @@ class MySelectionListener implements SelectionListener{
 				//new answers for each question
 				// these kids are ANSWERS
 				List<TreeNode<String>> answers = newQuestion.children;
-				for(TreeNode answer:answers){
+				for(TreeNode<String> answer:answers){
 					Button label1 = new Button(questionComposite, SWT.RADIO);
 					label1.setText((String) answer.data);
 					label1.addSelectionListener(this);
@@ -158,8 +158,7 @@ class MySelectionListener implements SelectionListener{
 			}
 			questionsHolder.layout();
 
-			System.out.println("\n\n");
-
+			System.out.println("\n");
 		}
 	}
 
@@ -167,6 +166,4 @@ class MySelectionListener implements SelectionListener{
 	public void widgetDefaultSelected(SelectionEvent e) {
 		widgetSelected(e);
 	}
-	
-	
 }
