@@ -41,9 +41,11 @@ public class ResourceManagerViewActionDelgate implements IViewActionDelegate {
 		
 	CaptureEmployeeInformationWizard wizard = new CaptureEmployeeInformationWizard();
 	WizardDialog dialog = new WizardDialog(view.getSite().getShell(), wizard);
+
 	dialog.create();
+
 	dialog.open();
-	
+
 	}
 
 	@Override

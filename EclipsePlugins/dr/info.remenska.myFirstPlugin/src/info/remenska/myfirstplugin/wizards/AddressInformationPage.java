@@ -217,52 +217,6 @@ class MyExpandListener implements ExpandListener{
 
 class MySelectionListener implements SelectionListener{
 
-	public void adjustHeight(SelectionEvent e, int oldHeight, int newHeight) {
-		Button button = (Button) e.getSource();
-		Composite compositeParent1 = button.getParent();
-		ExpandBar barParent = (ExpandBar) compositeParent1.getParent();
-		ExpandItem[] itemss = barParent.getItems();
-		ExpandItem itemExpanded = null; //TODO change
-		for(ExpandItem item:itemss){
-			if(item.getControl().equals(compositeParent1))
-				itemExpanded = item;
-		}
-		ExpandItem theOneWeLookFor = null; 
-//		itemExpanded.setHeight(itemExpanded.getHeight()+newHeight-oldHeight);
-		compositeParent1.layout();
-
-		while(itemExpanded!=null){
-			theOneWeLookFor = null;
-			ExpandBar itemParentBar = itemExpanded.getParent();
-			System.out.println("ItemParentBar: " + itemParentBar);
-			Composite compositeControlled = (Composite) itemExpanded.getControl();
-//			int heightToAdd = compositeControlled.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
-			Composite compositeParent =itemParentBar.getParent();
-			if(compositeParent!=null){
-				ExpandBar expandBarSuperParent = (ExpandBar) compositeParent.getParent();
-				if(expandBarSuperParent!=null){
-					ExpandItem[] allItemsOfSuperParent = expandBarSuperParent.getItems();
-					
-					for(ExpandItem item:allItemsOfSuperParent){
-						if(item.getControl().equals(compositeParent))
-							theOneWeLookFor = item;
-					}
-//					heightToAdd = compositeParent.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
-//					System.out.println("Height to add:"+ heightToAdd);
-
-					System.out.println("The one we look for: "+ theOneWeLookFor);
-					System.out.println("ParentItem height BEFORE = " + theOneWeLookFor.getHeight());
-					theOneWeLookFor.setHeight(theOneWeLookFor.getHeight()+newHeight-oldHeight);
-					System.out.println("ParentItem height AFTER = " + theOneWeLookFor.getHeight());
-
-					compositeParent.layout();
-				}
-				
-			}
-			itemExpanded = theOneWeLookFor; //TODO change this!!
-
-		}
-	}
 	
 	@Override
 	public void widgetSelected(SelectionEvent e) {
