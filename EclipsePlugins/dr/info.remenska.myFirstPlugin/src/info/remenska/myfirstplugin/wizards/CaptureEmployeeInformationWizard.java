@@ -1,6 +1,7 @@
 package info.remenska.myfirstplugin.wizards;
 
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.swt.SWT;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.themes.WorkbenchPreview;
 
@@ -13,8 +14,10 @@ public class CaptureEmployeeInformationWizard extends Wizard {
 		addPage(personalInfoPage);
 		addressInfoPage = new AddressInformationPage("Address Information");
 		addPage(addressInfoPage);
+		this.getShell().setMaximized(true);
+
 		this.getShell().setFocus();
-		
+		this.getShell().setMaximized(true);
 	}
 	@Override
 	public boolean performFinish() {

@@ -81,6 +81,7 @@ public class AddressInformationPage extends WizardPage {
 	public void createControl(Composite parent) {
 		createQuestionnaire();
 		System.out.println("PARENTTT:" + parent);
+		this.getShell().setMaximized(true);
 		Composite composite = new Composite(parent, SWT.NONE);
 		parentLe = composite;
 		composite.setLayout(new FillLayout());
