@@ -2,6 +2,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ExpandEvent;
+import org.eclipse.swt.events.ExpandListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -12,10 +14,12 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 
 
@@ -23,7 +27,7 @@ public class Test4 {
 	private static int DEPTH_TREE = 6;
 	private static int[] heightItem = new int[DEPTH_TREE];
 	public static TreeNode<String> questionnaire = new TreeNode<String>("Is the behavior only required to hold within the restricted interval(s) in the event sequence?", true);
-
+	public static Shell shell;
 
 	private static String createIndent(int depth) {
         StringBuilder sb = new StringBuilder();
@@ -67,16 +71,21 @@ public class Test4 {
 
 	public static void main(String[] args) {
 		createQuestionnaire();
-		Display display = new Display();
-		Shell shell = new Shell(display);
+		final Display display = new Display();
+		shell= new Shell(display);
 		shell.setLayout(new FillLayout());
 		final MySelectionListener mySelectionListener = new MySelectionListener();
-	
+		final MyExpandListener myExpandListener = new MyExpandListener();
+		
 		// we know first one(root) is a question	
 		ExpandBar root = new ExpandBar(shell, SWT.NONE);;
 		ExpandItem question = new ExpandItem(root, SWT.NONE, 0);
 		question.setText((String) questionnaire.data);
 
+//		 final int Tprincipal = compositePrincipal.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
+//		 root.setHeight(Tprincipal);
+		 root.addExpandListener(myExpandListener);
+		 
 		Composite answersContainer = new Composite(root, SWT.NONE);
 		GridLayout layout1 = new GridLayout(1, true);
 		answersContainer.setLayout(layout1);
@@ -91,8 +100,7 @@ public class Test4 {
 			answer.addSelectionListener(mySelectionListener);
 		}
 		
-		
-		question.setHeight(answersContainer.computeSize(SWT.DEFAULT, SWT.DEFAULT).y + 300);
+		question.setHeight(answersContainer.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 
 		shell.open();
 		while (!shell.isDisposed()) {
@@ -102,6 +110,89 @@ public class Test4 {
 		display.dispose();
 	}
 
+}
+
+class MyExpandListener implements ExpandListener{
+
+	@Override
+	public void itemCollapsed(ExpandEvent e) {
+		// TODO Auto-generated method stub
+		 // we need to propagate the height to all ExpandItem parents in the hierarchy
+		ExpandItem itemExpanded = (ExpandItem) e.item;
+		System.out.println("ItemExpanded: " + itemExpanded + "; height = " + itemExpanded.getHeight());
+		ExpandItem theOneWeLookFor = null; 
+		while(itemExpanded!=null){
+			theOneWeLookFor = null;
+			ExpandBar itemParentBar = itemExpanded.getParent();
+			System.out.println("ItemParentBar: " + itemParentBar);
+			Composite compositeControlled = (Composite) itemExpanded.getControl();
+			int heightToRemove = compositeControlled.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
+			Composite compositeParent =itemParentBar.getParent();
+			if(compositeParent!=null){
+				ExpandBar expandBarSuperParent = (ExpandBar) compositeParent.getParent();
+				if(expandBarSuperParent!=null){
+					ExpandItem[] allItemsOfSuperParent = expandBarSuperParent.getItems();
+					
+					for(ExpandItem item:allItemsOfSuperParent){
+						if(item.getControl().equals(compositeParent))
+							theOneWeLookFor = item;
+					}
+//					heightToAdd = compositeParent.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
+					System.out.println("Height to remove:"+ heightToRemove);
+
+					System.out.println("The one we look for: "+ theOneWeLookFor);
+					System.out.println("ParentItem height BEFORE = " + theOneWeLookFor.getHeight());
+					theOneWeLookFor.setHeight(theOneWeLookFor.getHeight()-heightToRemove);
+					System.out.println("ParentItem height AFTER = " + theOneWeLookFor.getHeight());
+
+					compositeParent.layout();
+				}
+				
+			}
+			itemExpanded = theOneWeLookFor; //TODO change this!!
+
+		}
+	}
+
+
+	@Override
+	public void itemExpanded(ExpandEvent e) {
+     // we need to propagate the height to all ExpandItem parents in the hierarchy
+		ExpandItem itemExpanded = (ExpandItem) e.item;
+		System.out.println("ItemExpanded: " + itemExpanded + "; height = " + itemExpanded.getHeight());
+		ExpandItem theOneWeLookFor = null; 
+		while(itemExpanded!=null){
+			theOneWeLookFor = null;
+			ExpandBar itemParentBar = itemExpanded.getParent();
+			System.out.println("ItemParentBar: " + itemParentBar);
+			Composite compositeControlled = (Composite) itemExpanded.getControl();
+			int heightToAdd = compositeControlled.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
+			Composite compositeParent =itemParentBar.getParent();
+			if(compositeParent!=null){
+				ExpandBar expandBarSuperParent = (ExpandBar) compositeParent.getParent();
+				if(expandBarSuperParent!=null){
+					ExpandItem[] allItemsOfSuperParent = expandBarSuperParent.getItems();
+					
+					for(ExpandItem item:allItemsOfSuperParent){
+						if(item.getControl().equals(compositeParent))
+							theOneWeLookFor = item;
+					}
+//					heightToAdd = compositeParent.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
+					System.out.println("Height to add:"+ heightToAdd);
+
+					System.out.println("The one we look for: "+ theOneWeLookFor);
+					System.out.println("ParentItem height BEFORE = " + theOneWeLookFor.getHeight());
+					theOneWeLookFor.setHeight(theOneWeLookFor.getHeight()+heightToAdd);
+					System.out.println("ParentItem height AFTER = " + theOneWeLookFor.getHeight());
+
+					compositeParent.layout();
+				}
+				
+			}
+			itemExpanded = theOneWeLookFor; //TODO change this!!
+
+		}
+	}
 }
 
 class MySelectionListener implements SelectionListener{
@@ -120,19 +211,27 @@ class MySelectionListener implements SelectionListener{
 			Composite questionsHolder = ((Button) e.getSource()).getParent();
 //			questionsHolder.redraw();
 //			questionsHolder.update();
-		
+			int oldOldHeight = 0;
 			//first remove existing expandBars. This means only answers remain, no nested questions
 			 for (Control control : questionsHolder.getChildren()) {
-			        if (!(control instanceof Button)) control.dispose();
+			        if (!(control instanceof Button)){
+			        	// here collect the OldOldHeight
+			        	control.dispose();
+			        }
 			    }		
 			 
 			 questionsHolder.layout();
 
 			//dynamically create new questions. 
 			ExpandBar expandBarNewQuestions = new ExpandBar(questionsHolder, SWT.NONE);
+			MyExpandListener myExpandListener = new MyExpandListener();
+			expandBarNewQuestions.addExpandListener(myExpandListener);
+			
 			expandBarNewQuestions.setLayoutData(new GridData(GridData.FILL, GridData.FILL,
 					true, true, 2, 1));
 			
+			int height = 0; 
+			ExpandItem prevQuest = null;
 			System.out.println("NEW QUESTIONS: " + newQuestions);
 			for(TreeNode<String> newQuestion:newQuestions){
 				Composite questionComposite = new Composite(expandBarNewQuestions, SWT.NONE);
@@ -142,9 +241,8 @@ class MySelectionListener implements SelectionListener{
 				ExpandItem question = new ExpandItem(expandBarNewQuestions, SWT.NONE, 0);
 				question.setText((String) newQuestion.data);
 				System.out.println("QUESTION INSERTED, TEXT:"+ question.getText());
-				question.setControl(questionComposite);
-				question.setHeight(300);
-				
+				question.setControl(questionComposite);//Sets the control that is shown when the item is expanded.
+
 				//new answers for each question
 				// these kids are ANSWERS
 				List<TreeNode<String>> answers = newQuestion.children;
@@ -153,8 +251,30 @@ class MySelectionListener implements SelectionListener{
 					label1.setText((String) answer.data);
 					label1.addSelectionListener(this);
 				}
+//				question.setHeight(300);
+				question.setHeight(questionComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+				height += questionComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
+//				if(prevQuest!=null)
+//					prevQuest.setHeight(prevQuest.getHeight() + height);
 				questionComposite.setVisible(true);
 				questionComposite.layout();
+				questionsHolder.layout();
+//				prevQuest = question;
+			}
+			
+			//we need to adjust the (parent) ExpandItem's height
+			//first let's find it
+			ExpandBar expandBarParent = (ExpandBar) questionsHolder.getParent();
+			ExpandItem[] expandItems = expandBarParent.getItems();
+			ExpandItem theOneWeNeed = null;
+			for(ExpandItem expandItem:expandItems){
+				if(expandItem.getControl().equals(questionsHolder))
+					theOneWeNeed = expandItem;
+			}
+			//recalculate the height
+			if(theOneWeNeed!=null){
+				int oldHeight = theOneWeNeed.getHeight();
+				theOneWeNeed.setHeight(oldHeight+height); // <-- this is fishy
 			}
 			questionsHolder.layout();
 
