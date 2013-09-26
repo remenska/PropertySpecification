@@ -9,12 +9,14 @@ import org.eclipse.ui.internal.themes.WorkbenchPreview;
 public class CaptureEmployeeInformationWizard extends Wizard {
 	PersonalInformationPage personalInfoPage;
 	AddressInformationPage addressInfoPage;
-	
+	AddressInformationPage newPage;
 	public void addPages(){
 		personalInfoPage = new PersonalInformationPage("Personal Information Page");
 		addPage(personalInfoPage);
-		addressInfoPage = new AddressInformationPage("Address Information");
+		addressInfoPage = new AddressInformationPage("Scope Question Tree View", "Please answer the following questions regarding the scope of the property:", Questionnaire.scopeQuestionTree);
 		addPage(addressInfoPage);
+		newPage = new AddressInformationPage("Behavior Question Tree View", "Please answer the following questions regarding the behavior of the property:", Questionnaire.behaviorQuestionTree);
+		addPage(newPage);
 		this.getShell().setMaximized(true);
 		this.getShell().setFocus();
 		this.getShell().setMaximized(true);
