@@ -46,14 +46,15 @@ public class Test4 {
 				TreeNode<String> answ112112 = quest11211.addChild("NOT SO SURE HMM", false);
 
 			TreeNode<String> answ1122 = quest112.addChild("Blaaah yah2", false);
+			TreeNode<String> quest11221 = answ1122.addChild("Im asking one last time ", true);
+				TreeNode<String> answ112211 = quest11221.addChild("Answering one last time", false);
+				TreeNode<String> answ112212 = quest11221.addChild("Ok I'm done here!", false);
 		TreeNode<String> quest113 = answ11.addChild("Really are you sure sure? ", true);
 			TreeNode<String> answ1131 = quest113.addChild("Blaaah blaah yah1", false);
 			TreeNode<String> answ1132 = quest113.addChild("Blaaah blaah yah2", false);		
 	TreeNode<String> answ12 = questionnaire.addChild("No, the behavior is required to hold throughout the entire event sequence", false);
-
 				
-				
-			    // traverse?
+			    // traverse for debugging purposes?
 		TreeNode<String > treeRoot = questionnaire;
 		for(TreeNode<String> node: treeRoot) {
 			String ident = createIndent(node.getLevel());
@@ -70,98 +71,7 @@ public class Test4 {
 		Shell shell = new Shell(display);
 		shell.setLayout(new FillLayout());
 		final MySelectionListener mySelectionListener = new MySelectionListener();
-		SelectionListener selectionListener = new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				// ExpandBar contains: ExpandItem and Composite(contains:
-				// Buttons))
-				boolean isSelected = ((Button) e.getSource()).getSelection();
-				System.out.println("-----------");
-				System.out.println("Selected: "+  ((Button) e.getSource()).getText());
-				System.out.println("Trying to find a TreeNode, it's children are..: "+ questionnaire.findTreeNode(((Button) e.getSource()).getText()).children);
-				if (isSelected) {
-					
-					List<TreeNode<String>> newQuestions = questionnaire.findTreeNode(((Button) e.getSource()).getText()).children;
-					Composite questionsHolder = ((Button) e.getSource()).getParent();
-//					questionsHolder.redraw();
-//					questionsHolder.update();
-				
-					//first remove existing expandBars. This means only answers remain, no nested questions
-					 for (Control control : questionsHolder.getChildren()) {
-					        if (!(control instanceof Button)) control.dispose();
-					    }		
-					 
-					 questionsHolder.layout();
-
-					//dynamically create new questions. 
-					ExpandBar expandBarNewQuestions = new ExpandBar(questionsHolder, SWT.NONE);
-					expandBarNewQuestions.setLayoutData(new GridData(GridData.FILL, GridData.FILL,
-							true, true, 2, 1));
-					
-					System.out.println("NEW QUESTIONS: " + newQuestions);
-					for(TreeNode<String> newQuestion:newQuestions){
-						Composite questionComposite = new Composite(expandBarNewQuestions, SWT.NONE);
-						GridLayout layout1 = new GridLayout(1, true);
-						questionComposite.setLayout(layout1);
-						
-						ExpandItem question = new ExpandItem(expandBarNewQuestions, SWT.NONE, 0);
-						question.setText((String) newQuestion.data);
-						System.out.println("QUESTION INSERTED, TEXT:"+ question.getText());
-						question.setControl(questionComposite);
-						question.setHeight(300);
-						
-						//new answers for each question
-						// these kids are ANSWERS
-						List<TreeNode<String>> answers = newQuestion.children;
-						for(TreeNode answer:answers){
-							Button label1 = new Button(questionComposite, SWT.RADIO);
-							label1.setText((String) answer.data);
-							label1.addSelectionListener(mySelectionListener);
-						}
-						questionComposite.setVisible(true);
-						questionComposite.layout();
-					}
-					questionsHolder.layout();
-
-					
-					
-//					Control[] children = ((Button) e.getSource()).getParent()
-//							.getChildren();
-//					
-//					
-//					System.out.println("Parent: " +  ((Control) e.getSource()).getParent());
-//					System.out.println("Parent's children: ");
-//					for (Control child : children) {
-//						child.setVisible(true);
-//						System.out.println("\t \t child: "+ child + "  ");
-//						if (child instanceof ExpandBar) {
-//							ExpandItem[] theirExpandItems = ((ExpandBar) child).getItems();
-//							Control[] restOfChildren = ((ExpandBar) child).getChildren();
-//							for (ExpandItem theirChild : theirExpandItems) {
-//								System.out.println("\t \t \t Their children ExpandItems: "
-//										+ theirChild);
-//								theirChild.setExpanded(false);
-//							}
-//							
-//							for (Control theirChild : restOfChildren) {
-//								System.out.println("\t \t \t Their children (rest): "
-//										+ theirChild);
-////								theirChild.setExpanded(false);
-//							}
-//						}
-//
-//
-//					}
-					System.out.println("\n\n");
-
-				}
-			}
-
-		};
-		
 	
-
-		
 		// we know first one(root) is a question	
 		ExpandBar root = new ExpandBar(shell, SWT.NONE);;
 		ExpandItem question = new ExpandItem(root, SWT.NONE, 0);
@@ -233,7 +143,7 @@ class MySelectionListener implements SelectionListener{
 				question.setText((String) newQuestion.data);
 				System.out.println("QUESTION INSERTED, TEXT:"+ question.getText());
 				question.setControl(questionComposite);
-				question.setHeight(200);
+				question.setHeight(300);
 				
 				//new answers for each question
 				// these kids are ANSWERS
@@ -248,124 +158,14 @@ class MySelectionListener implements SelectionListener{
 			}
 			questionsHolder.layout();
 
-			
-			
-//			Control[] children = ((Button) e.getSource()).getParent()
-//					.getChildren();
-//			
-//			
-//			System.out.println("Parent: " +  ((Control) e.getSource()).getParent());
-//			System.out.println("Parent's children: ");
-//			for (Control child : children) {
-//				child.setVisible(true);
-//				System.out.println("\t \t child: "+ child + "  ");
-//				if (child instanceof ExpandBar) {
-//					ExpandItem[] theirExpandItems = ((ExpandBar) child).getItems();
-//					Control[] restOfChildren = ((ExpandBar) child).getChildren();
-//					for (ExpandItem theirChild : theirExpandItems) {
-//						System.out.println("\t \t \t Their children ExpandItems: "
-//								+ theirChild);
-//						theirChild.setExpanded(false);
-//					}
-//					
-//					for (Control theirChild : restOfChildren) {
-//						System.out.println("\t \t \t Their children (rest): "
-//								+ theirChild);
-////						theirChild.setExpanded(false);
-//					}
-//				}
-//
-//
-//			}
 			System.out.println("\n\n");
 
-		}		
+		}
 	}
 
 	@Override
 	public void widgetDefaultSelected(SelectionEvent e) {
-		// ExpandBar contains: ExpandItem and Composite(contains:
-		// Buttons))
-		boolean isSelected = ((Button) e.getSource()).getSelection();
-		System.out.println("-----------");
-		System.out.println("Selected: "+  ((Button) e.getSource()).getText());
-		System.out.println("Trying to find a TreeNode, it's children are..: "+ Test4.questionnaire.findTreeNode(((Button) e.getSource()).getText()).children);
-		if (isSelected) {
-			
-			List<TreeNode<String>> newQuestions = Test4.questionnaire.findTreeNode(((Button) e.getSource()).getText()).children;
-			Composite questionsHolder = ((Button) e.getSource()).getParent();
-//			questionsHolder.redraw();
-//			questionsHolder.update();
-		
-			//first remove existing expandBars. This means only answers remain, no nested questions
-			 for (Control control : questionsHolder.getChildren()) {
-			        if (!(control instanceof Button)) control.dispose();
-			    }		
-			 
-			 questionsHolder.layout();
-
-			//dynamically create new questions. 
-			ExpandBar expandBarNewQuestions = new ExpandBar(questionsHolder, SWT.NONE);
-			expandBarNewQuestions.setLayoutData(new GridData(GridData.FILL, GridData.FILL,
-					true, true, 2, 1));
-			
-			System.out.println("NEW QUESTIONS: " + newQuestions);
-			for(TreeNode<String> newQuestion:newQuestions){
-				Composite questionComposite = new Composite(expandBarNewQuestions, SWT.NONE);
-				GridLayout layout1 = new GridLayout(1, true);
-				questionComposite.setLayout(layout1);
-				
-				ExpandItem question = new ExpandItem(expandBarNewQuestions, SWT.NONE, 0);
-				question.setText((String) newQuestion.data);
-				System.out.println("QUESTION INSERTED, TEXT:"+ question.getText());
-				question.setControl(questionComposite);
-				question.setHeight(200);
-				
-				//new answers for each question
-				// these kids are ANSWERS
-				List<TreeNode<String>> answers = newQuestion.children;
-				for(TreeNode answer:answers){
-					Button label1 = new Button(questionComposite, SWT.RADIO);
-					label1.setText((String) answer.data);
-					label1.addSelectionListener(this);
-				}
-				questionComposite.setVisible(true);
-				questionComposite.layout();
-			}
-			questionsHolder.layout();
-
-			
-			
-//			Control[] children = ((Button) e.getSource()).getParent()
-//					.getChildren();
-//			
-//			
-//			System.out.println("Parent: " +  ((Control) e.getSource()).getParent());
-//			System.out.println("Parent's children: ");
-//			for (Control child : children) {
-//				child.setVisible(true);
-//				System.out.println("\t \t child: "+ child + "  ");
-//				if (child instanceof ExpandBar) {
-//					ExpandItem[] theirExpandItems = ((ExpandBar) child).getItems();
-//					Control[] restOfChildren = ((ExpandBar) child).getChildren();
-//					for (ExpandItem theirChild : theirExpandItems) {
-//						System.out.println("\t \t \t Their children ExpandItems: "
-//								+ theirChild);
-//						theirChild.setExpanded(false);
-//					}
-//					
-//					for (Control theirChild : restOfChildren) {
-//						System.out.println("\t \t \t Their children (rest): "
-//								+ theirChild);
-////						theirChild.setExpanded(false);
-//					}
-//				}
-//
-//
-//			}
-			System.out.println("\n\n");
-
-		}				
+		widgetSelected(e);
 	}
 	
 	
