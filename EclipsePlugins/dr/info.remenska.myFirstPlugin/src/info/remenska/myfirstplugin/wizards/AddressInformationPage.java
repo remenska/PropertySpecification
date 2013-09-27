@@ -89,6 +89,8 @@ public class AddressInformationPage extends WizardPage {
 					
 					ExpandItem question = new ExpandItem(expandBarNewQuestions, SWT.NONE, 0);
 					question.setText((String) newQuestion.data);
+					question.setExpanded(true);
+					question.notifyListeners(SWT.Expand, new Event());
 					System.out.println("QUESTION INSERTED, TEXT:"+ question.getText());
 					question.setControl(questionComposite);//Sets the control that is shown when the item is expanded.
 
@@ -217,13 +219,7 @@ public class AddressInformationPage extends WizardPage {
 		Composite composite = new Composite(parent, SWT.NONE);
 		parentLe = composite;
 		composite.setLayout(new FillLayout());
-		setControl(composite);
-//		new Label(composite, SWT.NONE).setText("Street");
-//		street = new Text(composite, SWT.NONE);
-//		new Label(composite, SWT.NONE).setText("City");
-//		city = new Text(composite, SWT.NONE);	
-//		new Label(composite, SWT.NONE).setText("State");
-//		state = new Text(composite, SWT.NONE);	
+		setControl(composite);	
 		ExpandBar root = new ExpandBar(composite, SWT.V_SCROLL);;
 		final MySelectionListener mySelectionListener = new MySelectionListener();
 		final MyExpandListener myExpandListener = new MyExpandListener();
@@ -231,6 +227,8 @@ public class AddressInformationPage extends WizardPage {
 //		root.setBackgroundImage(new Image(display,"/home/daniela/Downloads/background.jpg"));
 		ExpandItem question = new ExpandItem(root, SWT.NONE, 0);
 		question.setText((String) questionnaire.data);
+		question.setExpanded(true);
+		question.notifyListeners(SWT.Expand, new Event());
 		 root.addExpandListener(myExpandListener);
 		Composite answersContainer = new Composite(root, SWT.NONE);
 		GridLayout layout1 = new GridLayout(1, true);
@@ -239,7 +237,6 @@ public class AddressInformationPage extends WizardPage {
 		question.setControl(answersContainer); //
 		// now the answers
 		List<TreeNode<String>> deca = questionnaire.children;
-		System.out.println("DECA?:" + deca);
 		for(TreeNode dete:deca){
 			Button answer = new Button(answersContainer, SWT.RADIO);
 			answer.setText((String) dete.data);
@@ -248,7 +245,6 @@ public class AddressInformationPage extends WizardPage {
 		
 		question.setHeight(answersContainer.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 
-//		createChangeAddressPagePage(composite);
 	}
 	
 }

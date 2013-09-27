@@ -35,7 +35,7 @@ public class Questionnaire {
 			public static TreeNode<String> answ12 = scopeQuestionTree.addChild("No, the behavior is required to hold throughout the entire event sequence", false);
 			public static 	TreeNode<String> quest121 = answ12.addChild("Are there any exceptional events such that if any of them occurs the property behavior may not be required to hold?", true);	
 			public static 		TreeNode<String> answ1211 = quest121.addChild("No.", false);
-			public static 		TreeNode<String> answ1212 = quest121.addChild("Yes, if exceptional event X occurs, the property behavior may not be required to hold", false);
+			public static 		TreeNode<String> answ1212 = quest121.addChild("Yes, if exceptional event X occurs, the property behavior may not be required to hold.", false);
 		    
 //////
 			public static TreeNode<String> aansw11 = behaviorQuestionTree.addChild("One event.", false);
@@ -53,7 +53,7 @@ public class Questionnaire {
 			public static 				TreeNode<String> aansw111212 = qquest11121.addChild("Yes, if exceptional event X occurs, A is not required to occur.", false);
 		
 			public static 		TreeNode<String> aansw1113 = qquest111.addChild("A is allowed to occur exactly once.", false);
-			public static 			TreeNode<String> qquest11131 = aansw1113.addChild("Are there any exceptional events such that if any of them occurs, the property \n behavior may not be required to hold?", true);
+			public static 			TreeNode<String> qquest11131 = aansw1113.addChild("Are there any exceptional events such that if any of them occurs, the \n property behavior may not be required to hold?", true);
 			public static 				TreeNode<String> aansw111311 = qquest11131.addChild("No.", false);
 			public static 				TreeNode<String> aansw111312 = qquest11131.addChild("Yes, if exceptional event X occurs when A has not yet occured, the behavior is not required to hold.", false);
 			public static 					TreeNode<String> qquest1113121 = aansw111312.addChild("What if the exceptional event occurs after the violation has been found (A has occured more then once)?", true);

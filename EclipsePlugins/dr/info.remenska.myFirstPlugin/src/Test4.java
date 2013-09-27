@@ -1,8 +1,11 @@
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.graphics.Image;
 
 import info.remenska.myfirstplugin.wizards.TreeNode;
 
 import java.awt.Rectangle;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,6 +29,13 @@ import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.uml2.uml.Model;
+import org.eclipse.uml2.uml.Operation;
+
+import com.ibm.xtools.modeler.ui.UMLModeler;
+import com.ibm.xtools.uml.type.UMLElementTypes;
+import com.ibm.xtools.uml.ui.internal.dialogs.UMLSelectExistingElementDialog;
 
 
 public class Test4 {
@@ -159,15 +169,55 @@ public class Test4 {
 		createQuestionnaire();
 		final Display display = new Display();
 		shell= new Shell(display);
-		shell.setLayout(new FillLayout());
+//		shell.setLayout(new FillLayout());
 		final MySelectionListener mySelectionListener = new MySelectionListener();
 		final MyExpandListener myExpandListener = new MyExpandListener();
+		GridLayout layout = new GridLayout();
+		layout.numColumns = 2;
+		shell.setLayout(layout);
+//		Composite composite = new Composite(shell, SWT.NONE);
+		Text firstNameText;
+		Text secondNameText;
+		new Label(shell, SWT.NONE).setText("First Name");
+		firstNameText = new Text(shell, SWT.NONE);
+		new Label(shell, SWT.NONE).setText("Last Name");
+		secondNameText = new Text(shell, SWT.NONE);
+		final Text selectedOperation = new Text(shell, SWT.NONE);
+		selectedOperation.setEditable(false);
+		Listener operationListener = new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+
+				
+				Collection<Model> models = UMLModeler.getOpenedModels();
+
+				 System.out.println("OpenModelRoots:"+UMLModeler.getOpenModelRoots());
+				 UMLSelectExistingElementDialog dialog = new
+				 UMLSelectExistingElementDialog(shell,Collections.singletonList(UMLElementTypes.OPERATION));
+				 dialog.create();
+
+				if(dialog.open()==Window.OK){
+					List<Operation> selected = (List<Operation>) dialog.getSelectedElements();
+					System.out.println(selected.get(0).getName()+" : "+selected.get(0).getQualifiedName());
+					
+					System.out.println(selected.get(0).getOwner().eClass().getName());
+					selectedOperation.setText(selected.get(0).getName());
+					dialog.close();
+				}
+
+			}
+
+		};
+		selectedOperation.addListener(SWT.MouseDoubleClick,operationListener);
+		selectedOperation.addListener(SWT.KeyDown,operationListener);
+		
+		
 		
 		// we know first one(root) is a question	
 		ExpandBar root = new ExpandBar(shell, SWT.V_SCROLL);;
 		
 		root.setBackground(display.getSystemColor(SWT.COLOR_BLUE));
-		root.setBackgroundImage(new Image(display,"/home/daniela/Downloads/background1.jpg"));
+		root.setBackgroundImage(new Image(display,"/home/daniela/Downloads/background.jpg"));
 		ExpandItem question = new ExpandItem(root, SWT.NONE, 0);
 		question.setText((String) questionnaire.data);
 
@@ -381,7 +431,7 @@ class MySelectionListener implements SelectionListener{
 
 			//dynamically create new questions. 
 			ExpandBar expandBarNewQuestions = new ExpandBar(questionsHolder, SWT.NONE);
-			expandBarNewQuestions.setBackgroundImage(new Image(Display.getCurrent(),"/home/daniela/Downloads/background2.jpg"));
+			expandBarNewQuestions.setBackgroundImage(new Image(Display.getCurrent(),"/home/daniela/Downloads/background.jpg"));
 //			expandBarNewQuestions.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_BLUE)); 
 			MyExpandListener myExpandListener = new MyExpandListener();
 			expandBarNewQuestions.addExpandListener(myExpandListener);
