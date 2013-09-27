@@ -1,6 +1,6 @@
 package info.remenska.myfirstplugin;
 
-import info.remenska.myfirstplugin.wizards.CaptureEmployeeInformationWizard;
+import info.remenska.myfirstplugin.wizards.CapturePropertyWizard;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.action.IAction;
@@ -39,7 +39,7 @@ public class ResourceManagerViewActionDelgate implements IViewActionDelegate {
 //			
 //		}
 		
-	CaptureEmployeeInformationWizard wizard = new CaptureEmployeeInformationWizard();
+	CapturePropertyWizard wizard = new CapturePropertyWizard();
 	WizardDialog dialog = new WizardDialog(view.getSite().getShell(), wizard);
 
 	dialog.create();

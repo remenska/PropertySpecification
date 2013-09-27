@@ -1,6 +1,6 @@
 package info.remenska.myfirstplugin.actions;
 
-import info.remenska.myfirstplugin.wizards.CaptureEmployeeInformationWizard;
+import info.remenska.myfirstplugin.wizards.CapturePropertyWizard;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
@@ -28,7 +28,7 @@ public class OpenResourceManagerViewActionDelegate implements
 //		}
 // Hmmm let's change it to show the wizard instead of the view :)
 		
-		CaptureEmployeeInformationWizard wizard = new CaptureEmployeeInformationWizard();
+		CapturePropertyWizard wizard = new CapturePropertyWizard();
 		WizardDialog dialog = new WizardDialog(window.getShell(), wizard);
 
 		dialog.create();
