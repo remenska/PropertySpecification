@@ -13,6 +13,8 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
@@ -186,6 +188,7 @@ public class QuestionTreePage extends WizardPage {
 						theOneWeLookFor.setHeight(theOneWeLookFor.getHeight()+questionsHolder.computeSize(SWT.DEFAULT, SWT.DEFAULT).y - oldOldHeight);
 
 						compositeParent.layout();
+					
 					}
 					
 				}
@@ -202,6 +205,10 @@ public class QuestionTreePage extends WizardPage {
 	}
 	public TreeNode<String> questionnaire;
 	public TreeNode<String> dynamicQuestionnaire;
+	public static Label labelStartEvent, labelEndEvent;
+	public static Text textStartEvent, textEndEvent;
+	public static Label labelGraphicsHolder;
+	public static Image scopeGraphical;
 
 	private static String createIndent(int depth) {
         StringBuilder sb = new StringBuilder();
@@ -254,31 +261,86 @@ public class QuestionTreePage extends WizardPage {
 	
 	@Override
 	public void createControl(Composite parent) {
-		Composite composite = new Composite(parent, SWT.NONE);
+		Composite composite = new Composite(parent, SWT.FILL);
 		parentLe = composite;
 		
-//		FormData formData = new FormData();
-//		formData.top = new FormAttachment(20,0);
 		
-		GridData gridData = new GridData();
-		gridData.verticalAlignment = GridData.FILL_BOTH;
 		FillLayout layout = new FillLayout(); //OLD
-//		layout.makeColumnsEqualWidth = false;
-//		layout.numColumns = 2;
+		GridLayout layout2 = new GridLayout();
+		layout2.makeColumnsEqualWidth = false;
+		layout2.numColumns = 2;
 //		layout.pa
-		composite.setLayoutData(gridData); //OLD
+//		composite.setLayout(layout); //OLD
+//		RowLayout rowLayout = new RowLayout();
+//		rowLayout.wrap = true;
+//		rowLayout.type = SWT.HORIZONTAL;
+//		rowLayout.justify = true;
+//		rowLayout.pack = true;
 		
+		
+		GridLayout gridLayout = new GridLayout();
+		gridLayout.numColumns = 2;
+		
+		composite.setLayout(gridLayout); //OLD
+
 //		composite.setLayout(new FillLayout());
-		
 //		composite.setLayoutData(gridData);
 		setControl(composite);
 		
 		
-		new Label(composite, SWT.NONE).setText("Static Field: ");
-		final Text staticField = new Text(composite, SWT.NONE);
-		staticField.setText("AAAAAAAAAAAAAA");
+		GridData gridData = new GridData();
+		gridData.verticalSpan = 5;
+		gridData.verticalAlignment = GridData.FILL;
+		gridData.horizontalAlignment = GridData.FILL;
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.grabExcessVerticalSpace = true;
+		ExpandBar root = new ExpandBar(composite, SWT.V_SCROLL | SWT.H_SCROLL);;
+		root.setLayoutData(gridData);
+
+		gridData = new GridData();
+		gridData.horizontalAlignment = GridData.BEGINNING;
+		gridData.verticalAlignment = SWT.TOP;
+		labelStartEvent = new Label(composite, SWT.NONE);
+		labelStartEvent.setText("Start Event: ");
 		
-		ExpandBar root = new ExpandBar(composite, SWT.V_SCROLL);;
+		FontData fontData = labelStartEvent.getFont().getFontData()[0];
+		Font font = new Font(Display.getCurrent(), new FontData(fontData.getName(), fontData
+		    .getHeight(), SWT.BOLD));
+		labelStartEvent.setFont(font);
+		labelStartEvent.setLayoutData(gridData);
+		
+		gridData = new GridData();
+		gridData.horizontalAlignment = GridData.BEGINNING;
+		gridData.verticalAlignment = SWT.TOP;
+		textStartEvent = new Text(composite, SWT.NONE); // THESE SHOULD BE STATIC
+		textStartEvent.setText("A::message1()");
+		textStartEvent.setLayoutData(gridData);
+		
+		gridData = new GridData();
+		gridData.horizontalAlignment = GridData.BEGINNING;
+		gridData.verticalAlignment = SWT.TOP;
+		labelEndEvent = new Label(composite, SWT.NONE);
+		labelEndEvent.setText("End Event: ");
+		labelEndEvent.setFont(font);
+		labelEndEvent.setLayoutData(gridData);
+		
+		gridData = new GridData();
+		gridData.horizontalAlignment = GridData.BEGINNING;
+		gridData.verticalAlignment = SWT.TOP;
+		textEndEvent = new Text(composite, SWT.NONE);
+		textEndEvent.setText("B::message2()");
+		textEndEvent.setLayoutData(gridData);
+		
+		labelGraphicsHolder = new Label(composite, SWT.NONE);
+		scopeGraphical = new Image(Display.getCurrent(),
+				   "/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/ScopeTimelineView/legend.png");
+		labelGraphicsHolder.setImage(scopeGraphical);
+		gridData = new GridData();
+		gridData.horizontalAlignment = GridData.BEGINNING;
+		gridData.verticalAlignment = SWT.TOP;
+		labelGraphicsHolder.setLayoutData(gridData);
+		
+		composite.pack();
 //		root.setLayoutData(formData);
 		
 //		FormData formData2 = new FormData();
