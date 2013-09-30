@@ -1,6 +1,7 @@
 package info.remenska.myfirstplugin.wizards;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
@@ -47,12 +48,53 @@ public class QuestionTreePage extends WizardPage {
 			if (isSelected) {
 				
 				List<TreeNode<String>> newQuestions = questionnaire.findTreeNode(((Button) e.getSource()).getText()).children;
+				String selected = ((Button) e.getSource()).getText();
+				// (1) find parent 
+				// (2) remove all children
+				// (3) add this clicked one
 				//TODO: how about we check if there are any new questions at all?
+				System.out.println("SELECTED: "+ selected);
 				
+//				TreeNode<String> selectedNode = dynamicQuestionnaire.findTreeNode(selected);
+//				selectedNode.removeChildren();
+//				TreeNode<String> selectedNodeParent = selectedNode.parent;
+//				selectedNodeParent.removeChildren();
+//				System.out.println("CAN YOU FIND IT NOW? " + dynamicQuestionnaire.findTreeNode(selected));
+//				selectedNodeParent.addChild(selectedNode.data, false);	
+				TreeNode<String> staticNode = questionnaire.findTreeNode(selected);
+				System.out.println("FOUND STATIC NODE: "+ staticNode.data);
+
+				TreeNode<String> staticParentNode = staticNode.parent;
+				System.out.println("STATIC NODE PARENT: "+ staticParentNode.data);
+
+				// (1)
+				TreeNode<String> dynamicParentNode =  dynamicQuestionnaire.findTreeNode(staticParentNode.data);
+				System.out.println("DYNAMIC NODE PARENT: "+ dynamicParentNode.data);
+				System.out.println("DYNAMIC PARENT HAS: "+ dynamicParentNode.children.size());
+//				traverseQuestionnaire(dynamicQuestionnaire);
+
+//				List<TreeNode<String>>dynamicParentNodeChildren = dynamicParentNode.children;
+				// (2)
+//				dynamicQuestionnaire.findTreeNode(staticParentNode.data).removeChildren();
+				dynamicParentNode.removeChildren();
+				TreeNode<String> dynamicNode = dynamicParentNode.addChild(selected, false); 
+//				dynamicNode.removeChildren();
+				System.out.println(">>> CAN YOU FIND IT NOW? " + dynamicQuestionnaire.findTreeNode(selected));
+//				System.out.println("(AFTER DELITION) DYNAMIC PARENT HAS: "+ dynamicParentNode.children.size());
+//				traverseQuestionnaire(dynamicQuestionnaire);
+
+//				for(TreeNode<String> child:dynamicParentNodeChildren)
+//					child.removeChildren();
+				// (3)
+				
+//				System.out.println("(AFTER ADDITION) DYNAMIC PARENT HAS: "+ dynamicParentNode.children.size());
+//				traverseQuestionnaire(dynamicQuestionnaire);
+
 				Composite questionsHolder = ((Button) e.getSource()).getParent();
-				TreeNode<Composite> questionsHolderVal = questionnaireValidation.findTreeNodeViaObject(questionsHolder);
-				questionsHolderVal.removeChildren();
-				System.out.println("Removed children, now: "+ questionnaireValidation.getLevel());
+//				TreeNode<Composite> questionsHolderVal = questionnaireValidation.findTreeNodeViaObject(questionsHolder); //TODO: not needed, remove?
+				
+//				questionsHolderVal.removeChildren();
+//				System.out.println("Removed children, now: "+ questionnaireValidation.getLevel());
 		//DEBUG
 				//OK
 //				System.out.println("QuestionsHolder BEFORE:" + questionsHolder.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
@@ -98,13 +140,15 @@ public class QuestionTreePage extends WizardPage {
 //				System.out.println("NEW QUESTIONS: " + newQuestions);
 				for(TreeNode<String> newQuestion:newQuestions){
 					Composite questionComposite = new Composite(expandBarNewQuestions, SWT.NONE);
-					questionsHolderVal.addChild(questionComposite, true);
-					System.out.println("Added child, now: " + questionnaireValidation.getLevel());
+//					questionsHolderVal.addChild(questionComposite, true);
+//					System.out.println("Added child, now: " + questionnaireValidation.getLevel());
 					GridLayout layout1 = new GridLayout(1, true);
 					questionComposite.setLayout(layout1);
 					
 					ExpandItem question = new ExpandItem(expandBarNewQuestions, SWT.NONE, 0);
 					question.setText((String) newQuestion.data);
+					TreeNode<String> dynamicQuestion = dynamicNode.addChild(newQuestion.data, true);
+					
 //					question.setExpanded(true);
 //					question.notifyListeners(SWT.Expand, new Event());
 //					System.out.println("QUESTION INSERTED, TEXT:"+ question.getText());
@@ -117,6 +161,8 @@ public class QuestionTreePage extends WizardPage {
 						Button label1 = new Button(questionComposite, SWT.RADIO);
 						label1.setText((String) answer.data);
 						label1.addSelectionListener(this);
+						
+						dynamicQuestion.addChild(answer.data, false);
 					}
 //					question.setHeight(300);
 					question.setHeight(questionComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
@@ -151,9 +197,17 @@ public class QuestionTreePage extends WizardPage {
 				
 				recallibrateHeight(height, oldOldHeight, questionsHolder);
 				questionsHolder.layout();
+//				System.out.println("(AFTER ALL) DYNAMIC PARENT HAS: "+ dynamicParentNode.children.size());
+//				System.out.println("DEPTH DYNAMIC PARENT HAS: "+ dynamicParentNode.getLevel());
 
-				System.out.println("\n");
+//				System.out.println("CHILDREN CONTENT: " + dynamicParentNode.children);
+
+//				System.out.println("\n");
+				traverseQuestionnaire(dynamicQuestionnaire);
+
+				System.out.println("\n");System.out.println("\n");
 			}
+			
 		}
 
 		private void recallibrateHeight(int height, int oldOldHeight,
@@ -210,7 +264,8 @@ public class QuestionTreePage extends WizardPage {
 		}
 	}
 	public TreeNode<String> questionnaire;
-	public TreeNode<Composite> questionnaireValidation;
+	public TreeNode<String> dynamicQuestionnaire;
+//	public TreeNode<Composite> questionnaireValidation;
 //	public LinkedList<Composite> questionnaireValidation = new LinkedList<Composite>();
 //	public HashMap<Composite,Button> questionnaireValidation1 = new HashMap<Composite,Button>();
 	private static String createIndent(int depth) {
@@ -230,15 +285,32 @@ public class QuestionTreePage extends WizardPage {
 		setDescription(description);
 //		setPageComplete(false);
 	}
+	
+	public void traverseQuestionnaire(TreeNode<String> questionnaireAman){
+//		Iterator<TreeNode<String>> iter = this.questionnaire.iterator();
+		System.out.println("TRAVERSAL-------");
+		Iterator<TreeNode<String>> iter = dynamicQuestionnaire.iterator();
+		while(iter.hasNext()){
+			TreeNode<String> el = iter.next();
+//			System.out.println(el.data);
+			
+			String ident = createIndent(el.getLevel());
+			String hmmm = el.isQuestion?"Q: ":"A: ";
+			
+			System.out.println(el.getLevel()+ident+hmmm+el.data);
+		}
+	}
+	
+	
 	@Override
 	public void createControl(Composite parent) {
 //		System.out.println("PARENTTT:" + parent);
 //		Questionnaire.load();
 		Composite composite = new Composite(parent, SWT.NONE);
 		parentLe = composite;
-		
-		questionnaireValidation = new TreeNode(composite, false);
-		System.out.println("Added root, now: " + questionnaireValidation.getLevel());
+//		traverseQuestionnaire(questionnaire);
+//		questionnaireValidation = new TreeNode(composite, false);
+//		System.out.println("Added root, now: " + questionnaireValidation.getLevel());
 		composite.setLayout(new FillLayout());
 		setControl(composite);	
 		ExpandBar root = new ExpandBar(composite, SWT.V_SCROLL);;
@@ -252,22 +324,27 @@ public class QuestionTreePage extends WizardPage {
 //		question.notifyListeners(SWT.Expand, new Event());
 		 root.addExpandListener(myExpandListener);
 		Composite answersContainer = new Composite(root, SWT.NONE);
-		questionnaireValidation.addChild(answersContainer, false);
-		System.out.println("Added child, now: " + questionnaireValidation.getLevel());
-		
+//		questionnaireValidation.addChild(answersContainer, false);
+//		System.out.println("Added child, now: " + questionnaireValidation.getLevel());
+		dynamicQuestionnaire = new TreeNode<String>(this.questionnaire.data, true);
 		GridLayout layout1 = new GridLayout(1, true);
 		answersContainer.setLayout(layout1);
 		answersContainer.setVisible(true);
 		question.setControl(answersContainer); //
 		// now the answers
-		List<TreeNode<String>> deca = questionnaire.children;
+		List<TreeNode<String>> deca = this.questionnaire.children;
 		for(TreeNode dete:deca){
 			Button answer = new Button(answersContainer, SWT.RADIO);
 			answer.setText((String) dete.data);
+			
 			answer.addSelectionListener(mySelectionListener);
+			
+			dynamicQuestionnaire.addChild((String)dete.data, false);
 		}
 		
 		question.setHeight(answersContainer.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+		System.out.println("Dynamic QUESTIONNAIRE!!: ");
+		traverseQuestionnaire(dynamicQuestionnaire);
 
 	}
 	
@@ -363,7 +440,6 @@ public class QuestionTreePage extends WizardPage {
 		}
 	}
 }
-
 
 
 

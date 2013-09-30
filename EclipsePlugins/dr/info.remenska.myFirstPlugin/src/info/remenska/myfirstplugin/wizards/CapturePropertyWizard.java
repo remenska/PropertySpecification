@@ -7,12 +7,12 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.themes.WorkbenchPreview;
 
 public class CapturePropertyWizard extends Wizard {
-	ModelSelectionPage personalInfoPage;
+	ModelSelectionPage modelSelectionPage;
 	QuestionTreePage addressInfoPage;
 	QuestionTreePage newPage;
 	public void addPages(){
-		personalInfoPage = new ModelSelectionPage("Personal Information Page");
-		addPage(personalInfoPage);
+		modelSelectionPage = new ModelSelectionPage("Personal Information Page");
+		addPage(modelSelectionPage);
 		addressInfoPage = new QuestionTreePage("Scope Question Tree View", "Please answer the following questions regarding the scope of the property:", Questionnaire.scopeQuestionTree);
 		addPage(addressInfoPage);
 		newPage = new QuestionTreePage("Behavior Question Tree View", "Please answer the following questions regarding the behavior of the property:", Questionnaire.behaviorQuestionTree);

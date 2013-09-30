@@ -10,7 +10,7 @@ public class TreeNode<T> implements Iterable<TreeNode<T>> {
 	public TreeNode<T> parent;
 	public List<TreeNode<T>> children;
 	public boolean isQuestion;
-	
+	public List<TreeNode<T>> toDelete;
 	public boolean isRoot() {
 		return parent == null;
 	}
@@ -42,9 +42,23 @@ public class TreeNode<T> implements Iterable<TreeNode<T>> {
 		this.children.remove(child);
 	}
 	
-	public void removeChildren() { 
-		this.elementsIndex.removeAll(children);
-		this.children = new LinkedList<TreeNode<T>>();
+	public void removeChildren() {
+		toDelete = new LinkedList<TreeNode<T>>(this.elementsIndex);
+		this.children.clear();
+//		toDelete = this.children;
+		this.elementsIndex.clear();
+		this.elementsIndex.add(this);
+		toDelete.remove(this);
+//		this.children.clear();	
+		if(parent!=null)
+			parent.removeHigher(toDelete);
+
+	}
+	
+	public void removeHigher(List<TreeNode<T>> toDelete){
+		this.elementsIndex.removeAll(toDelete);
+		if (parent!=null)
+			parent.removeHigher(toDelete);
 	}
 	
 	public int getLevel() {

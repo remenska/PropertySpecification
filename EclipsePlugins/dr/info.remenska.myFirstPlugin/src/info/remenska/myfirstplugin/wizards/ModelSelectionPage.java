@@ -113,12 +113,13 @@ public class ModelSelectionPage extends WizardPage {
 		layout.numColumns = 2;
 		composite.setLayout(layout);
 		setControl(composite);
-		new Label(composite, SWT.NONE).setText("First Name");
-		firstNameText = new Text(composite, SWT.NONE);
-		new Label(composite, SWT.NONE).setText("Last Name");
-		secondNameText = new Text(composite, SWT.NONE);
-		final Button button = new Button(composite, SWT.PUSH);
-		button.setText("Click me");
+//		new Label(composite, SWT.NONE).setText("First Name");
+//		firstNameText = new Text(composite, SWT.NONE);
+//		new Label(composite, SWT.NONE).setText("Last Name");
+//		secondNameText = new Text(composite, SWT.NONE);
+//		final Button button = new Button(composite, SWT.PUSH);
+//		button.setText("Click me");
+		new Label(composite, SWT.NONE).setText("Select the operation ");
 		final Text selectedOperation = new Text(composite, SWT.NONE);
 		new Label(composite, SWT.NONE).setText("Select the working model: ");
 		final Text selectedModel = new Text(composite, SWT.NONE);
@@ -126,34 +127,31 @@ public class ModelSelectionPage extends WizardPage {
 		selectedModel.setEditable(false);
 		
 		selectedOperation.setEditable(false);
-		Listener modelListener = new Listener(){
-
+		Listener operationListener = new Listener(){
+//
 			@Override
 			public void handleEvent(Event event) {
-				 UMLSelectExistingElementDialog dialogModel = new
-						 UMLSelectExistingElementDialog(getShell(),Collections.singletonList(UMLElementTypes.MODEL));
-				 dialogModel.create();
-						if(dialogModel.open()==Window.OK){
-							List<Model> selected = (List<Model>) dialogModel.getSelectedElements();
-							System.out.println("Selected model:"+ selected.get(0).getName()+" : "+selected.get(0).getQualifiedName());
-							
-//							System.out.println(selected.get(0).getOwner().eClass().getName());
-							selectedModel.setText(selected.get(0).getName());
-							dialogModel.close();
+				 UMLSelectExistingElementDialog dialogOperation = new
+						 UMLSelectExistingElementDialog(getShell(),Collections.singletonList(UMLElementTypes.OPERATION));
+				 dialogOperation.create();
+						if(dialogOperation.open()==Window.OK){
+							List<Operation> selected = (List<Operation>) dialogOperation.getSelectedElements();
+							System.out.println("Selected operation:"+ selected.get(0).getName()+" : "+selected.get(0).getQualifiedName());
+							selectedOperation.setText(selected.get(0).getQualifiedName());
+							dialogOperation.close();
 						}
-
+//
 			}
-			
+//			
 		};
 		
-		selectedModel.addListener(SWT.MouseDoubleClick,modelListener);
-		selectedModel.addListener(SWT.KeyDown,modelListener);
-		Listener operationListener = new Listener() {
+	
+		Listener modelListener = new Listener() {
 			@Override
 			public void handleEvent(Event event) {
 
 				
-				Collection<Model> models = UMLModeler.getOpenedModels();
+//				Collection<Model> models = UMLModeler.getOpenedModels();
 				
 				/* Perform remaining work within a Runnable */
 				try {
@@ -198,37 +196,39 @@ public class ModelSelectionPage extends WizardPage {
 					System.out.println("StackTrace: "+ e);
 				}	
 				
-				 System.out.println("OpenModelRoots:"+UMLModeler.getOpenModelRoots());
+//				 System.out.println("OpenModelRoots:"+UMLModeler.getOpenModelRoots());
 //				 for(Model model:models){
 //		
 //					 createSequenceDiagram(model);
 //
 //				 }
-				 UMLSelectExistingElementDialog dialog = new
-				 UMLSelectExistingElementDialog(getShell(),Collections.singletonList(UMLElementTypes.OPERATION));
-				 dialog.create();
-				if(dialog.open()==Window.OK){
-					List<Operation> selected = (List<Operation>) dialog.getSelectedElements();
-					System.out.println(selected.get(0).getName()+" : "+selected.get(0).getQualifiedName());
-					
-					System.out.println(selected.get(0).getOwner().eClass().getName());
-					selectedOperation.setText(selected.get(0).getName());
-					dialog.close();
-				}
+//				 UMLSelectExistingElementDialog dialog = new
+//				 UMLSelectExistingElementDialog(getShell(),Collections.singletonList(UMLElementTypes.OPERATION));
+//				 dialog.create();
+//				if(dialog.open()==Window.OK){
+//					List<Operation> selected = (List<Operation>) dialog.getSelectedElements();
+//					System.out.println(selected.get(0).getName()+" : "+selected.get(0).getQualifiedName());
+////					
+//					System.out.println(selected.get(0).getOwner().eClass().getName());
+//					selectedOperation.setText(selected.get(0).getName());
+//					dialog.close();
+//				}
 
 			}
 
 		};
+		selectedModel.addListener(SWT.MouseDoubleClick,modelListener);
 		selectedOperation.addListener(SWT.MouseDoubleClick,operationListener);
-		selectedOperation.addListener(SWT.KeyDown,operationListener);
+//		selectedModel.addListener(SWT.KeyDown,modelListener);
 
 
-		button.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) {
-			
-			}
 
-		});
+//		button.addSelectionListener(new SelectionAdapter() {
+//			public void widgetSelected(SelectionEvent event) {
+//			
+//			}
+//
+//		});
 		
 		
 	}
@@ -239,38 +239,38 @@ private void createSequenceDiagram(Model m) {
 		Interaction inter = (Interaction) coll.createOwnedBehavior("PropertySpecInteraction_" +random, UMLPackage.eINSTANCE.getInteraction());
 		
 		// not part of the sequence diagram, but we'll be using these
-		Class c1 = (Class) m.createPackagedElement("C1", UMLPackage.eINSTANCE.getClass_());
-		Class c2 = (Class) m.createPackagedElement("C2", UMLPackage.eINSTANCE.getClass_());
+		Class c1 = (Class) m.createPackagedElement("C1_"+random, UMLPackage.eINSTANCE.getClass_());
+		Class c2 = (Class) m.createPackagedElement("C2_"+random, UMLPackage.eINSTANCE.getClass_());
 		
 		// create a class to use as the operation parameter type
-		Class c3 = (Class) m.createPackagedElement("C3", UMLPackage.eINSTANCE.getClass_());
+		Class c3 = (Class) m.createPackagedElement("C3_"+random, UMLPackage.eINSTANCE.getClass_());
 		
 		// create an operation on c2
 		EList ownedParameterNames = new BasicEList();
 		EList ownedParameterTypes = new BasicEList();
-		ownedParameterNames.add("Param1");
+		ownedParameterNames.add("Param1_"+random);
 		ownedParameterTypes.add(c3);
-		Operation op1 = c2.createOwnedOperation("open", ownedParameterNames, ownedParameterTypes);
+		Operation op1 = c2.createOwnedOperation("open_"+random, ownedParameterNames, ownedParameterTypes);
 
 		// create the properties of the collaboration (we'll need these for the lifelines)
-		Property p1 = coll.createOwnedAttribute("c1", c1);
-		Property p2 = coll.createOwnedAttribute("c2", c2);
+		Property p1 = coll.createOwnedAttribute("c1_"+random, c1);
+		Property p2 = coll.createOwnedAttribute("c2_"+random, c2);
 		
 		//
 		// start populating the interaction
 		//
 		
 		// create the lifelines
-		Lifeline lifeline1 =  inter.createLifeline("k1");
-		Lifeline lifeline2 = inter.createLifeline("k2");
+		Lifeline lifeline1 =  inter.createLifeline("k1_"+random);
+		Lifeline lifeline2 = inter.createLifeline("k2_"+random);
 		lifeline1.setRepresents(p1);
 		lifeline2.setRepresents(p2);
 		
 		// create a message from k1 to k2
-		Message m1 = inter.createMessage("open");
+		Message m1 = inter.createMessage("open_"+random);
 		
 		// every message needs a connector
-		Connector cn1 = inter.createOwnedConnector("connector1");
+		Connector cn1 = inter.createOwnedConnector("connector1_"+random);
 		cn1.setKind(ConnectorKind.ASSEMBLY_LITERAL);
 		
 		// create the connector ends, assign the roles
@@ -279,10 +279,10 @@ private void createSequenceDiagram(Model m) {
 		ConnectorEnd ce2 = cn1.createEnd();
 		ce2.setRole(p2);
 		
-		ExecutionEvent ev1 = (ExecutionEvent) m.createPackagedElement("ExecutionEvent1", UMLPackage.eINSTANCE.getExecutionEvent());
-		ReceiveOperationEvent roe = (ReceiveOperationEvent) m.createPackagedElement("ReceiveOperationEvent1", UMLPackage.eINSTANCE.getReceiveOperationEvent());
+		ExecutionEvent ev1 = (ExecutionEvent) m.createPackagedElement("ExecutionEvent1_"+random, UMLPackage.eINSTANCE.getExecutionEvent());
+		ReceiveOperationEvent roe = (ReceiveOperationEvent) m.createPackagedElement("ReceiveOperationEvent1_"+random, UMLPackage.eINSTANCE.getReceiveOperationEvent());
 		roe.setOperation(op1);
-		SendOperationEvent soe = (SendOperationEvent) m.createPackagedElement("SendOperationEvent1", UMLPackage.eINSTANCE.getSendOperationEvent());
+		SendOperationEvent soe = (SendOperationEvent) m.createPackagedElement("SendOperationEvent1_"+random, UMLPackage.eINSTANCE.getSendOperationEvent());
 		soe.setOperation(op1);
 
 		MessageOccurrenceSpecification se = (MessageOccurrenceSpecification) inter.createFragment(null, UMLPackage.eINSTANCE.getMessageOccurrenceSpecification());
@@ -323,11 +323,11 @@ private void createSequenceDiagram(Model m) {
 		// and finally... create the diagrams
 		// note slightly different syntax here
 		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
-		d.setName("My Sequence diagram");		
+		d.setName("My Sequence diagram_"+random);		
 		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
 
 		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
-		cd.setName("My Communication diagram");		
+		cd.setName("My Communication diagram_"+random);		
 //		UMLModeler.getUMLDiagramHelper().openDiagramEditor(cd);
 	}
 
