@@ -16,8 +16,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -241,7 +244,6 @@ public class QuestionTreePage extends WizardPage {
 				isValid = false;
 				break;
 			}
-			
 		}
 		if(isValid)
 			setPageComplete(true);
@@ -254,9 +256,37 @@ public class QuestionTreePage extends WizardPage {
 	public void createControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		parentLe = composite;
-		composite.setLayout(new FillLayout());
-		setControl(composite);	
+		
+//		FormData formData = new FormData();
+//		formData.top = new FormAttachment(20,0);
+		
+		GridData gridData = new GridData();
+		gridData.verticalAlignment = GridData.FILL_BOTH;
+		FillLayout layout = new FillLayout(); //OLD
+//		layout.makeColumnsEqualWidth = false;
+//		layout.numColumns = 2;
+//		layout.pa
+		composite.setLayoutData(gridData); //OLD
+		
+//		composite.setLayout(new FillLayout());
+		
+//		composite.setLayoutData(gridData);
+		setControl(composite);
+		
+		
+		new Label(composite, SWT.NONE).setText("Static Field: ");
+		final Text staticField = new Text(composite, SWT.NONE);
+		staticField.setText("AAAAAAAAAAAAAA");
+		
 		ExpandBar root = new ExpandBar(composite, SWT.V_SCROLL);;
+//		root.setLayoutData(formData);
+		
+//		FormData formData2 = new FormData();
+//		formData2.top = new FormAttachment(root,SWT.TOP);
+;
+//		staticField.setLayoutData(formData);
+//		staticField.setLayoutData(gridData);
+//		root.setLayoutData(gridData);
 		final MySelectionListener mySelectionListener = new MySelectionListener();
 		final MyExpandListener myExpandListener = new MyExpandListener();
 //		root.setBackgroundImage(new Image(display,"/home/daniela/Downloads/background.jpg"));

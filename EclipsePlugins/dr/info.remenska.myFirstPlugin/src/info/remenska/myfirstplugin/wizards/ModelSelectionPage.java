@@ -123,6 +123,7 @@ public class ModelSelectionPage extends WizardPage {
 		final Text selectedOperation = new Text(composite, SWT.NONE);
 		new Label(composite, SWT.NONE).setText("Select the working model: ");
 		final Text selectedModel = new Text(composite, SWT.NONE);
+
 		
 		selectedModel.setEditable(false);
 		
