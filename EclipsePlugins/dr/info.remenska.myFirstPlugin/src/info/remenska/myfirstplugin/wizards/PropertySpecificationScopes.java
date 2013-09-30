@@ -29,7 +29,7 @@ public class PropertySpecificationScopes extends WizardPage {
 
 	@Override
 	public void createControl(Composite parent) {
-		String explanation = " Each pattern has a scope, which is the extent of the program execution "
+		String explanation = "Each pattern has a scope, which is the extent of the program execution "
 		+ "over which the pattern must hold. There are five basic kinds of scopes: global (the entire program execution), "
 		+ "before (the execution up to a given state/event), after (the execution after a given state/event), "
 		+ "between (any part of the execution from one given state/event to another given state/event) "

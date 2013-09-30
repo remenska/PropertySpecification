@@ -16,7 +16,7 @@ public class CapturePropertyWizard extends Wizard {
 	QuestionTreePage questionTreePage;
 	DisciplinedEnglishPage disciplinedEnglishPage;
 	public void addPages(){
-		propertyScopes = new PropertySpecificationScopes("BAAAA", "BLAAA");
+		propertyScopes = new PropertySpecificationScopes("Introduction", "Property Specification Scopes");
 		addPage(propertyScopes);
 //		modelSelectionPage = new ModelSelectionPage("Personal Information Page");
 //		addPage(modelSelectionPage);
