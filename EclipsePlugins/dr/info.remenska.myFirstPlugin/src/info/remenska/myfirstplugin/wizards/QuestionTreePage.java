@@ -1,5 +1,9 @@
 package info.remenska.myfirstplugin.wizards;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -11,6 +15,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.gmf.runtime.common.ui.services.elementselection.ElementSelectionScope;
+import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
@@ -33,6 +39,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.internal.Workbench;
+import org.eclipse.uml2.uml.Operation;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ExpandAdapter;
 import org.eclipse.swt.events.ExpandEvent;
@@ -40,6 +47,10 @@ import org.eclipse.swt.events.ExpandListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 
+import com.ibm.xtools.uml.type.UMLElementTypes;
+import com.ibm.xtools.uml.ui.internal.dialogs.UMLSelectExistingElementDialog;
+import com.ibm.xtools.uml.ui.internal.dialogs.UMLSelectElementDialog;
+import com.ibm.xtools.uml.ui.internal.dialogs.UMLSelectElementDialogAPN;
 public class QuestionTreePage extends WizardPage {
 	class MySelectionListener implements SelectionListener{
 		@Override
@@ -263,28 +274,12 @@ public class QuestionTreePage extends WizardPage {
 	public void createControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.FILL);
 		parentLe = composite;
-		
-		
-		FillLayout layout = new FillLayout(); //OLD
-		GridLayout layout2 = new GridLayout();
-		layout2.makeColumnsEqualWidth = false;
-		layout2.numColumns = 2;
-//		layout.pa
-//		composite.setLayout(layout); //OLD
-//		RowLayout rowLayout = new RowLayout();
-//		rowLayout.wrap = true;
-//		rowLayout.type = SWT.HORIZONTAL;
-//		rowLayout.justify = true;
-//		rowLayout.pack = true;
-		
-		
+
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 2;
 		
-		composite.setLayout(gridLayout); //OLD
+		composite.setLayout(gridLayout); 
 
-//		composite.setLayout(new FillLayout());
-//		composite.setLayoutData(gridData);
 		setControl(composite);
 		
 		
@@ -302,7 +297,6 @@ public class QuestionTreePage extends WizardPage {
 		gridData.verticalAlignment = SWT.TOP;
 		labelStartEvent = new Label(composite, SWT.NONE);
 		labelStartEvent.setText("Start Event: ");
-		
 		FontData fontData = labelStartEvent.getFont().getFontData()[0];
 		Font font = new Font(Display.getCurrent(), new FontData(fontData.getName(), fontData
 		    .getHeight(), SWT.BOLD));
@@ -312,8 +306,9 @@ public class QuestionTreePage extends WizardPage {
 		gridData = new GridData();
 		gridData.horizontalAlignment = GridData.BEGINNING;
 		gridData.verticalAlignment = SWT.TOP;
-		textStartEvent = new Text(composite, SWT.NONE); // THESE SHOULD BE STATIC
-		textStartEvent.setText("A::message1()");
+		textStartEvent = new Text(composite, SWT.FILL); // THESE SHOULD BE STATIC
+		textStartEvent.setText("double click to select");
+		textStartEvent.setEditable(false);
 		textStartEvent.setLayoutData(gridData);
 		
 		gridData = new GridData();
@@ -327,8 +322,10 @@ public class QuestionTreePage extends WizardPage {
 		gridData = new GridData();
 		gridData.horizontalAlignment = GridData.BEGINNING;
 		gridData.verticalAlignment = SWT.TOP;
-		textEndEvent = new Text(composite, SWT.NONE);
-		textEndEvent.setText("B::message2()");
+		textEndEvent = new Text(composite, SWT.FILL);
+		textEndEvent.setText("double-click to select");
+		textEndEvent.setEditable(false);
+
 		textEndEvent.setLayoutData(gridData);
 		
 		labelGraphicsHolder = new Label(composite, SWT.NONE);
@@ -341,6 +338,32 @@ public class QuestionTreePage extends WizardPage {
 		labelGraphicsHolder.setLayoutData(gridData);
 		
 		composite.pack();
+		
+		Listener operationListener = new Listener(){
+//
+			@Override
+			public void handleEvent(Event event) {
+				 UMLSelectExistingElementDialog dialogOperation = new
+						 UMLSelectExistingElementDialog(getShell(),Collections.singletonList(UMLElementTypes.OPERATION));
+				 dialogOperation.create();
+				 
+//				 dialogOperation.setElementSelectionScope(ElementSelectionScope.VISIBLE);
+						if(dialogOperation.open()==Window.OK){
+							List<Operation> selected = (List<Operation>) dialogOperation.getSelectedElements();
+							System.out.println("Selected operation:"+ selected.get(0).getName()+" : "+selected.get(0).getQualifiedName());
+							((Text)event.widget).setText(selected.get(0).getQualifiedName());
+							((Text)event.widget).pack();
+//							selectedOperation.setText(selected.get(0).getQualifiedName());
+							dialogOperation.close();
+						}
+//
+			}
+//			
+		};	
+		
+		textStartEvent.addListener(SWT.MouseDoubleClick,operationListener);
+		textEndEvent.addListener(SWT.MouseDoubleClick,operationListener);
+
 //		root.setLayoutData(formData);
 		
 //		FormData formData2 = new FormData();
