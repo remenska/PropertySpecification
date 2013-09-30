@@ -330,7 +330,7 @@ public class QuestionTreePage extends WizardPage {
 		
 		labelGraphicsHolder = new Label(composite, SWT.NONE);
 		scopeGraphical = new Image(Display.getCurrent(),
-				   "/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/ScopeTimelineView/legend.png");
+				   "/home/daniela/git/PropertySpecification/ScopeTimelineView/legend.png");
 		labelGraphicsHolder.setImage(scopeGraphical);
 		gridData = new GridData();
 		gridData.horizontalAlignment = GridData.BEGINNING;
