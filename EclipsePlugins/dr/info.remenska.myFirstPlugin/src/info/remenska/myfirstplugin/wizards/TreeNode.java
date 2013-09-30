@@ -45,11 +45,9 @@ public class TreeNode<T> implements Iterable<TreeNode<T>> {
 	public void removeChildren() {
 		toDelete = new LinkedList<TreeNode<T>>(this.elementsIndex);
 		this.children.clear();
-//		toDelete = this.children;
 		this.elementsIndex.clear();
 		this.elementsIndex.add(this);
 		toDelete.remove(this);
-//		this.children.clear();	
 		if(parent!=null)
 			parent.removeHigher(toDelete);
 

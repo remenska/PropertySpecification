@@ -43,8 +43,6 @@ public class QuestionTreePage extends WizardPage {
 			// Buttons))
 			boolean isSelected = ((Button) e.getSource()).getSelection();
 //			System.out.println("-----------");
-//			System.out.println("Selected: "+  ((Button) e.getSource()).getText());
-//			System.out.println("Trying to find a TreeNode, it's children are..: "+ questionnaire.findTreeNode(((Button) e.getSource()).getText()).children);
 			if (isSelected) {
 				
 				List<TreeNode<String>> newQuestions = questionnaire.findTreeNode(((Button) e.getSource()).getText()).children;
@@ -52,73 +50,31 @@ public class QuestionTreePage extends WizardPage {
 				// (1) find parent 
 				// (2) remove all children
 				// (3) add this clicked one
-				//TODO: how about we check if there are any new questions at all?
-				System.out.println("SELECTED: "+ selected);
-				
-//				TreeNode<String> selectedNode = dynamicQuestionnaire.findTreeNode(selected);
-//				selectedNode.removeChildren();
-//				TreeNode<String> selectedNodeParent = selectedNode.parent;
-//				selectedNodeParent.removeChildren();
-//				System.out.println("CAN YOU FIND IT NOW? " + dynamicQuestionnaire.findTreeNode(selected));
-//				selectedNodeParent.addChild(selectedNode.data, false);	
+//				System.out.println("SELECTED: "+ selected);
+
 				TreeNode<String> staticNode = questionnaire.findTreeNode(selected);
-				System.out.println("FOUND STATIC NODE: "+ staticNode.data);
+//				System.out.println("FOUND STATIC NODE: "+ staticNode.data);
 
 				TreeNode<String> staticParentNode = staticNode.parent;
-				System.out.println("STATIC NODE PARENT: "+ staticParentNode.data);
+//				System.out.println("STATIC NODE PARENT: "+ staticParentNode.data);
 
 				// (1)
 				TreeNode<String> dynamicParentNode =  dynamicQuestionnaire.findTreeNode(staticParentNode.data);
-				System.out.println("DYNAMIC NODE PARENT: "+ dynamicParentNode.data);
-				System.out.println("DYNAMIC PARENT HAS: "+ dynamicParentNode.children.size());
-//				traverseQuestionnaire(dynamicQuestionnaire);
+//				System.out.println("DYNAMIC NODE PARENT: "+ dynamicParentNode.data);
+//				System.out.println("DYNAMIC PARENT HAS: "+ dynamicParentNode.children.size());
 
-//				List<TreeNode<String>>dynamicParentNodeChildren = dynamicParentNode.children;
 				// (2)
-//				dynamicQuestionnaire.findTreeNode(staticParentNode.data).removeChildren();
 				dynamicParentNode.removeChildren();
-				TreeNode<String> dynamicNode = dynamicParentNode.addChild(selected, false); 
-//				dynamicNode.removeChildren();
-				System.out.println(">>> CAN YOU FIND IT NOW? " + dynamicQuestionnaire.findTreeNode(selected));
-//				System.out.println("(AFTER DELITION) DYNAMIC PARENT HAS: "+ dynamicParentNode.children.size());
-//				traverseQuestionnaire(dynamicQuestionnaire);
 
-//				for(TreeNode<String> child:dynamicParentNodeChildren)
-//					child.removeChildren();
 				// (3)
-				
-//				System.out.println("(AFTER ADDITION) DYNAMIC PARENT HAS: "+ dynamicParentNode.children.size());
-//				traverseQuestionnaire(dynamicQuestionnaire);
+				TreeNode<String> dynamicNode = dynamicParentNode.addChild(selected, false); 
 
 				Composite questionsHolder = ((Button) e.getSource()).getParent();
-//				TreeNode<Composite> questionsHolderVal = questionnaireValidation.findTreeNodeViaObject(questionsHolder); //TODO: not needed, remove?
-				
-//				questionsHolderVal.removeChildren();
-//				System.out.println("Removed children, now: "+ questionnaireValidation.getLevel());
-		//DEBUG
-				//OK
-//				System.out.println("QuestionsHolder BEFORE:" + questionsHolder.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
-//				ExpandBar findBar = (ExpandBar) questionsHolder.getParent(); 
-//				ExpandItem[] findItems = findBar.getItems();
-//				for(ExpandItem item:findItems){
-//					if(item.getControl().equals(questionsHolder))
-//						// NOT OK!
-//						System.out.println("ExpandItem BEFORE:" + item.getHeight());
-//				}
-		//END_DEBUG
-				
-//				questionsHolder.redraw();
-//				questionsHolder.update();
 				
 				int oldOldHeight = questionsHolder.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
 				//first remove existing expandBars. This means only answers remain, no nested questions
 				 for (Control control : questionsHolder.getChildren()) {
 				        if (!(control instanceof Button)){
-//				        	if(control instanceof Composite){
-//				        		questionnaireValidation.remove(control); // <-- but this should be done recursively to subtrees
-//				        		System.out.println("Removed composite, now: "+ questionnaireValidation + " " + questionnaireValidation.isEmpty());
-//				        	}
-				        	// here collect the OldOldHeight
 				        	control.dispose();
 				        }
 				    }		
@@ -140,7 +96,6 @@ public class QuestionTreePage extends WizardPage {
 //				System.out.println("NEW QUESTIONS: " + newQuestions);
 				for(TreeNode<String> newQuestion:newQuestions){
 					Composite questionComposite = new Composite(expandBarNewQuestions, SWT.NONE);
-//					questionsHolderVal.addChild(questionComposite, true);
 //					System.out.println("Added child, now: " + questionnaireValidation.getLevel());
 					GridLayout layout1 = new GridLayout(1, true);
 					questionComposite.setLayout(layout1);
@@ -149,13 +104,10 @@ public class QuestionTreePage extends WizardPage {
 					question.setText((String) newQuestion.data);
 					TreeNode<String> dynamicQuestion = dynamicNode.addChild(newQuestion.data, true);
 					
-//					question.setExpanded(true);
-//					question.notifyListeners(SWT.Expand, new Event());
 //					System.out.println("QUESTION INSERTED, TEXT:"+ question.getText());
 					question.setControl(questionComposite);//Sets the control that is shown when the item is expanded.
 
 					//new answers for each question
-					// these kids are ANSWERS
 					List<TreeNode<String>> answers = newQuestion.children;
 					for(TreeNode<String> answer:answers){
 						Button label1 = new Button(questionComposite, SWT.RADIO);
@@ -164,20 +116,15 @@ public class QuestionTreePage extends WizardPage {
 						
 						dynamicQuestion.addChild(answer.data, false);
 					}
-//					question.setHeight(300);
 					question.setHeight(questionComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 					height += questionComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
-//					if(prevQuest!=null)
-//						prevQuest.setHeight(prevQuest.getHeight() + height);
 					questionComposite.setVisible(true);
 					questionComposite.layout();
 					questionsHolder.layout();
-//					prevQuest = question;
 				}
 				
 				//we need to adjust the (parent) ExpandItem's height
 				//first let's find it
-//				adjustHeight(e, oldOldHeight, height);
 				ExpandBar expandBarParent = (ExpandBar) questionsHolder.getParent();
 				ExpandItem[] expandItems = expandBarParent.getItems();
 				ExpandItem theOneWeNeed = null;
@@ -190,24 +137,16 @@ public class QuestionTreePage extends WizardPage {
 				//recalculate the height // <-- needs to be propagated to outer levels
 				if(theOneWeNeed!=null){
 					int oldHeight = theOneWeNeed.getHeight();
-					theOneWeNeed.setHeight(questionsHolder.computeSize(SWT.DEFAULT, SWT.DEFAULT).y); // <-- this is fishy
-//					theOneWeNeed.setHeight(oldHeight+height); // <-- this is fishy
+					theOneWeNeed.setHeight(questionsHolder.computeSize(SWT.DEFAULT, SWT.DEFAULT).y); 
 
 				}
 				
 				recallibrateHeight(height, oldOldHeight, questionsHolder);
 				questionsHolder.layout();
-//				System.out.println("(AFTER ALL) DYNAMIC PARENT HAS: "+ dynamicParentNode.children.size());
-//				System.out.println("DEPTH DYNAMIC PARENT HAS: "+ dynamicParentNode.getLevel());
-
-//				System.out.println("CHILDREN CONTENT: " + dynamicParentNode.children);
-
-//				System.out.println("\n");
 				traverseQuestionnaire(dynamicQuestionnaire);
-
 				System.out.println("\n");System.out.println("\n");
 			}
-			
+			checkIfValid();
 		}
 
 		private void recallibrateHeight(int height, int oldOldHeight,
@@ -240,19 +179,14 @@ public class QuestionTreePage extends WizardPage {
 							if(item.getControl().equals(compositeParent))
 								theOneWeLookFor = item;
 						}
-//						heightToAdd = compositeParent.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
-//						System.out.println("Height to add:"+ heightToAdd);
 
-//						System.out.println("The one we look for: "+ theOneWeLookFor);
-//						System.out.println("ParentItem height BEFORE = " + theOneWeLookFor.getHeight());
 						theOneWeLookFor.setHeight(theOneWeLookFor.getHeight()+questionsHolder.computeSize(SWT.DEFAULT, SWT.DEFAULT).y - oldOldHeight);
-//						System.out.println("ParentItem height AFTER = " + theOneWeLookFor.getHeight());
 
 						compositeParent.layout();
 					}
 					
 				}
-				itemExpanded = theOneWeLookFor; //TODO change this!!
+				itemExpanded = theOneWeLookFor; 
 
 			}
 		
@@ -265,9 +199,7 @@ public class QuestionTreePage extends WizardPage {
 	}
 	public TreeNode<String> questionnaire;
 	public TreeNode<String> dynamicQuestionnaire;
-//	public TreeNode<Composite> questionnaireValidation;
-//	public LinkedList<Composite> questionnaireValidation = new LinkedList<Composite>();
-//	public HashMap<Composite,Button> questionnaireValidation1 = new HashMap<Composite,Button>();
+
 	private static String createIndent(int depth) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < depth; i++) {
@@ -283,7 +215,7 @@ public class QuestionTreePage extends WizardPage {
 		this.questionnaire = questionnaire;
 		setTitle(pageName);
 		setDescription(description);
-//		setPageComplete(false);
+		setPageComplete(false);
 	}
 	
 	public void traverseQuestionnaire(TreeNode<String> questionnaireAman){
@@ -291,9 +223,7 @@ public class QuestionTreePage extends WizardPage {
 		System.out.println("TRAVERSAL-------");
 		Iterator<TreeNode<String>> iter = dynamicQuestionnaire.iterator();
 		while(iter.hasNext()){
-			TreeNode<String> el = iter.next();
-//			System.out.println(el.data);
-			
+			TreeNode<String> el = iter.next();			
 			String ident = createIndent(el.getLevel());
 			String hmmm = el.isQuestion?"Q: ":"A: ";
 			
@@ -301,31 +231,39 @@ public class QuestionTreePage extends WizardPage {
 		}
 	}
 	
+	public void checkIfValid(){
+		boolean isValid = true;
+		Iterator<TreeNode<String>> iter = dynamicQuestionnaire.iterator();
+		while(iter.hasNext()){
+			TreeNode<String> el = iter.next();
+			if(el.isQuestion)
+			if(el.children.size()!=1 && el.isQuestion){
+				isValid = false;
+				break;
+			}
+			
+		}
+		if(isValid)
+			setPageComplete(true);
+		else
+			setPageComplete(false);
+	}
+	
 	
 	@Override
 	public void createControl(Composite parent) {
-//		System.out.println("PARENTTT:" + parent);
-//		Questionnaire.load();
 		Composite composite = new Composite(parent, SWT.NONE);
 		parentLe = composite;
-//		traverseQuestionnaire(questionnaire);
-//		questionnaireValidation = new TreeNode(composite, false);
-//		System.out.println("Added root, now: " + questionnaireValidation.getLevel());
 		composite.setLayout(new FillLayout());
 		setControl(composite);	
 		ExpandBar root = new ExpandBar(composite, SWT.V_SCROLL);;
 		final MySelectionListener mySelectionListener = new MySelectionListener();
 		final MyExpandListener myExpandListener = new MyExpandListener();
-//		root.setBackground(display.getSystemColor(SWT.COLOR_BLUE));
 //		root.setBackgroundImage(new Image(display,"/home/daniela/Downloads/background.jpg"));
 		ExpandItem question = new ExpandItem(root, SWT.NONE, 0);
 		question.setText((String) questionnaire.data);
-//		question.setExpanded(true);
-//		question.notifyListeners(SWT.Expand, new Event());
 		 root.addExpandListener(myExpandListener);
 		Composite answersContainer = new Composite(root, SWT.NONE);
-//		questionnaireValidation.addChild(answersContainer, false);
-//		System.out.println("Added child, now: " + questionnaireValidation.getLevel());
 		dynamicQuestionnaire = new TreeNode<String>(this.questionnaire.data, true);
 		GridLayout layout1 = new GridLayout(1, true);
 		answersContainer.setLayout(layout1);
@@ -356,19 +294,14 @@ public class QuestionTreePage extends WizardPage {
 			 // we need to propagate the height to all ExpandItem parents in the hierarchy
 			
 			ExpandItem itemExpanded = (ExpandItem) e.item;
-//			System.out.println("Action: COLLAPSE");
-//			System.out.println("ItemCollapsed: " + itemExpanded + "; height = " + itemExpanded.getHeight());
 			ExpandItem theOneWeLookFor = null; 
-			Composite compositeControlled = (Composite) itemExpanded.getControl(); // what if it's a top level? Where we have Composite(Composite)
+			Composite compositeControlled = (Composite) itemExpanded.getControl(); 
 			int heightToRemove = compositeControlled.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
 			while(itemExpanded!=null){
 				theOneWeLookFor = null;
 				
 				ExpandBar itemParentBar = itemExpanded.getParent();
-//				System.out.println("ItemParentBar: " + itemParentBar);
 				compositeControlled = (Composite) itemExpanded.getControl();
-//				int heightToRemove = compositeControlled.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
-//				int heightToRemove = itemExpanded.getHeight();
 				
 				Composite compositeParent =itemParentBar.getParent();
 				if(compositeParent!=null  && !itemParentBar.getParent().equals(parentLe)){
@@ -380,20 +313,15 @@ public class QuestionTreePage extends WizardPage {
 							if(item.getControl().equals(compositeParent))
 								theOneWeLookFor = item;
 						}
-//						heightToAdd = compositeParent.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
-//						System.out.println("Height to remove:"+ heightToRemove);
 
-//						System.out.println("The one we look for: "+ theOneWeLookFor);
-//						System.out.println("ParentItem height BEFORE = " + theOneWeLookFor.getHeight());
 						theOneWeLookFor.setHeight(theOneWeLookFor.getHeight()-heightToRemove);
-//						System.out.println("ParentItem height AFTER = " + theOneWeLookFor.getHeight());
 
 						compositeParent.layout();
 						compositeControlled.layout();
 					}
 					
 				}
-				itemExpanded = theOneWeLookFor; //TODO change this!!
+				itemExpanded = theOneWeLookFor; 
 
 			}
 		}
@@ -403,16 +331,13 @@ public class QuestionTreePage extends WizardPage {
 		public void itemExpanded(ExpandEvent e) {
 	     // we need to propagate the height to all ExpandItem parents in the hierarchy
 			ExpandItem itemExpanded = (ExpandItem) e.item;
-//			System.out.println("ItemExpanded: " + itemExpanded + "; height = " + itemExpanded.getHeight());
 			ExpandItem theOneWeLookFor = null; 
 			Composite compositeControlled = (Composite) itemExpanded.getControl();
 			int heightToAdd = compositeControlled.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
 			while(itemExpanded!=null){
 				theOneWeLookFor = null;
 				ExpandBar itemParentBar = itemExpanded.getParent();
-//				System.out.println("ItemParentBar: " + itemParentBar);
 				compositeControlled = (Composite) itemExpanded.getControl();
-//				int heightToAdd = compositeControlled.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
 				if(itemParentBar.getParent()!=null && !itemParentBar.getParent().equals(parentLe)){
 					ExpandBar expandBarSuperParent = (ExpandBar) itemParentBar.getParent().getParent(); // BUG
 					if(expandBarSuperParent!=null){
@@ -422,19 +347,14 @@ public class QuestionTreePage extends WizardPage {
 							if(item.getControl().equals(itemParentBar.getParent()))
 								theOneWeLookFor = item;
 						}
-//						heightToAdd = compositeParent.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
-//						System.out.println("Height to add:"+ heightToAdd);
 
-//						System.out.println("The one we look for: "+ theOneWeLookFor);
-//						System.out.println("ParentItem height BEFORE = " + theOneWeLookFor.getHeight());
 						theOneWeLookFor.setHeight(theOneWeLookFor.getHeight()+heightToAdd);
-//						System.out.println("ParentItem height AFTER = " + theOneWeLookFor.getHeight());
 
 						itemParentBar.getParent().layout();
 					}
 					
 				}
-				itemExpanded = theOneWeLookFor; //TODO change this!!
+				itemExpanded = theOneWeLookFor; 
 
 			}
 		}
