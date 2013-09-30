@@ -1,12 +1,22 @@
 package info.remenska.myfirstplugin.wizards;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Link;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 
 public class PropertySpecificationScopes extends WizardPage {
 
@@ -21,12 +31,24 @@ public class PropertySpecificationScopes extends WizardPage {
 	public void createControl(Composite parent) {
 		String explanation = " Each pattern has a scope, which is the extent of the program execution "
 		+ "over which the pattern must hold. There are five basic kinds of scopes: global (the entire program execution), "
-		+ "before (the execution up to a given state/event), after (the execution after a given state/event),"
+		+ "before (the execution up to a given state/event), after (the execution after a given state/event), "
 		+ "between (any part of the execution from one given state/event to another given state/event) "
-		+ "and after-until (like between but the designated part of the execution continues even if the second state/event does not occur)."
+		+ "and after-until (like between but the designated part of the execution continues even if the second state/event does not occur). "
 		+ "The scope is determined by specifying a starting and an ending state/event for the pattern: "
-		+ "the scope consists of all states/events beginning with the starting state/event and up to but not including the ending state/event.";
+		+ "the scope consists of all states/events beginning with the starting state/event and up to but not including the ending state/event."
+		+ "\n\n"
+		+ "The figure  illustrates the portions of an execution that are designated by the different kinds of scopes. "
+		+ "We note that a scope itself should be interpreted as optional; if the scope delimiters are not present in an execution "
+		+ "then the specification will be true."
+		+ "\n\n"
 
+		+ "Before and after scopes for our patterns are interpreted relative to the first occurrence of the designated "
+		+ "state/event. We have done this because it matches our experience with real specifications. Note, however, that we could just "
+		+ "as easily interpret these scopes relative to the last occurrence of the designated state/event "
+		+ "(the mappings given in the patterns are easily transformed to match this interpretation). At present we do not "
+		+ "see the need for supporting both first and last occurrence scopes, but as we gain experience applying the patterns "
+		+ "we may wish to extend scopes in this way. ";
+		 
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 2;
@@ -35,12 +57,16 @@ public class PropertySpecificationScopes extends WizardPage {
 		setControl(composite);
 
 		GridData gridData = new GridData();
-//		gridData.heightHint = 300;
-//		gridData.widthHint = 700;
+		gridData.horizontalAlignment = GridData.BEGINNING;
+		gridData.verticalAlignment = SWT.TOP;
+		gridData.verticalSpan = 5;
+
+		gridData.heightHint = 450;
+		gridData.widthHint = 550;
 //		gridData.horizontalAlignment = GridData.GRAB_HORIZONTAL;
 //		gridData.verticalAlignment = GridData.GRAB_VERTICAL;
 //		gridData.se
-		StyledText styledText = new StyledText(composite, SWT.WRAP | SWT.BORDER);
+		StyledText styledText = new StyledText(composite, SWT.WRAP);
 		styledText.setLineJustify(0, 1, true);
 		styledText.setEditable(false);
 //		styledText.setLineAlignment(6, 1, SWT.RIGHT);
@@ -48,6 +74,57 @@ public class PropertySpecificationScopes extends WizardPage {
 		styledText.setLayoutData(gridData); 
 //		styledText.setBounds(10,10,100,100);
 		styledText.setText(explanation);
+		
+		gridData = new GridData();
+		gridData.horizontalAlignment = GridData.BEGINNING;
+		gridData.verticalAlignment = SWT.TOP;
+		Label imageHolder = new Label(composite, SWT.WRAP | SWT.BORDER);
+		Image scopesGraphical = new Image(Display.getCurrent(),
+				   "/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/ScopeTimelineView/scopes.gif");
+		imageHolder.setImage(scopesGraphical);
+		
+		imageHolder.setLayoutData(gridData);
+		
+
+		gridData = new GridData();
+		gridData.horizontalAlignment = GridData.BEGINNING;
+		gridData.verticalAlignment = SWT.TOP;
+
+		gridData.heightHint = 100;
+		gridData.widthHint = 400;
+//		gridData.horizontalAlignment = GridData.GRAB_HORIZONTAL;
+//		gridData.verticalAlignment = GridData.GRAB_VERTICAL;
+//		gridData.se
+//		StyledText takenFrom = new StyledText(composite, SWT.WRAP);
+//		takenFrom.setLineJustify(0, 1, true);
+//		takenFrom.setEditable(false);
+//		styledText.setLineAlignment(6, 1, SWT.RIGHT);
+//		takenFrom.setWordWrap(true);
+//		takenFrom.setLayoutData(gridData); 
+//		styledText.setBounds(10,10,100,100);
+		Link link = new Link(composite, SWT.NONE);
+		link.setLayoutData(gridData);
+		String message = "* The explanation and figure are borrowed from the <a href=\"http://patterns.projects.cis.ksu.edu/documentation/patterns/scopes.shtml\">Property Specification Patterns</a> project website.";
+		link.setText(message);
+		link.addSelectionListener(new SelectionAdapter(){
+	        @Override
+	        public void widgetSelected(SelectionEvent e) {
+	               System.out.println("You have selected: "+e.text);
+	               try {
+	                //  Open default external browser 
+	                PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL(new URL(e.text));
+	              } 
+	             catch (PartInitException ex) {
+	                // TODO Auto-generated catch block
+	                 ex.printStackTrace();
+	            } 
+	            catch (MalformedURLException ex) {
+	                // TODO Auto-generated catch block
+	                ex.printStackTrace();
+	            }
+	        }
+	    });
+		
 //		Label labelExplanation = new Label(composite, SWT.FILL);
 //		labelExplanation.setText(explanation);
 
