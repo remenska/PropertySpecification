@@ -18,6 +18,8 @@ public class CapturePropertyWizard extends Wizard {
 	public void addPages(){
 		propertyScopes = new PropertySpecificationScopes("Introduction", "Property Specification Scopes");
 		addPage(propertyScopes);
+//		getShell().setMaximized(true);
+//		getShell().setFullScreen(true);
 //		modelSelectionPage = new ModelSelectionPage("Personal Information Page");
 //		addPage(modelSelectionPage);
 		addressInfoPage = new QuestionTreePage("Scope Question Tree View", "Please answer the following questions regarding the scope of the property:", Questionnaire.scopeQuestionTree);
@@ -28,10 +30,12 @@ public class CapturePropertyWizard extends Wizard {
 		addPage(disciplinedEnglishPage);
 		this.getShell().setMaximized(true);
 		this.getShell().setFocus();
-		this.getShell().setMaximized(true);
+//		this.getShell().pack();
+//		this.getShell().setMaximized(true);
 		Rectangle clientArea = this.getShell().getClientArea ();
-//		System.out.println("Client Area: "+ clientArea + " AAAA" + getShell().getMaximized());
+		System.out.println("Client Area: "+ clientArea + " AAAA" + getShell().getMaximized());
 		this.getShell().setSize(clientArea.width, clientArea.height);
+//		this.getShell().pack();
 	}
 	@Override
 	public boolean performFinish() {

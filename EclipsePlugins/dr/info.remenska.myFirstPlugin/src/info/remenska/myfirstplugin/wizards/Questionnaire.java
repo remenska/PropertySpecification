@@ -2,7 +2,7 @@ package info.remenska.myfirstplugin.wizards;
 
 public class Questionnaire {
 	
-	public static TreeNode<String> scopeQuestionTree = new TreeNode<String>("Is the behavior only required to hold within a restricted interval(s) in the event sequence?", true);
+	public static TreeNode<String> scopeQuestionTree = new TreeNode<String>("Is the behavior only required to hold within a restricted interval(s) in the event sequence?                                    \t\t                                          ", true);
 	public static TreeNode<String> behaviorQuestionTree = new TreeNode<String>("How many events of primary interest are there in this behavior?", true);
 	public static 	TreeNode<String> answ11 = scopeQuestionTree.addChild("Yes, the behavior is only required to hold within restricted interval(s) in the event sequence. ", false);
 	public static 	TreeNode<String> quest111 = answ11.addChild("Which of the following choices best describes the restricted interval(s)?", true);

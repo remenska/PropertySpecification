@@ -17,6 +17,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.gmf.runtime.common.ui.services.elementselection.ElementSelectionScope;
+import org.eclipse.jface.viewers.CellEditor.LayoutData;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -87,33 +88,19 @@ public class QuestionTreePage extends WizardPage {
 				TreeNode<String> dynamicNode = dynamicParentNode.addChild(selected, false); 
 
 				Composite questionsHolder = ((Button) e.getSource()).getParent();
-				//change the image
-				System.out.println(staticNode);
-				System.out.println("DID WE FILL IN AT LEAST ONE???" + scopeImage);
-//				System.out.println("Let's TRY TO CHANGE THE IMAGE:");
-				System.out.println("To this: "+ scopeImage.get(staticNode));
-			
+
 				if(scopeImage.get(staticNode)!=null){
-					System.out.println("progress..1");
-					scopeGraphical.dispose();
-					
-					final Image scopeGraphical = new Image(Display.getCurrent(), scopeImage.get(staticNode));
+
+					labelGraphicsHolder.setVisible(true);
+					scopeGraphical = new Image(Display.getCurrent(), scopeImage.get(staticNode));
+
 					labelGraphicsHolder.getDisplay().asyncExec(new Runnable () {
 						public void run() {
-							System.out.println("progress..2");
 
-							System.out.println("progress..3");
-
+							Composite parent = labelGraphicsHolder.getParent();
 							labelGraphicsHolder.setImage(scopeGraphical) ;
-							System.out.println("progress..4");
-							System.out.println("IMAGE!!:"+labelGraphicsHolder.getImage().toString());
-//							labelGraphicsHolder.getParent().redraw();
-//							labelGraphicsHolder.getParent().layout();
-//							labelGraphicsHolder.getParent().pack(true);
-							System.out.println("progress.5");
 							labelGraphicsHolder.pack(true);
-							labelGraphicsHolder.pack();
-							System.out.println("progress.5");
+							getShell().pack();
 
 							labelGraphicsHolder.redraw();
 							labelGraphicsHolder.update();
@@ -196,6 +183,8 @@ public class QuestionTreePage extends WizardPage {
 				
 				recallibrateHeight(height, oldOldHeight, questionsHolder);
 				questionsHolder.layout();
+//				getShell().pack();
+
 				traverseQuestionnaire(dynamicQuestionnaire);
 				System.out.println("\n");System.out.println("\n");
 			}
@@ -255,12 +244,12 @@ public class QuestionTreePage extends WizardPage {
 	public TreeNode<String> dynamicQuestionnaire;
 	public static Label labelStartEvent, labelEndEvent;
 	public static Text textStartEvent, textEndEvent;
-	public static Label labelGraphicsHolder;
-	public static Image scopeGraphical;
+	public  Label labelGraphicsHolder;
+	public  Image scopeGraphical;
 	public static LinkedHashMap<TreeNode<String>, String> scopeImage; 
 	
 	public static void fillTreeMap(){
-		String path = "/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/ScopeTimelineView/";
+		String path = "/home/daniela/git/PropertySpecification/ScopeTimelineView/";
 		scopeImage.put(Questionnaire.answ12, path+ "1.png");
 		scopeImage.put(Questionnaire.answ11, null);
 		scopeImage.put(Questionnaire.answ1111, path + "3.png");
@@ -396,15 +385,22 @@ public class QuestionTreePage extends WizardPage {
 
 		textEndEvent.setLayoutData(gridData);
 		
-		labelGraphicsHolder = new Label(composite, SWT.NONE);
-		scopeGraphical = new Image(Display.getCurrent(),
-				   "/home/daniela/git/PropertySpecification/ScopeTimelineView/legend.png");
-		labelGraphicsHolder.setImage(scopeGraphical);
+		labelGraphicsHolder = new Label(composite, SWT.WRAP | SWT.BORDER);
+//		scopeGraphical = new Image(Display.getCurrent(),
+//				   scopeImage.get(Questionnaire.answ12));
+		labelGraphicsHolder.setImage(null);
+//		labelGraphicsHolder = new Label(composite, SWT.WRAP | SWT.BORDER);
+//		scopeGraphical = new Image(Display.getCurrent(),
+//				   scopeImage.get(Questionnaire.answ111111));
+//		labelGraphicsHolder.setImage(scopeGraphical);
+		
 		gridData = new GridData();
 		gridData.horizontalAlignment = GridData.BEGINNING;
 		gridData.verticalAlignment = SWT.TOP;
 		labelGraphicsHolder.setLayoutData(gridData);
-
+		labelGraphicsHolder.setVisible(false);
+//		scopeGraphical.dispose();
+//		labelGraphicsHolder.dispose();
 		composite.pack();
 		
 		Listener operationListener = new Listener(){
