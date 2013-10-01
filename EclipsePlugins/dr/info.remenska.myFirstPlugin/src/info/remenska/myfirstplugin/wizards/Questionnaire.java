@@ -19,7 +19,7 @@ public class Questionnaire {
 	public static 			TreeNode<String> quest11131 = answ1113.addChild("What happens if there are multiple occurences of START without an occurence of END in between them?", true);
 	public static 				TreeNode<String> answ11311 = quest11131.addChild("Only the first of those occurences of START potentially starts a restricted interval; later occurences of START within that restricted interval do not have an effect.", false);
 	public static 				TreeNode<String> answ11312 = quest11131.addChild("Only the last of those occurences of START potentially starts a restricted interval; each of those occurences of START resets the beginning of that restricted interval. ", false);
-	public static 			TreeNode<String> quest11132 = 	answ1113.addChild("If an occurence of START is not followed by an occurence of END, is the behavior still required to hold, until the end of the event sequence?", true);
+	public static 			TreeNode<String> quest11132 = answ1113.addChild("If an occurence of START is not followed by an occurence of END, is the behavior still required to hold, until the end of the event sequence?", true);
 			public static 				TreeNode<String> answ111321 = quest11132.addChild("Yes, if END does not occur subsequently, then the behavior is required to hold until the end of the event sequence.", false);
 			public static 				TreeNode<String> answ111322 = quest11132.addChild("No, if END does not occur subsequently, then the behavior is not required to hold for the remainder of the event sequence.", false);
 			public static 			TreeNode<String> quest11133 =  answ1113.addChild("What happens if START occurs after the end of a restricted interval?", true);

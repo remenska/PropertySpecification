@@ -24,6 +24,7 @@ public class PropertySpecificationScopes extends WizardPage {
 		super(pageName);
 		setTitle(pageName);
 		setDescription(description);
+
 		// TODO Auto-generated constructor stub
 	}
 

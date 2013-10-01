@@ -11,6 +11,8 @@ public class DisciplinedEnglishPage  extends WizardPage  {
 		super(pageName);
 		setTitle(pageName);
 		setDescription(description);
+		setPageComplete(false);
+
 		// TODO Auto-generated constructor stub
 	}
 

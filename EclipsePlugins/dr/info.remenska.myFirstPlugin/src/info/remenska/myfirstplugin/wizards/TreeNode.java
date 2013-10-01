@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class TreeNode<T> implements Iterable<TreeNode<T>> {
+public class TreeNode<T> implements Iterable<TreeNode<T>>, Comparable<T> {
 
 	public T data;
 	public TreeNode<T> parent;
@@ -101,6 +101,14 @@ public class TreeNode<T> implements Iterable<TreeNode<T>> {
 	public Iterator<TreeNode<T>> iterator() {
 		TreeNodeIter<T> iter = new TreeNodeIter<T>(this);
 		return iter;
+	}
+
+	@Override
+	public int compareTo(Object arg0) {
+		// TODO Auto-generated method stub
+		if(this.data.equals(((TreeNode<T>)arg0).data))
+			return 0;
+		else return -1;
 	}
 
 }
