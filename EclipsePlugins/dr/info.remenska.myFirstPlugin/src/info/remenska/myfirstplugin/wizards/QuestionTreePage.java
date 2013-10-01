@@ -6,6 +6,7 @@ import java.awt.event.MouseListener;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
@@ -86,6 +87,42 @@ public class QuestionTreePage extends WizardPage {
 				TreeNode<String> dynamicNode = dynamicParentNode.addChild(selected, false); 
 
 				Composite questionsHolder = ((Button) e.getSource()).getParent();
+				//change the image
+				System.out.println(staticNode);
+				System.out.println("DID WE FILL IN AT LEAST ONE???" + scopeImage);
+//				System.out.println("Let's TRY TO CHANGE THE IMAGE:");
+				System.out.println("To this: "+ scopeImage.get(staticNode));
+			
+				if(scopeImage.get(staticNode)!=null){
+					System.out.println("progress..1");
+					scopeGraphical.dispose();
+					
+					final Image scopeGraphical = new Image(Display.getCurrent(), scopeImage.get(staticNode));
+					labelGraphicsHolder.getDisplay().asyncExec(new Runnable () {
+						public void run() {
+							System.out.println("progress..2");
+
+							System.out.println("progress..3");
+
+							labelGraphicsHolder.setImage(scopeGraphical) ;
+							System.out.println("progress..4");
+							System.out.println("IMAGE!!:"+labelGraphicsHolder.getImage().toString());
+//							labelGraphicsHolder.getParent().redraw();
+//							labelGraphicsHolder.getParent().layout();
+//							labelGraphicsHolder.getParent().pack(true);
+							System.out.println("progress.5");
+							labelGraphicsHolder.pack(true);
+							labelGraphicsHolder.pack();
+							System.out.println("progress.5");
+
+							labelGraphicsHolder.redraw();
+							labelGraphicsHolder.update();
+						}
+						}); 
+
+				}
+				
+				
 				
 				int oldOldHeight = questionsHolder.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
 				//first remove existing expandBars. This means only answers remain, no nested questions
@@ -220,7 +257,37 @@ public class QuestionTreePage extends WizardPage {
 	public static Text textStartEvent, textEndEvent;
 	public static Label labelGraphicsHolder;
 	public static Image scopeGraphical;
+	public static LinkedHashMap<TreeNode<String>, String> scopeImage; 
+	
+	public static void fillTreeMap(){
+		String path = "/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/ScopeTimelineView/";
+		scopeImage.put(Questionnaire.answ12, path+ "1.png");
+		scopeImage.put(Questionnaire.answ11, null);
+		scopeImage.put(Questionnaire.answ1111, path + "3.png");
+		scopeImage.put(Questionnaire.answ111111, path + "3.png");
+		scopeImage.put(Questionnaire.answ111112, path + "6.png");
+		scopeImage.put(Questionnaire.answ1112, path + "2.png");
+		scopeImage.put(Questionnaire.answ111211, path + "7.png");
+		scopeImage.put(Questionnaire.answ111212, path + "8.png");
+		scopeImage.put(Questionnaire.answ1113, path + "4.png");
+		scopeImage.put(Questionnaire.answ11311, path + "4.png");
+		scopeImage.put(Questionnaire.answ11312, path + "9.png");
+		scopeImage.put(Questionnaire.answ111321, path + "11.png"); // same as 5?
+		scopeImage.put(Questionnaire.answ111322, path + "10.png");
+		// (10,10) can just as well be (12 13)! how to determine?
+		scopeImage.put(Questionnaire.answ111331, null); //plain wrong to have
+		scopeImage.put(Questionnaire.answ111332, null); //plain wrong to have
+		scopeImage.put(Questionnaire.answ1121, null); //? just stay the same? So in the widgetSelected it can test before changing it
+		scopeImage.put(Questionnaire.answ1122, null); //? just stay the same?
+		scopeImage.put(Questionnaire.answ112211, null); //? just stay the same?
+		scopeImage.put(Questionnaire.answ112212, null); //? just stay the same?
+		scopeImage.put(Questionnaire.answ1211, null);  //? just stay the same?
+		scopeImage.put(Questionnaire.answ1212, null);  //? just stay the same?
 
+		
+		
+	}
+	
 	private static String createIndent(int depth) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < depth; i++) {
@@ -281,7 +348,8 @@ public class QuestionTreePage extends WizardPage {
 		composite.setLayout(gridLayout); 
 
 		setControl(composite);
-		
+		scopeImage = new LinkedHashMap<TreeNode<String>, String>();
+		fillTreeMap();
 		
 		GridData gridData = new GridData();
 		gridData.verticalSpan = 5;
@@ -336,7 +404,7 @@ public class QuestionTreePage extends WizardPage {
 		gridData.horizontalAlignment = GridData.BEGINNING;
 		gridData.verticalAlignment = SWT.TOP;
 		labelGraphicsHolder.setLayoutData(gridData);
-		
+
 		composite.pack();
 		
 		Listener operationListener = new Listener(){
