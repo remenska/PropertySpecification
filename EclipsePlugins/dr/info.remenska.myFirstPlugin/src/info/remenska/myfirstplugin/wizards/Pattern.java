@@ -75,11 +75,11 @@ public class Pattern {
 	   addPattern("Between Q and R", "Response Chain 2", "[true*. Q. (not R)*. P. (not (S or R))*. (nil | (S. (not (T or R))*)). R] false ");
 	   addPattern("After Q until R", "Response Chain 2", "[true*. Q. (not R)*. P] mu X. <true> true and [R] false and [S] mu Y. (<true> true and [R] false and [not T] Y) and [not S] X ");
 	   
-	  addPattern("Globally", "Bounded Existence", " [(not P)*. P. (not P)*. P. (not P)*. P] false ");
-	  addPattern("Before R", "Bounded Existence", " [(not R)*. P. (not R)*. P. (not R)*. P. (not R)*. R] false ");
-	  addPattern("After Q", "Bounded Existence", " [(not Q)*. Q. (not P)*. P. (not P)*. P. (not P)*. P] false ");
-	  addPattern("Between Q and R", "Bounded Existence", " [true*. Q. (not R)*. P. (not R)*. P. (not R)*. P. (not R)*. R] false ");
-	  addPattern("After Q until R", "Bounded Existence" , " [true*. Q. (not R)*. P. (not R)*. P. (not R)*. P] false ");
+	  addPattern("Globally", "Bounded Existence", " [(not P)*. P. (not P)*. P] false ");
+	  addPattern("Before R", "Bounded Existence", " [(not R)*. P. (not R)*. P. (not R)*. R] false ");
+	  addPattern("After Q", "Bounded Existence", " [(not Q)*. Q. (not P)*. P. (not P)*. P] false ");
+	  addPattern("Between Q and R", "Bounded Existence", " [true*. Q. (not R)*. P. (not R)*. P. (not R)*. R] false ");
+	  addPattern("After Q until R", "Bounded Existence" , " [true*. Q. (not R)*. P. (not R)*. P] false ");
 	  
 	  Questionnaire.answ12.setScope("Globally");
 	  Questionnaire.answ1211.setScope("Globally");
