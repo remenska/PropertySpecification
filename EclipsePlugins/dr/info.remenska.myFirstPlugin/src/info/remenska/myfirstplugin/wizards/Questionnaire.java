@@ -25,19 +25,18 @@ public class Questionnaire {
 		
 			public static TreeNode<String> answ12 = scopeQuestionTree.addChild("No, the behavior is required to hold throughout the entire event sequence", false); // GLOBALLY
 			public static 	TreeNode<String> quest121 = answ12.addChild("Are there any exceptional events such that if any of them occurs the property behavior may not be required to hold?", true);	
-			public static 		TreeNode<String> answ1211 = quest121.addChild("No, none.", false);
-			public static 		TreeNode<String> answ1212 = quest121.addChild("Yes, if exceptional event X occurs, the property behavior may not be required to hold.", false);
-		    
+			public static 		TreeNode<String> answ1211 = quest121.addChild("No, none.", false); // GLOBALLY
+			public static 		TreeNode<String> answ1212 = quest121.addChild("Yes, if exceptional event X occurs, the property behavior may not be required to hold.", false);   // can it be implemented? 
 //////
 			public static TreeNode<String> aansw11 = behaviorQuestionTree.addChild("One event.", false);
 			public static 	TreeNode<String> qquest111 = aansw11.addChild("Which of the following choices best describes the restriction on A?", true);
 			public static 		TreeNode<String> aansw1111 = qquest111.addChild("A is never allowed to occur", false); // ABSENCE
 			public static 			TreeNode<String> qquest1111 = aansw1111.addChild("Are there any exceptional events, such that if any of them occurs - the property \n behavior may not be required to hold?", true);
-			public static 				TreeNode<String> aansw11111 = qquest1111.addChild("No, there is none.", false);
+			public static 				TreeNode<String> aansw11111 = qquest1111.addChild("No, there is none.", false); // ABSENCE
 			public static 				TreeNode<String> aansw11112 = qquest1111.addChild("Yes, if an exceptional event X occurs when A has not yet occured, the behavior is not required to hold.", false);
 			public static 					TreeNode<String> qquest111121 = aansw11112.addChild("What if the exceptional event occurs after a behavior violation has been found (A has occured)?", true);
-			public static 						TreeNode<String> aansw1111211 = qquest111121.addChild("In such a case, the event sequence is not acceptable.", false);
-			public static 						TreeNode<String> aansw1111212 = qquest111121.addChild("Even in that case, the event sequence is still considered acceptable", false);
+			public static 						TreeNode<String> aansw1111211 = qquest111121.addChild("In such a case, the event sequence is not acceptable.", false); // can it be implemented?
+			public static 						TreeNode<String> aansw1111212 = qquest111121.addChild("Even in that case, the event sequence is still considered acceptable", false); // can it be implemented?
 			public static 		TreeNode<String> aansw1112 = qquest111.addChild("A is allowed to occur at least once.", false);	// EXISTENCE			
 					
 			public static 		TreeNode<String> aansw1113 = qquest111.addChild("A is allowed to occur exactly once.", false); // BOUNDED EXISTENCE 
@@ -56,19 +55,6 @@ public class Questionnaire {
 			public static 	TreeNode<String> qquest122 = aansw12.addChild("After A occurs, is A allowed to occur again before the first subsequent B occurs?", true);
 			public static 	TreeNode<String> aansw1221 = qquest122.addChild("Yes, A is allowed to occur again, zero or more times, before the first subsequent B occurs", false); //can it be implemented?? [(not R)*. P. (not (S or R))*. R] false will become [(not R)*. P. P*. (not (S or R))*. R] false
 			public static 		TreeNode<String> aansw1222 = qquest122.addChild("No, A is not allowed to occur again before the first subsequent B occurs.", false); // RESPONSE
-			public static 	TreeNode<String> qquest123 = aansw12.addChild("After A and the first subsequent B occur, is A allowed to occur again?", true);
-			public static 		TreeNode<String> aansw1232 = qquest123.addChild("No, A is not allowed to occur again.", false); 
-			public static 			TreeNode<String> qquest12321 = aansw1232.addChild("Is event B allowed to occur again? ", true);
-			public static 				TreeNode<String> aansw123211 = qquest12321.addChild("Yes, event B is allowed to occur again zero or more times.", false);
-			public static 				TreeNode<String> aansw123212 = qquest12321.addChild("No, event B is not allowed to occur again.", false);
-			public static 	TreeNode<String> aansw1231 = qquest123.addChild("Yes, A is allowed to occur again.", false);
-			public static 			TreeNode<String> qquest12311 = aansw1231.addChild("Is B allowed to occur again?", true);
-			public static 				TreeNode<String> aansw123111 = qquest12311.addChild("No, B is not allowed to occur again.", false);
-			public static 				TreeNode<String> aansw123112 = qquest12311.addChild("Yes, B is allowed to occur again, but not until after another A occurs. \n If another A does occur, the situation is the same as when the first A occured, meaning that \n the restrictions described on any events that take place after that occurence would again apply", false); 
-			public static 				TreeNode<String> aansw123113 = qquest12311.addChild("Yes, B is allowed to occur again, zero or more times, whether or not another A occurs.", false); // RESPONSE
-			public static 					TreeNode<String> qquest1231131 = aansw123113.addChild("If another A does occur, is the situation the same as when the first A occured, \n meaning that the restrictions described on any events that take place after that occurence would again apply?", true);
-			public static 						TreeNode<String> aansw12311311 = qquest1231131.addChild("Yes, if A does occur again, the restrictions described on those events would again apply.", false); // RESPONSE
-			public static 						TreeNode<String> aansw12311312 = qquest1231131.addChild("No, even if A does not occur again, there are no restrictions on the occurences of any future events.", false);
 		
 		
 			public static TreeNode<String> aansw13 = behaviorQuestionTree.addChild("Three events.", false);
@@ -77,6 +63,5 @@ public class Questionnaire {
 				public static TreeNode<String> aansw1312 = qquest131.addChild("If A occurs followed by B, then C is required to occur subsequently.", false); // RESPONSE CHAIN P responds to S, T
 				public static TreeNode<String> aansw1313 = qquest131.addChild("C is not allowed to occur until A, followed by B, occurs.", false); // PRECEDENCE CHAIN S, T precede P
 				public static TreeNode<String> aansw1314 = qquest131.addChild("B followed by C is not allowed to occur, until A occurs.", false); // PRECENDENCE CHAIN P precedes S, T
-
 
 }

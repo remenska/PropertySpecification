@@ -73,7 +73,7 @@ public class QuestionTreePage extends WizardPage {
 //				System.out.println("SELECTED: "+ selected);
 
 				TreeNode<String> staticNode = questionnaire.findTreeNode(selected);
-//				System.out.println("FOUND STATIC NODE: "+ staticNode.data);
+				System.out.println("FOUND STATIC NODE: "+ staticNode.data);
 
 				TreeNode<String> staticParentNode = staticNode.parent;
 //				System.out.println("STATIC NODE PARENT: "+ staticParentNode.data);
@@ -90,7 +90,12 @@ public class QuestionTreePage extends WizardPage {
 				TreeNode<String> dynamicNode = dynamicParentNode.addChild(selected, false); 
 
 				Composite questionsHolder = ((Button) e.getSource()).getParent();
-
+				
+				// update the scope & behavior if it's decided with the answers so far
+				if(staticNode.isLeaf() && staticNode.getScope()!=null) scope = staticNode.getScope();
+				if(staticNode.isLeaf() && staticNode.getBehavior()!=null) behavior = staticNode.getBehavior();
+				
+				
 				// refresh graphical scopes (for Scope Question Tree only?)
 				if(scopeImage.get(staticNode)!=null){
 
@@ -201,10 +206,13 @@ public class QuestionTreePage extends WizardPage {
 				questionsHolder.layout();
 //				getShell().pack();
 
-				traverseQuestionnaire(dynamicQuestionnaire);
+//				traverseQuestionnaire(dynamicQuestionnaire);
 				System.out.println("\n");System.out.println("\n");
+				System.out.println("SCOPE: " + scope + "; BEHAVIOR: " + behavior);
+				checkIfValid();
+
 			}
-			checkIfValid();
+			
 		}
 
 		private void recallibrateHeight(int height, int oldOldHeight,
@@ -260,7 +268,7 @@ public class QuestionTreePage extends WizardPage {
 	public LinkedList<Text> ownedTexts;
 	public static Label labelEventA, labelEventB, labelEventC;
 	public static Text textEventA, textEventB, textEventC;
-	
+	public static String scope, behavior;
 	public  Label labelGraphicsHolder;
 	public  Image scopeGraphical;
 	public static LinkedHashMap<TreeNode<String>, String> scopeImage; 
@@ -432,7 +440,7 @@ public class QuestionTreePage extends WizardPage {
 		question.setHeight(answersContainer.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 		System.out.println("Dynamic QUESTIONNAIRE!!: ");
 		traverseQuestionnaire(dynamicQuestionnaire);
-
+		Pattern.fill();
 	}
 	
 	class MyExpandListener implements ExpandListener{

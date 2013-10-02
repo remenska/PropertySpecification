@@ -11,6 +11,7 @@ public class TreeNode<T> implements Iterable<TreeNode<T>>, Comparable<T> {
 	public List<TreeNode<T>> children;
 	public boolean isQuestion;
 	public List<TreeNode<T>> toDelete;
+	public String scope, behavior;
 	public boolean isRoot() {
 		return parent == null;
 	}
@@ -37,6 +38,22 @@ public class TreeNode<T> implements Iterable<TreeNode<T>>, Comparable<T> {
 		return childNode;
 	}
 
+	public void setScope(String scope){
+	this.scope = scope;	
+	}
+	
+	public String getScope(){
+		return this.scope;
+	}
+	
+	public void setBehavior(String behavior){
+		this.behavior = behavior;
+	}
+	
+	public String getBehavior(){
+		return behavior;
+	}
+	
 	public void removeChild(T child){
 		this.elementsIndex.remove(child);
 		this.children.remove(child);
