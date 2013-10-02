@@ -244,12 +244,16 @@ public class QuestionTreePage extends WizardPage {
 	public TreeNode<String> dynamicQuestionnaire;
 	public static Label labelStartEvent, labelEndEvent;
 	public static Text textStartEvent, textEndEvent;
+	
+	public static Label labelEventA, labelEventB, labelEventC;
+	public static Text textEventA, textEventB, textEventC;
+	
 	public  Label labelGraphicsHolder;
 	public  Image scopeGraphical;
 	public static LinkedHashMap<TreeNode<String>, String> scopeImage; 
 	
 	public static void fillTreeMap(){
-		String path = "/home/daniela/git/PropertySpecification/ScopeTimelineView/";
+		String path = "/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/ScopeTimelineView/";
 		scopeImage.put(Questionnaire.answ12, path+ "1.png");
 		scopeImage.put(Questionnaire.answ11, null);
 		scopeImage.put(Questionnaire.answ1111, path + "3.png");
@@ -264,14 +268,14 @@ public class QuestionTreePage extends WizardPage {
 		scopeImage.put(Questionnaire.answ111321, path + "11.png"); // same as 5?
 		scopeImage.put(Questionnaire.answ111322, path + "10.png");
 		// (10,10) can just as well be (12 13)! how to determine?
-		scopeImage.put(Questionnaire.answ111331, null); //plain wrong to have
-		scopeImage.put(Questionnaire.answ111332, null); //plain wrong to have
-		scopeImage.put(Questionnaire.answ1121, null); //? just stay the same? So in the widgetSelected it can test before changing it
-		scopeImage.put(Questionnaire.answ1122, null); //? just stay the same?
-		scopeImage.put(Questionnaire.answ112211, null); //? just stay the same?
-		scopeImage.put(Questionnaire.answ112212, null); //? just stay the same?
-		scopeImage.put(Questionnaire.answ1211, null);  //? just stay the same?
-		scopeImage.put(Questionnaire.answ1212, null);  //? just stay the same?
+//		scopeImage.put(Questionnaire.answ111331, null); //plain wrong to have
+//		scopeImage.put(Questionnaire.answ111332, null); //plain wrong to have
+//		scopeImage.put(Questionnaire.answ1121, null); //? just stay the same? So in the widgetSelected it can test before changing it
+//		scopeImage.put(Questionnaire.answ1122, null); //? just stay the same?
+//		scopeImage.put(Questionnaire.answ112211, null); //? just stay the same?
+//		scopeImage.put(Questionnaire.answ112212, null); //? just stay the same?
+//		scopeImage.put(Questionnaire.answ1211, null);  //? just stay the same?
+//		scopeImage.put(Questionnaire.answ1212, null);  //? just stay the same?
 
 		
 		
@@ -325,6 +329,9 @@ public class QuestionTreePage extends WizardPage {
 			setPageComplete(false);
 	}
 	
+	public void addEventSlots(Composite parent, ExpandBar root, Listener operationListener){
+		
+	}
 	
 	@Override
 	public void createControl(Composite parent) {
@@ -340,68 +347,66 @@ public class QuestionTreePage extends WizardPage {
 		scopeImage = new LinkedHashMap<TreeNode<String>, String>();
 		fillTreeMap();
 		
-		GridData gridData = new GridData();
-		gridData.verticalSpan = 5;
-		gridData.verticalAlignment = GridData.FILL;
-		gridData.horizontalAlignment = GridData.FILL;
-		gridData.grabExcessHorizontalSpace = true;
-		gridData.grabExcessVerticalSpace = true;
+//		GridData gridData = new GridData();
+//		gridData.verticalSpan = 5;
+//		gridData.verticalAlignment = GridData.FILL;
+//		gridData.horizontalAlignment = GridData.FILL;
+//		gridData.grabExcessHorizontalSpace = true;
+//		gridData.grabExcessVerticalSpace = true;
 		ExpandBar root = new ExpandBar(composite, SWT.V_SCROLL | SWT.H_SCROLL);;
-		root.setLayoutData(gridData);
+//		root.setLayoutData(gridData);
 
-		gridData = new GridData();
-		gridData.horizontalAlignment = GridData.BEGINNING;
-		gridData.verticalAlignment = SWT.TOP;
-		labelStartEvent = new Label(composite, SWT.NONE);
-		labelStartEvent.setText("Start Event: ");
-		FontData fontData = labelStartEvent.getFont().getFontData()[0];
-		Font font = new Font(Display.getCurrent(), new FontData(fontData.getName(), fontData
-		    .getHeight(), SWT.BOLD));
-		labelStartEvent.setFont(font);
-		labelStartEvent.setLayoutData(gridData);
+		//added to subclass
+//		gridData = new GridData();
+//		gridData.horizontalAlignment = GridData.BEGINNING;
+//		gridData.verticalAlignment = SWT.TOP;
+//		labelStartEvent = new Label(composite, SWT.NONE);
+//		labelStartEvent.setText("Start Event: ");
+//		FontData fontData = labelStartEvent.getFont().getFontData()[0];
+//		Font font = new Font(Display.getCurrent(), new FontData(fontData.getName(), fontData
+//		    .getHeight(), SWT.BOLD));
+//		labelStartEvent.setFont(font);
+//		labelStartEvent.setLayoutData(gridData);
+//		
+//		gridData = new GridData();
+//		gridData.horizontalAlignment = GridData.BEGINNING;
+//		gridData.verticalAlignment = SWT.TOP;
+//		textStartEvent = new Text(composite, SWT.FILL); // THESE SHOULD BE STATIC
+//		textStartEvent.setText("double click to select");
+//		textStartEvent.setEditable(false);
+//		textStartEvent.setLayoutData(gridData);
+//		
+//		gridData = new GridData();
+//		gridData.horizontalAlignment = GridData.BEGINNING;
+//		gridData.verticalAlignment = SWT.TOP;
+//		labelEndEvent = new Label(composite, SWT.NONE);
+//		labelEndEvent.setText("End Event: ");
+//		labelEndEvent.setFont(font);
+//		labelEndEvent.setLayoutData(gridData);
+//		
+//		gridData = new GridData();
+//		gridData.horizontalAlignment = GridData.BEGINNING;
+//		gridData.verticalAlignment = SWT.TOP;
+//		textEndEvent = new Text(composite, SWT.FILL);
+//		textEndEvent.setText("double-click to select");
+//		textEndEvent.setEditable(false);
+//
+//		textEndEvent.setLayoutData(gridData);
+		//END- added to subclass
+//		
+//		labelStartEvent = new Label(composite, SWT.NONE);
+//		labelEndEvent = new Label(composite, SWT.NONE);
+//		textStartEvent = new Text(composite, SWT.FILL); 
+//		textEndEvent = new Text(composite, SWT.FILL);
+//		
+//		
+//		labelEventA = new Label(composite, SWT.NONE);
+//		textEventA = new Text(composite, SWT.FILL); 
+//		labelEventB = new Label(composite, SWT.NONE);
+//		textEventB = new Text(composite, SWT.FILL);
+//		labelEventC = new Label(composite, SWT.NONE);
+//		textEventC = new Text(composite, SWT.FILL);
 		
-		gridData = new GridData();
-		gridData.horizontalAlignment = GridData.BEGINNING;
-		gridData.verticalAlignment = SWT.TOP;
-		textStartEvent = new Text(composite, SWT.FILL); // THESE SHOULD BE STATIC
-		textStartEvent.setText("double click to select");
-		textStartEvent.setEditable(false);
-		textStartEvent.setLayoutData(gridData);
-		
-		gridData = new GridData();
-		gridData.horizontalAlignment = GridData.BEGINNING;
-		gridData.verticalAlignment = SWT.TOP;
-		labelEndEvent = new Label(composite, SWT.NONE);
-		labelEndEvent.setText("End Event: ");
-		labelEndEvent.setFont(font);
-		labelEndEvent.setLayoutData(gridData);
-		
-		gridData = new GridData();
-		gridData.horizontalAlignment = GridData.BEGINNING;
-		gridData.verticalAlignment = SWT.TOP;
-		textEndEvent = new Text(composite, SWT.FILL);
-		textEndEvent.setText("double-click to select");
-		textEndEvent.setEditable(false);
-
-		textEndEvent.setLayoutData(gridData);
-		
-		labelGraphicsHolder = new Label(composite, SWT.WRAP | SWT.BORDER);
-//		scopeGraphical = new Image(Display.getCurrent(),
-//				   scopeImage.get(Questionnaire.answ12));
-		labelGraphicsHolder.setImage(null);
-//		labelGraphicsHolder = new Label(composite, SWT.WRAP | SWT.BORDER);
-//		scopeGraphical = new Image(Display.getCurrent(),
-//				   scopeImage.get(Questionnaire.answ111111));
-//		labelGraphicsHolder.setImage(scopeGraphical);
-		
-		gridData = new GridData();
-		gridData.horizontalAlignment = GridData.BEGINNING;
-		gridData.verticalAlignment = SWT.TOP;
-		labelGraphicsHolder.setLayoutData(gridData);
-		labelGraphicsHolder.setVisible(false);
-//		scopeGraphical.dispose();
-//		labelGraphicsHolder.dispose();
-		composite.pack();
 		
 		Listener operationListener = new Listener(){
 //
@@ -425,17 +430,23 @@ public class QuestionTreePage extends WizardPage {
 //			
 		};	
 		
-		textStartEvent.addListener(SWT.MouseDoubleClick,operationListener);
-		textEndEvent.addListener(SWT.MouseDoubleClick,operationListener);
+		addEventSlots(composite, root, operationListener);
 
-//		root.setLayoutData(formData);
 		
-//		FormData formData2 = new FormData();
-//		formData2.top = new FormAttachment(root,SWT.TOP);
-;
-//		staticField.setLayoutData(formData);
-//		staticField.setLayoutData(gridData);
-//		root.setLayoutData(gridData);
+		labelGraphicsHolder = new Label(composite, SWT.WRAP | SWT.BORDER);
+
+		labelGraphicsHolder.setImage(null);
+
+		
+		GridData gridData = new GridData();
+		gridData.horizontalAlignment = GridData.BEGINNING;
+		gridData.verticalAlignment = SWT.TOP;
+		labelGraphicsHolder.setLayoutData(gridData);
+		labelGraphicsHolder.setVisible(false);
+
+		composite.pack();
+		
+
 		final MySelectionListener mySelectionListener = new MySelectionListener();
 		final MyExpandListener myExpandListener = new MyExpandListener();
 //		root.setBackgroundImage(new Image(display,"/home/daniela/Downloads/background.jpg"));

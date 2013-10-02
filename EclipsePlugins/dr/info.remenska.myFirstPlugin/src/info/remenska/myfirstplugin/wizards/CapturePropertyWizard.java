@@ -22,9 +22,9 @@ public class CapturePropertyWizard extends Wizard {
 //		getShell().setFullScreen(true);
 //		modelSelectionPage = new ModelSelectionPage("Personal Information Page");
 //		addPage(modelSelectionPage);
-		addressInfoPage = new QuestionTreePage("Scope Question Tree View", "Please answer the following questions regarding the scope of the property:", Questionnaire.scopeQuestionTree);
+		addressInfoPage = new ScopeQuestionTreePage("Scope Question Tree View", "Please answer the following questions regarding the scope of the property:", Questionnaire.scopeQuestionTree);
 		addPage(addressInfoPage);
-		questionTreePage = new QuestionTreePage("Behavior Question Tree View", "Please answer the following questions regarding the behavior of the property:", Questionnaire.behaviorQuestionTree);
+		questionTreePage = new BehaviorQuestionTreePage("Behavior Question Tree View", "Please answer the following questions regarding the behavior of the property:", Questionnaire.behaviorQuestionTree);
 		addPage(questionTreePage);
 		disciplinedEnglishPage = new DisciplinedEnglishPage("Disciplined English Summary: ", "Please review the collected information regarding the property.");
 		addPage(disciplinedEnglishPage);
