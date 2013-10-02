@@ -44,7 +44,7 @@ public class ScopeQuestionTreePage extends QuestionTreePage {
 		gridData.horizontalAlignment = GridData.BEGINNING;
 		gridData.verticalAlignment = SWT.TOP;
 		textStartEvent = new Text(composite, SWT.FILL); // THESE SHOULD BE STATIC
-		textStartEvent.setText("double click to select");
+		textStartEvent.setText("double-click to select");
 		textStartEvent.setEditable(false);
 		textStartEvent.setLayoutData(gridData);
 		textStartEvent.addListener(SWT.MouseDoubleClick, operationListener);

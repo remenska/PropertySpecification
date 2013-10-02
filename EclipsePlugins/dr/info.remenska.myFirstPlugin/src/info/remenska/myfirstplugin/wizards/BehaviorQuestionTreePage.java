@@ -44,7 +44,7 @@ public class BehaviorQuestionTreePage extends QuestionTreePage {
 		gridData.horizontalAlignment = GridData.BEGINNING;
 		gridData.verticalAlignment = SWT.TOP;
 		textEventA = new Text(composite, SWT.FILL); // THESE SHOULD BE STATIC
-		textEventA.setText("double click to select");
+		textEventA.setText("double-click to select");
 		textEventA.setEditable(false);
 		textEventA.setLayoutData(gridData);
 		textEventA.addListener(SWT.MouseDoubleClick, operationListener);

@@ -336,6 +336,11 @@ public class QuestionTreePage extends WizardPage {
 				break;
 			}
 		}
+		
+		for(Text ownedText:ownedTexts){
+			if(ownedText.isEnabled() && ownedText.getText().equals("double-click to select"))
+				isValid = false;
+		}
 		if(isValid)
 			setPageComplete(true);
 		else
