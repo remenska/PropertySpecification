@@ -119,11 +119,11 @@ public class QuestionTreePage extends WizardPage {
 					}
 					
 					List<Text> fieldsToEnable = fieldMap.get(staticNode);
-
 					for(Text field:fieldsToEnable){
-//						System.out.println("Enabling field: " + field);
 						field.setEnabled(true);
+						field.pack(true);
 					}
+
 				}
 				
 				
@@ -382,6 +382,8 @@ public class QuestionTreePage extends WizardPage {
 							((Text)event.widget).setText(selected.get(0).getQualifiedName());
 							((Text)event.widget).pack();
 							dialogOperation.close();
+							
+							checkIfValid();
 						}
 			}
 		};	
