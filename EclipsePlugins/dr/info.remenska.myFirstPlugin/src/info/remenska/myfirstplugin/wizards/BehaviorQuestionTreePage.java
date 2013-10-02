@@ -48,6 +48,7 @@ public class BehaviorQuestionTreePage extends QuestionTreePage {
 		textEventA.setEditable(false);
 		textEventA.setLayoutData(gridData);
 		textEventA.addListener(SWT.MouseDoubleClick, operationListener);
+		textEventA.setEnabled(false);
 		
 		gridData = new GridData();
 		gridData.horizontalAlignment = GridData.BEGINNING;
@@ -64,7 +65,7 @@ public class BehaviorQuestionTreePage extends QuestionTreePage {
 		textEventB.setText("double-click to select");
 		textEventB.setEditable(false);
 		textEventB.addListener(SWT.MouseDoubleClick, operationListener);
-		
+		textEventB.setEnabled(false);
 		
 
 		gridData = new GridData();
@@ -84,7 +85,10 @@ public class BehaviorQuestionTreePage extends QuestionTreePage {
 
 		textEventC.setLayoutData(gridData);
 		textEventC.addListener(SWT.MouseDoubleClick, operationListener);
-		
+		textEventC.setEnabled(false);
+		ownedTexts.add(textEventA);
+		ownedTexts.add(textEventB);
+		ownedTexts.add(textEventC);
 	}
 
 

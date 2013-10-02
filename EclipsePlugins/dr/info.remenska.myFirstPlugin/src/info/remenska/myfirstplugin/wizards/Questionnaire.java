@@ -39,10 +39,7 @@ public class Questionnaire {
 			public static 						TreeNode<String> aansw1111211 = qquest111121.addChild("In such a case, the event sequence is not acceptable.", false);
 			public static 						TreeNode<String> aansw1111212 = qquest111121.addChild("Even in that case, the event sequence is still considered acceptable", false);
 			public static 		TreeNode<String> aansw1112 = qquest111.addChild("A is allowed to occur at least once.", false);	// EXISTENCE			
-			public static 			TreeNode<String> qquest11121 = aansw1112.addChild("Are there any exceptional events, such that if any of them occurs, \n the property behavior may not be required to hold?", true);
-			public static 				TreeNode<String> aansw111211 = qquest11121.addChild("No.", false);
-			public static 				TreeNode<String> aansw111212 = qquest11121.addChild("Yes, if exceptional event X occurs, A is not required to occur.", false);
-		
+					
 			public static 		TreeNode<String> aansw1113 = qquest111.addChild("A is allowed to occur exactly once.", false); // BOUNDED EXISTENCE 
 					
 			public static TreeNode<String> aansw12 = behaviorQuestionTree.addChild("Two events.", false);

@@ -48,6 +48,8 @@ public class ScopeQuestionTreePage extends QuestionTreePage {
 		textStartEvent.setEditable(false);
 		textStartEvent.setLayoutData(gridData);
 		textStartEvent.addListener(SWT.MouseDoubleClick, operationListener);
+		textStartEvent.setEnabled(false);
+		
 		gridData = new GridData();
 		gridData.horizontalAlignment = GridData.BEGINNING;
 		gridData.verticalAlignment = SWT.TOP;
@@ -64,6 +66,9 @@ public class ScopeQuestionTreePage extends QuestionTreePage {
 		textEndEvent.setEditable(false);
 		textEndEvent.addListener(SWT.MouseDoubleClick,operationListener);
 		textEndEvent.setLayoutData(gridData);
+		textEndEvent.setEnabled(false);
+		ownedTexts.add(textStartEvent);
+		ownedTexts.add(textEndEvent);
 	}
 
 }

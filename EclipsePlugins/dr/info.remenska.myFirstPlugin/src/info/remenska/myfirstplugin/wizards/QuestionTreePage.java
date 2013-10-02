@@ -3,6 +3,8 @@ package info.remenska.myfirstplugin.wizards;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -89,6 +91,7 @@ public class QuestionTreePage extends WizardPage {
 
 				Composite questionsHolder = ((Button) e.getSource()).getParent();
 
+				// refresh graphical scopes (for Scope Question Tree only?)
 				if(scopeImage.get(staticNode)!=null){
 
 					labelGraphicsHolder.setVisible(true);
@@ -109,6 +112,19 @@ public class QuestionTreePage extends WizardPage {
 
 				}
 				
+				// refresh enabled/disabled text fields for selection of events
+				if(fieldMap.get(staticNode)!=null){
+					for (Text ownedText:ownedTexts){
+						ownedText.setEnabled(false);
+					}
+					
+					List<Text> fieldsToEnable = fieldMap.get(staticNode);
+
+					for(Text field:fieldsToEnable){
+//						System.out.println("Enabling field: " + field);
+						field.setEnabled(true);
+					}
+				}
 				
 				
 				int oldOldHeight = questionsHolder.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
@@ -201,16 +217,12 @@ public class QuestionTreePage extends WizardPage {
 				if(item.getControl().equals(questionsHolder))
 					itemExpanded = item;
 			}
-//			ExpandItem itemExpanded = (ExpandItem) e.item;
-//			System.out.println("ItemExpanded: " + itemExpanded + "; height = " + itemExpanded.getHeight());
 			ExpandItem theOneWeLookFor = null; 
 			Composite compositeControlled = (Composite) itemExpanded.getControl();
-			int heightToAdd = compositeControlled.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
+//			int heightToAdd = compositeControlled.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
 			while(itemExpanded!=null){
 				theOneWeLookFor = null;
 				ExpandBar itemParentBar = itemExpanded.getParent();
-//				System.out.println("ItemParentBar: " + itemParentBar);
-//				int heightToAdd = compositeControlled.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
 				Composite compositeParent =itemParentBar.getParent();
 				if(compositeParent!=null  && !itemParentBar.getParent().equals(parentLe)){
 					ExpandBar expandBarSuperParent = (ExpandBar) compositeParent.getParent();
@@ -240,18 +252,19 @@ public class QuestionTreePage extends WizardPage {
 			widgetSelected(e);
 		}
 	}
+	public MySelectionListener mySelectionListener;
 	public TreeNode<String> questionnaire;
 	public TreeNode<String> dynamicQuestionnaire;
 	public static Label labelStartEvent, labelEndEvent;
 	public static Text textStartEvent, textEndEvent;
-	
+	public LinkedList<Text> ownedTexts;
 	public static Label labelEventA, labelEventB, labelEventC;
 	public static Text textEventA, textEventB, textEventC;
 	
 	public  Label labelGraphicsHolder;
 	public  Image scopeGraphical;
 	public static LinkedHashMap<TreeNode<String>, String> scopeImage; 
-	
+	public static LinkedHashMap<TreeNode<String>, LinkedList<Text>> fieldMap;
 	public static void fillTreeMap(){
 		String path = "/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/ScopeTimelineView/";
 		scopeImage.put(Questionnaire.answ12, path+ "1.png");
@@ -268,16 +281,16 @@ public class QuestionTreePage extends WizardPage {
 		scopeImage.put(Questionnaire.answ111321, path + "11.png"); // same as 5?
 		scopeImage.put(Questionnaire.answ111322, path + "10.png");
 		// (10,10) can just as well be (12 13)! how to determine?
-//		scopeImage.put(Questionnaire.answ111331, null); //plain wrong to have
-//		scopeImage.put(Questionnaire.answ111332, null); //plain wrong to have
-//		scopeImage.put(Questionnaire.answ1121, null); //? just stay the same? So in the widgetSelected it can test before changing it
-//		scopeImage.put(Questionnaire.answ1122, null); //? just stay the same?
-//		scopeImage.put(Questionnaire.answ112211, null); //? just stay the same?
-//		scopeImage.put(Questionnaire.answ112212, null); //? just stay the same?
-//		scopeImage.put(Questionnaire.answ1211, null);  //? just stay the same?
-//		scopeImage.put(Questionnaire.answ1212, null);  //? just stay the same?
 
-		
+		fieldMap.put(Questionnaire.answ11, new LinkedList());
+		fieldMap.put(Questionnaire.answ1111,new LinkedList(Arrays.asList(textStartEvent)));
+		fieldMap.put(Questionnaire.answ1112, new LinkedList(Arrays.asList(textEndEvent)));
+		fieldMap.put(Questionnaire.answ1113, new LinkedList(Arrays.asList(textStartEvent,textEndEvent)));
+
+		fieldMap.put(Questionnaire.answ12, new LinkedList());
+		fieldMap.put(Questionnaire.aansw11, new LinkedList(Arrays.asList(textEventA)));
+		fieldMap.put(Questionnaire.aansw12, new LinkedList(Arrays.asList(textEventA,textEventB)));
+		fieldMap.put(Questionnaire.aansw13, new LinkedList(Arrays.asList(textEventA,textEventB,textEventC)));
 		
 	}
 	
@@ -345,68 +358,10 @@ public class QuestionTreePage extends WizardPage {
 
 		setControl(composite);
 		scopeImage = new LinkedHashMap<TreeNode<String>, String>();
-		fillTreeMap();
-		
-//		GridData gridData = new GridData();
-//		gridData.verticalSpan = 5;
-//		gridData.verticalAlignment = GridData.FILL;
-//		gridData.horizontalAlignment = GridData.FILL;
-//		gridData.grabExcessHorizontalSpace = true;
-//		gridData.grabExcessVerticalSpace = true;
+		fieldMap = new LinkedHashMap<TreeNode<String>, LinkedList<Text>>();
+		ownedTexts = new LinkedList<Text>();
 		ExpandBar root = new ExpandBar(composite, SWT.V_SCROLL | SWT.H_SCROLL);;
-//		root.setLayoutData(gridData);
 
-		//added to subclass
-//		gridData = new GridData();
-//		gridData.horizontalAlignment = GridData.BEGINNING;
-//		gridData.verticalAlignment = SWT.TOP;
-//		labelStartEvent = new Label(composite, SWT.NONE);
-//		labelStartEvent.setText("Start Event: ");
-//		FontData fontData = labelStartEvent.getFont().getFontData()[0];
-//		Font font = new Font(Display.getCurrent(), new FontData(fontData.getName(), fontData
-//		    .getHeight(), SWT.BOLD));
-//		labelStartEvent.setFont(font);
-//		labelStartEvent.setLayoutData(gridData);
-//		
-//		gridData = new GridData();
-//		gridData.horizontalAlignment = GridData.BEGINNING;
-//		gridData.verticalAlignment = SWT.TOP;
-//		textStartEvent = new Text(composite, SWT.FILL); // THESE SHOULD BE STATIC
-//		textStartEvent.setText("double click to select");
-//		textStartEvent.setEditable(false);
-//		textStartEvent.setLayoutData(gridData);
-//		
-//		gridData = new GridData();
-//		gridData.horizontalAlignment = GridData.BEGINNING;
-//		gridData.verticalAlignment = SWT.TOP;
-//		labelEndEvent = new Label(composite, SWT.NONE);
-//		labelEndEvent.setText("End Event: ");
-//		labelEndEvent.setFont(font);
-//		labelEndEvent.setLayoutData(gridData);
-//		
-//		gridData = new GridData();
-//		gridData.horizontalAlignment = GridData.BEGINNING;
-//		gridData.verticalAlignment = SWT.TOP;
-//		textEndEvent = new Text(composite, SWT.FILL);
-//		textEndEvent.setText("double-click to select");
-//		textEndEvent.setEditable(false);
-//
-//		textEndEvent.setLayoutData(gridData);
-		//END- added to subclass
-//		
-//		labelStartEvent = new Label(composite, SWT.NONE);
-//		labelEndEvent = new Label(composite, SWT.NONE);
-//		textStartEvent = new Text(composite, SWT.FILL); 
-//		textEndEvent = new Text(composite, SWT.FILL);
-//		
-//		
-//		labelEventA = new Label(composite, SWT.NONE);
-//		textEventA = new Text(composite, SWT.FILL); 
-//		labelEventB = new Label(composite, SWT.NONE);
-//		textEventB = new Text(composite, SWT.FILL);
-//		labelEventC = new Label(composite, SWT.NONE);
-//		textEventC = new Text(composite, SWT.FILL);
-		
 		
 		Listener operationListener = new Listener(){
 //
@@ -416,21 +371,18 @@ public class QuestionTreePage extends WizardPage {
 						 UMLSelectExistingElementDialog(getShell(),Collections.singletonList(UMLElementTypes.OPERATION));
 				 dialogOperation.create();
 				 
-//				 dialogOperation.setElementSelectionScope(ElementSelectionScope.VISIBLE);
 						if(dialogOperation.open()==Window.OK){
 							List<Operation> selected = (List<Operation>) dialogOperation.getSelectedElements();
 							System.out.println("Selected operation:"+ selected.get(0).getName()+" : "+selected.get(0).getQualifiedName());
 							((Text)event.widget).setText(selected.get(0).getQualifiedName());
 							((Text)event.widget).pack();
-//							selectedOperation.setText(selected.get(0).getQualifiedName());
 							dialogOperation.close();
 						}
-//
 			}
-//			
 		};	
 		
 		addEventSlots(composite, root, operationListener);
+		fillTreeMap();
 
 		
 		labelGraphicsHolder = new Label(composite, SWT.WRAP | SWT.BORDER);
@@ -447,7 +399,7 @@ public class QuestionTreePage extends WizardPage {
 		composite.pack();
 		
 
-		final MySelectionListener mySelectionListener = new MySelectionListener();
+		mySelectionListener = new MySelectionListener();
 		final MyExpandListener myExpandListener = new MyExpandListener();
 //		root.setBackgroundImage(new Image(display,"/home/daniela/Downloads/background.jpg"));
 		ExpandItem question = new ExpandItem(root, SWT.NONE, 0);
