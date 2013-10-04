@@ -22,7 +22,7 @@ public class BehaviorQuestionTreePage extends QuestionTreePage {
 	public void addEventSlots(Composite composite, ExpandBar root, Listener operationListener){
 		
 		GridData gridData = new GridData();
-		gridData.verticalSpan = 7;
+		gridData.verticalSpan = 9;
 		gridData.verticalAlignment = GridData.FILL;
 		gridData.horizontalAlignment = GridData.FILL;
 		gridData.grabExcessHorizontalSpace = true;
@@ -86,9 +86,32 @@ public class BehaviorQuestionTreePage extends QuestionTreePage {
 		textEventC.setLayoutData(gridData);
 		textEventC.addListener(SWT.MouseDoubleClick, operationListener);
 		textEventC.setEnabled(false);
+		
+		gridData = new GridData();
+		gridData.horizontalAlignment = GridData.BEGINNING;
+		gridData.verticalAlignment = SWT.TOP;
+		labelEventX = new Label(composite, SWT.NONE);
+		labelEventX.setText("Exceptional event X: ");
+		labelEventX.setFont(font);
+		labelEventX.setLayoutData(gridData);
+		
+		gridData = new GridData();
+		gridData.horizontalAlignment = GridData.BEGINNING;
+		gridData.verticalAlignment = SWT.TOP;
+		textEventX = new Text(composite, SWT.FILL);
+		textEventX.setText("double-click to select");
+		textEventX.setEditable(false);
+
+		textEventX.setLayoutData(gridData);
+		textEventX.addListener(SWT.MouseDoubleClick, operationListener);
+		textEventX.setEnabled(false);
+		
+		
 		ownedTexts.add(textEventA);
 		ownedTexts.add(textEventB);
 		ownedTexts.add(textEventC);
+		ownedTexts.add(textEventX);
+
 	}
 
 

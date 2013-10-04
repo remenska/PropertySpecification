@@ -92,9 +92,10 @@ public class QuestionTreePage extends WizardPage {
 				Composite questionsHolder = ((Button) e.getSource()).getParent();
 				
 				// update the scope & behavior if it's decided with the answers so far
-				if(staticNode.isLeaf() && staticNode.getScope()!=null) scope = staticNode.getScope();
+				if(staticNode.isLeaf() && staticNode.getScope()!=null) scope = staticNode.getScope(); 
+//						else scope = null;
 				if(staticNode.isLeaf() && staticNode.getBehavior()!=null) behavior = staticNode.getBehavior();
-				
+//						else behavior = null;
 				
 				// refresh graphical scopes (for Scope Question Tree only?)
 				if(scopeImage.get(staticNode)!=null){
@@ -266,8 +267,8 @@ public class QuestionTreePage extends WizardPage {
 	public static Label labelStartEvent, labelEndEvent;
 	public static Text textStartEvent, textEndEvent;
 	public LinkedList<Text> ownedTexts;
-	public static Label labelEventA, labelEventB, labelEventC;
-	public static Text textEventA, textEventB, textEventC;
+	public static Label labelEventA, labelEventB, labelEventC, labelEventX;
+	public static Text textEventA, textEventB, textEventC, textEventX;
 	public static String scope, behavior;
 	public  Label labelGraphicsHolder;
 	public  Image scopeGraphical;
@@ -286,8 +287,11 @@ public class QuestionTreePage extends WizardPage {
 		scopeImage.put(Questionnaire.answ1113, path + "4.png");
 		scopeImage.put(Questionnaire.answ11311, path + "4.png");
 		scopeImage.put(Questionnaire.answ11312, path + "9.png");
-		scopeImage.put(Questionnaire.answ111321, path + "11.png"); // same as 5?
-		scopeImage.put(Questionnaire.answ111322, path + "10.png");
+		scopeImage.put(Questionnaire.answ1131211, path + "11.png"); // same as 5?
+		scopeImage.put(Questionnaire.answ1131212, path + "10.png");
+		scopeImage.put(Questionnaire.answ1131111, path + "12.png"); // same as 5?
+		scopeImage.put(Questionnaire.answ1131112, path + "13.png");		
+		
 		// (10,10) can just as well be (12 13)! how to determine?
 
 		fieldMap.put(Questionnaire.answ11, new LinkedList());
@@ -299,7 +303,12 @@ public class QuestionTreePage extends WizardPage {
 		fieldMap.put(Questionnaire.aansw11, new LinkedList(Arrays.asList(textEventA)));
 		fieldMap.put(Questionnaire.aansw12, new LinkedList(Arrays.asList(textEventA,textEventB)));
 		fieldMap.put(Questionnaire.aansw13, new LinkedList(Arrays.asList(textEventA,textEventB,textEventC)));
-		
+		fieldMap.put(Questionnaire.aansw1312, new LinkedList(Arrays.asList(textEventA,textEventB,textEventC)));
+		fieldMap.put(Questionnaire.aansw1312, new LinkedList(Arrays.asList(textEventA,textEventB,textEventC)));
+		fieldMap.put(Questionnaire.aansw1312, new LinkedList(Arrays.asList(textEventA,textEventB,textEventC)));
+
+		fieldMap.put(Questionnaire.aansw131112,  new LinkedList(Arrays.asList(textEventA,textEventB,textEventC, textEventX)));
+		fieldMap.put(Questionnaire.aansw131111, new LinkedList(Arrays.asList(textEventA,textEventB,textEventC)));
 	}
 	
 	private static String createIndent(int depth) {

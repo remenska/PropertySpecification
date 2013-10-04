@@ -75,37 +75,50 @@ public class Pattern {
 	   addPattern("Between Q and R", "Response Chain 2", "[true*. Q. (not R)*. P. (not (S or R))*. (nil | (S. (not (T or R))*)). R] false ");
 	   addPattern("After Q until R", "Response Chain 2", "[true*. Q. (not R)*. P] mu X. <true> true and [R] false and [S] mu Y. (<true> true and [R] false and [not T] Y) and [not S] X ");
 	   
+	   
+	   addPattern("Globally", "Constrained Response Chain 2", "[true*. P] mu X . <true> true and [S] mu Y. (<true> true and [Z] false and [not T] Y) and [not S] X " );
+	   addPattern("Before R", "Constrained Response Chain 2", "[(not R)*. P. (not (S or R))*. (nil | (S. (nil | ((not (T or R))*. Z)). (not (T or R))*)). R] false ");
+	   addPattern("After Q", "Constrained Response Chain 2", "[(not Q)*. Q. true*. P] mu X. <true> true and [S] mu Y. (<true> true and [Z] false and [not T] Y) and [not S] X");
+	   addPattern("Between Q and R", "Constrained Response Chain 2", "[true*. Q. (not R)*. P. (not (S or R))*. (nil | (S. (nil | ((not (T or R))*. Z)). (not (T or R))*)). R] false ");
+	   addPattern("After Q until R", "Constrained Response Chain 2", "[true*. Q. (not R)*. P] mu X. <true> true and [R] false and [S] mu Y. (<true> true and [Z or R] false and [not T] Y) and [not S] X ");
+	   
+	   
 	  addPattern("Globally", "Bounded Existence", " [(not P)*. P. (not P)*. P] false ");
 	  addPattern("Before R", "Bounded Existence", " [(not R)*. P. (not R)*. P. (not R)*. R] false ");
 	  addPattern("After Q", "Bounded Existence", " [(not Q)*. Q. (not P)*. P. (not P)*. P] false ");
 	  addPattern("Between Q and R", "Bounded Existence", " [true*. Q. (not R)*. P. (not R)*. P. (not R)*. R] false ");
 	  addPattern("After Q until R", "Bounded Existence" , " [true*. Q. (not R)*. P. (not R)*. P] false ");
 	  
+	  
+	  
+//	  Questionnaire.answ12.setScope("Globally");
 	  Questionnaire.answ12.setScope("Globally");
-	  Questionnaire.answ1211.setScope("Globally");
 	  Questionnaire.answ111111.setScope("After Q");
-	  Questionnaire.answ111112.setScope("After Q"); //variant
+	  Questionnaire.answ111112.setScope("After Q"); //variant, the formula should be adapted
 	  
-	  Questionnaire.answ111211.setScope("Before R");
-	  Questionnaire.answ111212.setScope("Before R"); //variant
+	  Questionnaire.answ111211.setScope("Before R"); //variant, the formula should be adapted
+	  Questionnaire.answ111212.setScope("Before R"); 
 	  
-	  Questionnaire.answ111321.setScope("After Q until R");
-	  Questionnaire.answ111322.setScope("Between Q and R");
-	  
+	  Questionnaire.answ1131111.setScope("After Q until R");
+	  Questionnaire.answ1131211.setScope("After Q until R"); //variant, can it be implemented?
+
+	  Questionnaire.answ1131112.setScope("Between Q and R");
+	  Questionnaire.answ1131212.setScope("Between Q and R"); //variant, can it be implemented?
+
 	  Questionnaire.aansw1111.setBehavior("Absence");
-	  Questionnaire.aansw11111.setBehavior("Absence");
 	  
 	  Questionnaire.aansw1112.setBehavior("Existence");
 	  Questionnaire.aansw1113.setBehavior("Bounded Existence");
+	  Questionnaire.aansw121212.setBehavior("Precedence"); 
+//	  Questionnaire.aansw1222.setBehavior("Response");
 	  Questionnaire.aansw121112.setBehavior("Response");
-	  Questionnaire.aansw1212.setBehavior("Precedence");
-	  Questionnaire.aansw121212.setBehavior("Precedence"); // <-- CHECK AGAIN, THIS ANSWER IS REFINEMENT OF THE PREVIOUS
-	  Questionnaire.aansw1222.setBehavior("Response");
-//	  Questionnaire.aansw123113.setBehavior("Response");
-//	  Questionnaire.aansw12311311.setBehavior("Response");
 
 	  // OK
-	  Questionnaire.aansw1311.setBehavior("Response Chain 2");
+	  Questionnaire.aansw131111.setBehavior("Response Chain 2");
+	  Questionnaire.aansw131112.setBehavior("Constrained Response Chain 2");
+
+	  
+	  
 	  Questionnaire.aansw1312.setBehavior("Response Chain 1");
 	  Questionnaire.aansw1313.setBehavior("Precedence Chain 1");
 	  Questionnaire.aansw1314.setBehavior("Precedence Chain 2");
