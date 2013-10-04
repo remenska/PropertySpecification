@@ -43,6 +43,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.internal.Workbench;
+import org.eclipse.uml2.uml.Message;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ExpandAdapter;
@@ -396,6 +397,8 @@ public class QuestionTreePage extends WizardPage {
 						if(dialogOperation.open()==Window.OK){
 							List<Operation> selected = (List<Operation>) dialogOperation.getSelectedElements();
 							System.out.println("Selected operation:"+ selected.get(0).getName()+" : "+selected.get(0).getQualifiedName());
+							System.out.println("Selected operation:"+ selected.get(0));
+
 							((Text)event.widget).setText(selected.get(0).getQualifiedName());
 							((Text)event.widget).pack();
 							dialogOperation.close();
