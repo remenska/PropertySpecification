@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/EclipsePlugins/dr/org.eclipse.emf.ecoretools.diagram.search_0.7.0.v200806130939.jar"/>
+	<classpathentry kind="lib" path="/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/EclipsePlugins/dr/org.eclipse.emf.search.codegen_0.7.0.v200806130939.jar"/>
+	<classpathentry kind="lib" path="/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/EclipsePlugins/dr/org.eclipse.emf.search.common.ui_0.7.0.v200806130939.jar"/>
+	<classpathentry kind="lib" path="/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/EclipsePlugins/dr/org.eclipse.emf.search.common_0.7.0.v200806130939.jar"/>
+	<classpathentry kind="lib" path="/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/EclipsePlugins/dr/org.eclipse.emf.search.doc_0.7.0.v200806130939.jar"/>
+	<classpathentry kind="lib" path="/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/EclipsePlugins/dr/org.eclipse.emf.search.ecore.ocl.ui_0.7.0.v200806130939.jar"/>
+	<classpathentry kind="lib" path="/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/EclipsePlugins/dr/org.eclipse.emf.search.ecore.ocl_0.7.0.v200806130939.jar"/>
+	<classpathentry kind="lib" path="/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/EclipsePlugins/dr/org.eclipse.emf.search.ecore.ui_0.7.0.v200806130939.jar"/>
+	<classpathentry kind="lib" path="/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/EclipsePlugins/dr/org.eclipse.emf.search.ecore_0.7.0.v200806130939.jar"/>
+	<classpathentry kind="lib" path="/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/EclipsePlugins/dr/org.eclipse.emf.search.examples.ecore.rcp_0.7.0.v200806130939.jar"/>
+	<classpathentry kind="lib" path="/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/EclipsePlugins/dr/org.eclipse.emf.search.examples.ecore_0.7.0.v200806130939.jar"/>
+	<classpathentry kind="lib" path="/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/EclipsePlugins/dr/org.eclipse.emf.search.genmodel.ui_0.7.0.v200806130939.jar"/>
+	<classpathentry kind="lib" path="/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/EclipsePlugins/dr/org.eclipse.emf.search.genmodel_0.7.0.v200806130939.jar"/>
+	<classpathentry kind="lib" path="/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/EclipsePlugins/dr/org.eclipse.emf.search.ocl.ui_0.7.0.v200806130939.jar"/>
+	<classpathentry kind="lib" path="/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/EclipsePlugins/dr/org.eclipse.emf.search.ocl_0.7.0.v200806130939.jar"/>
+	<classpathentry kind="lib" path="/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/EclipsePlugins/dr/org.eclipse.emf.search.ui_0.7.0.v200806130939.jar"/>
+	<classpathentry kind="lib" path="/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/EclipsePlugins/dr/org.eclipse.emf.search_0.7.0.v200806130939.jar"/>
+	<classpathentry kind="lib" path="/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/EclipsePlugins/dr/org.eclipse.uml2.diagram.clazz.search_0.7.0.v200806130939.jar"/>
+	<classpathentry kind="lib" path="/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/EclipsePlugins/dr/org.eclipse.uml2.search.common.ui_0.7.0.v200806130939.jar"/>
+	<classpathentry kind="lib" path="/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/EclipsePlugins/dr/org.eclipse.uml2.search.ocl.ui_0.7.0.v200806130939.jar"/>
+	<classpathentry kind="lib" path="/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/EclipsePlugins/dr/org.eclipse.uml2.search.ocl_0.7.0.v200806130939.jar"/>
+	<classpathentry kind="lib" path="/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/EclipsePlugins/dr/org.eclipse.uml2.search.ui_0.7.0.v200806130939.jar"/>
+	<classpathentry kind="lib" path="/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/EclipsePlugins/dr/org.eclipse.uml2.search_0.7.0.v200806130939.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
