@@ -26,8 +26,8 @@ public class CapturePropertyWizard extends Wizard {
 		addPage(addressInfoPage);
 		questionTreePage = new BehaviorQuestionTreePage("Behavior Question Tree View", "Please answer the following questions regarding the behavior of the property:", Questionnaire.behaviorQuestionTree);
 		addPage(questionTreePage);
-		disciplinedEnglishPage = new DisciplinedEnglishPage("Disciplined English Summary: ", "Please review the collected information regarding the property.");
-		addPage(disciplinedEnglishPage);
+//		disciplinedEnglishPage = new DisciplinedEnglishPage("Disciplined English Summary: ", "Please review the collected information regarding the property.");
+//		addPage(disciplinedEnglishPage);
 		this.getShell().setMaximized(true);
 		this.getShell().setFocus();
 //		this.getShell().pack();

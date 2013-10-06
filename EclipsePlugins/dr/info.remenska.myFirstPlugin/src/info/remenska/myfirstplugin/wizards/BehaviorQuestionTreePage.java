@@ -1,5 +1,7 @@
 package info.remenska.myfirstplugin.wizards;
 
+import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
@@ -114,5 +116,12 @@ public class BehaviorQuestionTreePage extends QuestionTreePage {
 
 	}
 
-
+	
+	public IWizardPage getNextPage(){
+		Wizard wizard = (Wizard) this.getWizard();
+		
+		DisciplinedEnglishPage disciplinedEnglishPage = new DisciplinedEnglishPage("Disciplined English Summary: ", "Please review the collected information regarding the property.");
+		wizard.addPage(disciplinedEnglishPage);
+		return disciplinedEnglishPage;
+		}
 }

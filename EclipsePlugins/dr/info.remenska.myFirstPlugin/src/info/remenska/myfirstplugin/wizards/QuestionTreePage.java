@@ -21,6 +21,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.gmf.runtime.common.ui.services.elementselection.ElementSelectionScope;
 import org.eclipse.jface.viewers.CellEditor.LayoutData;
 import org.eclipse.jface.window.Window;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
@@ -55,7 +56,8 @@ import org.eclipse.swt.events.SelectionListener;
 import com.ibm.xtools.uml.type.UMLElementTypes;
 import com.ibm.xtools.uml.ui.internal.dialogs.UMLSelectExistingElementDialog;
 import com.ibm.xtools.uml.ui.internal.dialogs.UMLSelectElementDialog;
-import com.ibm.xtools.uml.ui.internal.dialogs.UMLSelectElementDialogAPN;
+import com.ibm.xtools.uml.ui.internal.dialogs.selectelement.SelectElementDialog;
+import org.eclipse.gmf.runtime.emf.ui.dialogs.AbstractSelectElementDialog;
 public class QuestionTreePage extends WizardPage {
 	class MySelectionListener implements SelectionListener{
 		@Override
@@ -276,7 +278,7 @@ public class QuestionTreePage extends WizardPage {
 	public static LinkedHashMap<TreeNode<String>, String> scopeImage; 
 	public static LinkedHashMap<TreeNode<String>, LinkedList<Text>> fieldMap;
 	public static void fillTreeMap(){
-		String path = "/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/ScopeTimelineView/";
+		String path = "/home/daniela/git/PropertySpecification/ScopeTimelineView/";
 		scopeImage.put(Questionnaire.answ12, path+ "1.png");
 		scopeImage.put(Questionnaire.answ11, null);
 		scopeImage.put(Questionnaire.answ1111, path + "3.png");
@@ -368,6 +370,7 @@ public class QuestionTreePage extends WizardPage {
 	public void addEventSlots(Composite parent, ExpandBar root, Listener operationListener){
 		
 	}
+
 	
 	@Override
 	public void createControl(Composite parent) {
@@ -393,7 +396,6 @@ public class QuestionTreePage extends WizardPage {
 				 UMLSelectExistingElementDialog dialogOperation = new
 						 UMLSelectExistingElementDialog(getShell(),Collections.singletonList(UMLElementTypes.OPERATION));
 				 dialogOperation.create();
-				 
 						if(dialogOperation.open()==Window.OK){
 							List<Operation> selected = (List<Operation>) dialogOperation.getSelectedElements();
 							System.out.println("Selected operation:"+ selected.get(0).getName()+" : "+selected.get(0).getQualifiedName());
@@ -410,7 +412,6 @@ public class QuestionTreePage extends WizardPage {
 		
 		addEventSlots(composite, root, operationListener);
 		fillTreeMap();
-
 		
 		labelGraphicsHolder = new Label(composite, SWT.WRAP | SWT.BORDER);
 
