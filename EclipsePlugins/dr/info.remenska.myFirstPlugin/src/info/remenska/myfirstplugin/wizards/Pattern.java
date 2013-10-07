@@ -39,11 +39,18 @@ public class Pattern {
 	   addPattern("Between Q and R", "Universality", "[true*. Q. (not R)*. not (P or R). (not R)*. R] false");
 	   addPattern("After Q until R", "Universality", "[true*. Q. (not R)*. not (P or R)] false ");
 	   
-	   addPattern("Globally", "Precedence", "[(not S)*. P] false ");
-	   addPattern("Before R" , "Precedence" , "[(not (S or R))*. P. (not R)*. R] false " );
-	   addPattern("After Q", "Precedence", "[(not Q)*. Q. (not S)*. P] false ");
-	   addPattern("Between Q and R", "Precedence", "[true*. Q. (not (S or R))*. P. (not R)*. R] false");
-	   addPattern("After Q until R", "Precedence", "[true*. Q. (not (S or R))*. P] false ");
+//	   addPattern("Globally", "Precedence", "[(not S)*. P] false ");
+//	   addPattern("Before R" , "Precedence" , "[(not (S or R))*. P. (not R)*. R] false " );
+//	   addPattern("After Q", "Precedence", "[(not Q)*. Q. (not S)*. P] false ");
+//	   addPattern("Between Q and R", "Precedence", "[true*. Q. (not (S or R))*. P. (not R)*. R] false");
+//	   addPattern("After Q until R", "Precedence", "[true*. Q. (not (S or R))*. P] false ");
+//	   
+	   addPattern("Globally", "Precedence", "[(not P)*. S] false ");
+	   addPattern("Before R" , "Precedence" , "[(not (P or R))*. S. (not R)*. R] false " );
+	   addPattern("After Q", "Precedence", "[(not Q)*. Q. (not P)*. S] false ");
+	   addPattern("Between Q and R", "Precedence", "[true*. Q. (not (P or R))*. S. (not R)*. R] false");
+	   addPattern("After Q until R", "Precedence", "[true*. Q. (not (P or R))*. S] false ");
+	   
 	   
 	   addPattern("Globally", "Response", "[true*. P] mu X. <true> true and [not S] X ");
 	   addPattern("Before R", "Response", "[(not R)*. P. (not (S or R))*. R] false ");
@@ -51,11 +58,18 @@ public class Pattern {
 	   addPattern("Between Q and R", "Response", "[true*. Q. (not R)*. P. (not (S or R))*. R] false");
 	   addPattern("After Q until R", "Response", "[true*. Q. (not R)*. P] mu X. <true> true and [R] false and [not S] X");
 	   
+//	   addPattern("Globally", "Precedence Chain 1", "[(not S)*. (nil | (S. (not T)*)). P] false " );
+//	   addPattern("Before R", "Precedence Chain 1", " [(not (S or R))*. (nil | (S. (not (T or R))*)). P. (not R)*. R] false ");
+//	   addPattern("After Q", "Precedence Chain 1", " [(not Q)*. Q. (not S)*. (nil | (S. (not T)*)). P] false ");
+//	   addPattern("Between Q and R", "Precedence Chain 1", "[true*. Q. (not (S or R))*. (nil | (S. (not (T or R))*)). P.(not R)*. R] false");
+//	   addPattern("After Q until R", "Precedence Chain 1", " [true*. Q. (not (S or R))*. (nil | (S. (not (T or R))*)). P] false ");
+//	   
 	   addPattern("Globally", "Precedence Chain 1", "[(not S)*. (nil | (S. (not T)*)). P] false " );
 	   addPattern("Before R", "Precedence Chain 1", " [(not (S or R))*. (nil | (S. (not (T or R))*)). P. (not R)*. R] false ");
 	   addPattern("After Q", "Precedence Chain 1", " [(not Q)*. Q. (not S)*. (nil | (S. (not T)*)). P] false ");
 	   addPattern("Between Q and R", "Precedence Chain 1", "[true*. Q. (not (S or R))*. (nil | (S. (not (T or R))*)). P.(not R)*. R] false");
 	   addPattern("After Q until R", "Precedence Chain 1", " [true*. Q. (not (S or R))*. (nil | (S. (not (T or R))*)). P] false ");
+	  
 	   
 	   addPattern("Globally", "Precedence Chain 2", " [(not P)*. S. (not T)*. T] false ");
 	   addPattern("Before R", "Precedence Chain 2", " [(not (P or R))*. S. (not (T or R))*. T. (not R)*. R] false ");

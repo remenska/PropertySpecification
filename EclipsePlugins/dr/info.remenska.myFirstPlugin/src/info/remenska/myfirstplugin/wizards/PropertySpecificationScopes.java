@@ -30,7 +30,11 @@ public class PropertySpecificationScopes extends WizardPage {
 
 	@Override
 	public void createControl(Composite parent) {
-		String explanation = "Each pattern has a scope, which is the extent of the program execution "
+		String explanation = "Property Specification Patterns describe commonly occurring requirements in a generalized, classified manner. " +
+				"There are two aspects of each property. The first one tells when the property should hold, and the second " +
+				"tells what condition should be satisfied during this time/scope. Hence, each property has a scope and a pattern." +
+				
+				"\nThe scope is the extent of the program execution "
 		+ "over which the pattern must hold. There are five basic kinds of scopes: global (the entire program execution), "
 		+ "before (the execution up to a given state/event), after (the execution after a given state/event), "
 		+ "between (any part of the execution from one given state/event to another given state/event) "
@@ -38,7 +42,7 @@ public class PropertySpecificationScopes extends WizardPage {
 		+ "The scope is determined by specifying a starting and an ending state/event for the pattern: "
 		+ "the scope consists of all states/events beginning with the starting state/event and up to but not including the ending state/event."
 		+ "\n\n"
-		+ "The figure  illustrates the portions of an execution that are designated by the different kinds of scopes. "
+		+ "The figure illustrates the portions of an execution that are designated by the different kinds of scopes. "
 		+ "We note that a scope itself should be interpreted as optional; if the scope delimiters are not present in an execution "
 		+ "then the specification will be true."
 		+ "\n\n"
@@ -62,8 +66,8 @@ public class PropertySpecificationScopes extends WizardPage {
 		gridData.verticalAlignment = SWT.TOP;
 		gridData.verticalSpan = 5;
 
-		gridData.heightHint = 450;
-		gridData.widthHint = 550;
+		gridData.heightHint = 550;
+		gridData.widthHint = 650;
 //		gridData.horizontalAlignment = GridData.GRAB_HORIZONTAL;
 //		gridData.verticalAlignment = GridData.GRAB_VERTICAL;
 //		gridData.se

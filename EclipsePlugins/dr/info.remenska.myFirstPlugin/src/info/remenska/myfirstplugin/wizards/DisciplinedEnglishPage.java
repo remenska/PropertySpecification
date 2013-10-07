@@ -7,9 +7,14 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 public class DisciplinedEnglishPage  extends WizardPage  {
@@ -51,12 +56,12 @@ public class DisciplinedEnglishPage  extends WizardPage  {
 		behavior.put("Existence", "The event of interest for the required behavior is " +  eventA + ". " + eventA + " is required to occur one or more times. ");
 		behavior.put("Bounded Existence", "The event of interest for the required behavior is " +  eventA + ". " + eventA + " is required at most one time. ");
 		behavior.put("Precedence", "The events of interest for the required behavior are " + eventA + " and " + eventB + ". " + eventB + " is not allowed to occur until after " + eventA + " occurs." + eventA + " is not required to occur and, if it does not occur, " + eventB + " is never allowed to occur.");
-		behavior.put("Response", "The events of interest for the required behavior are " + eventA + " and " + eventB + ". If " + eventA + " occurs, " + eventB +" is required to occur subsequently. Event " + eventA + "is not required to occur. ");
+		behavior.put("Response", "The events of interest for the required behavior are " + eventA + " and " + eventB + ". If " + eventA + " occurs, " + eventB +" is required to occur subsequently. Event " + eventA + " is not required to occur. ");
 		behavior.put("Precedence Chain 1", "The events of interest for the required behavior are " + " " + eventA + ", " + eventB + " and " + eventC + ". Event " + eventC + " is not allowed to occur until after " + eventA +" followed by event " + eventB + " occurs. The event chain " + eventA+" followed by " + eventB + ", is not required to occur, and, if it does not occur, " + eventC + " is never allowed to occur.");
-		behavior.put("Precedence Chain 2", "The events of interest for the required behavior are " + " " + eventA + ", " + eventB + " and " + eventC + ". Event " + eventB + "followed by " + eventC + " is not allowed to occur, until " + eventA  + " occurs. The event  " + eventA+ " is not  required to occur, and, if does not occur, " + " the event chain: " + eventB + " followed by " + eventC + ", is never allowed to occur.");
-		behavior.put("Response Chain 1", "The events of interest for the required behavior are " + " " + eventA + ", " + eventB + " and " + eventC + ". If " + eventA + "occurs, then " + eventB +" followed by " + eventC + " is required to occur subsequently. Event " + eventA + "is not required to occur. ");
-		behavior.put("Response Chain 2", "The events of interest for the required behavior are " + " " + eventA + ", " + eventB + " and " + eventC + ". If " + eventA + " followed by " + eventB + " occurs, then " + eventC + "is required to occur subsequently. The event chain " + eventA +" followed by " + eventB + "is not required to occur. ");
-		behavior.put("Constrained Response Chain 2", "The events of interest for the required behavior are " + " " + eventA + ", " + eventB + "," + eventC + ", and the exceptional event " + eventX +". If " + eventA + " followed by " + eventB + " occurs, without the event " + eventX + " occurring inbetween,  then " + eventC + "is required to occur subsequently. The event chain " + eventA +" followed by " + eventB + "is not required to occur. ");
+		behavior.put("Precedence Chain 2", "The events of interest for the required behavior are " + " " + eventA + ", " + eventB + " and " + eventC + ". Event " + eventB + " followed by " + eventC + " is not allowed to occur, until " + eventA  + " occurs. The event  " + eventA+ " is not required to occur, and, if does not occur, " + " the event chain: " + eventB + " followed by " + eventC + ", is never allowed to occur.");
+		behavior.put("Response Chain 1", "The events of interest for the required behavior are " + " " + eventA + ", " + eventB + " and " + eventC + ". If " + eventA + " occurs, then " + eventB +" followed by " + eventC + " is required to occur subsequently. Event " + eventA + " is not required to occur. ");
+		behavior.put("Response Chain 2", "The events of interest for the required behavior are " + " " + eventA + ", " + eventB + " and " + eventC + ". If " + eventA + " followed by " + eventB + " occurs, then " + eventC + " is required to occur subsequently. The event chain " + eventA +" followed by " + eventB + " is not required to occur. ");
+		behavior.put("Constrained Response Chain 2", "The events of interest for the required behavior are " + " " + eventA + ", " + eventB + "," + eventC + ", and the exceptional event " + eventX +". If " + eventA + " followed by " + eventB + " occurs, without the event " + eventX + " occurring inbetween,  then " + eventC + "is required to occur subsequently. The event chain " + eventA +" followed by " + eventB + " is not required to occur. ");
 //		behavior.put("Universality", "The event of interest for the required behavior is " + eventA + ". " + eventA + " must always be possible to occur. ");
 	}
 	
@@ -82,13 +87,13 @@ public class DisciplinedEnglishPage  extends WizardPage  {
 //		gridData.horizontalAlignment = GridData.GRAB_HORIZONTAL;
 //		gridData.verticalAlignment = GridData.GRAB_VERTICAL;
 //		gridData.se
-		StyledText styledText = new StyledText(aman, SWT.WRAP);
-		styledText.setLineJustify(0, 1, true);
-		styledText.setEditable(false);
+//		StyledText styledText = new StyledText(aman, SWT.WRAP);
+//		styledText.setLineJustify(0, 1, true);
+//		styledText.setEditable(false);
 //		styledText.setLineAlignment(6, 1, SWT.RIGHT);
-		styledText.setWordWrap(true);
-		styledText.setLayoutData(gridData); 
-		styledText.setText(((BehaviorQuestionTreePage)this.getPreviousPage()).textEventA.getText());
+//		styledText.setWordWrap(true);
+//		styledText.setLayoutData(gridData); 
+//		styledText.setText(((BehaviorQuestionTreePage)this.getPreviousPage()).textEventA.getText());
 	}
 
 	public static void boldify(String originalText, String event, int style){
@@ -116,7 +121,7 @@ public class DisciplinedEnglishPage  extends WizardPage  {
 	
 	@Override
 	public void createControl(Composite parent) {
-		Composite composite = new Composite(parent, SWT.NONE);
+		final Composite composite = new Composite(parent, SWT.NONE);
 		System.out.println("NOW WE'RE IN!");
 		aman = composite;
 		GridLayout layout = new GridLayout();
@@ -125,7 +130,7 @@ public class DisciplinedEnglishPage  extends WizardPage  {
 		setControl(composite);
 		GridData gridData = new GridData();
 		gridData.verticalAlignment = SWT.TOP;
-		gridData.verticalSpan = 5;
+		gridData.verticalSpan = 2;
 		gridData.heightHint = 350;
 		gridData.widthHint = 850;
 
@@ -150,6 +155,86 @@ public class DisciplinedEnglishPage  extends WizardPage  {
 		boldify(fullText, "SCOPE", SWT.BOLD); boldify(fullText, "BEHAVIOR", SWT.BOLD);
 		boldify(fullText + pleaseReview, pleaseReview, SWT.ITALIC);
 		
+		final Label labelFormula = new Label(composite,  SWT.NONE);
+		labelFormula.setText("The resulting mu-calculus formula:");
+		final StyledText textFormula = new StyledText(composite, SWT.BORDER | SWT.WRAP);
+		
+		textFormula.setLineJustify(0, 1, true);
+		textFormula.setEditable(false);
+		textFormula.setWordWrap(true);
+		 gridData = new GridData();
+		gridData.verticalAlignment = SWT.TOP;
+		gridData.verticalSpan = 2;
+		gridData.heightHint = 100;
+		gridData.widthHint = 650;
+		textFormula.setLayoutData(gridData);
+		Pattern.fill();
+		
+		String modified = (Pattern.patterns.get(QuestionTreePage.scope).get(QuestionTreePage.behavior)).replaceAll("Q", QuestionTreePage.textStartEvent.getText()).replaceAll("R", QuestionTreePage.textEndEvent.getText()).replaceAll("P", QuestionTreePage.textEventA.getText()).replaceAll("S", QuestionTreePage.textEventB.getText());
+		if (QuestionTreePage.behavior.equals("Precedence Chain 1"))
+			modified = (Pattern.patterns.get(QuestionTreePage.scope).get(QuestionTreePage.behavior)).replaceAll("Q", QuestionTreePage.textStartEvent.getText()).replaceAll("R", QuestionTreePage.textEndEvent.getText()).replaceAll("S", QuestionTreePage.textEventA.getText()).replaceAll("T", QuestionTreePage.textEventB.getText()).replaceAll("P", QuestionTreePage.textEventC.getText());
+		else if(QuestionTreePage.behavior.equals("Precedence Chain 2"))
+			modified = (Pattern.patterns.get(QuestionTreePage.scope).get(QuestionTreePage.behavior)).replaceAll("Q", QuestionTreePage.textStartEvent.getText()).replaceAll("R", QuestionTreePage.textEndEvent.getText()).replaceAll("P", QuestionTreePage.textEventA.getText()).replaceAll("S", QuestionTreePage.textEventB.getText()).replaceAll("T", QuestionTreePage.textEventC.getText());
+		else if(QuestionTreePage.behavior.equals("Response Chain 1"))
+			modified = (Pattern.patterns.get(QuestionTreePage.scope).get(QuestionTreePage.behavior)).replaceAll("Q", QuestionTreePage.textStartEvent.getText()).replaceAll("R", QuestionTreePage.textEndEvent.getText()).replaceAll("S", QuestionTreePage.textEventA.getText()).replaceAll("T", QuestionTreePage.textEventB.getText()).replaceAll("P", QuestionTreePage.textEventC.getText());
+		else if(QuestionTreePage.behavior.equals("Response Chain 2"))
+			modified = (Pattern.patterns.get(QuestionTreePage.scope).get(QuestionTreePage.behavior)).replaceAll("Q", QuestionTreePage.textStartEvent.getText()).replaceAll("R", QuestionTreePage.textEndEvent.getText()).replaceAll("P", QuestionTreePage.textEventA.getText()).replaceAll("S", QuestionTreePage.textEventB.getText()).replaceAll("T", QuestionTreePage.textEventC.getText());
+		else if(QuestionTreePage.behavior.equals("Constrained Response Chain 2"))
+			modified = (Pattern.patterns.get(QuestionTreePage.scope).get(QuestionTreePage.behavior)).replaceAll("Q", QuestionTreePage.textStartEvent.getText()).replaceAll("R", QuestionTreePage.textEndEvent.getText()).replaceAll("P", QuestionTreePage.textEventA.getText()).replaceAll("S", QuestionTreePage.textEventB.getText()).replaceAll("T", QuestionTreePage.textEventC.getText()).replaceAll("Z",QuestionTreePage.textEventX.getText() );
+		
+		textFormula.setText(modified);
+		
+		final Label labelDirectoryFormula = new Label(composite, SWT.NONE);
+		labelDirectoryFormula.setText("Select a directory where the file containing the mu-calculus formula will be saved:");
+		final Text textDirectoryFormula = new Text(composite, SWT.BORDER);
+	    GridData data = new GridData();
+	    data.horizontalSpan = 1;
+	    data.verticalSpan = 2;
+
+	    data.verticalAlignment = SWT.BOTTOM;
+
+	    textDirectoryFormula.setLayoutData(data);
+	    data = new GridData();
+//	    data.horizontalSpan = 1;
+//	    data.verticalSpan = 1;
+	    data.verticalAlignment = SWT.BOTTOM;
+	    labelDirectoryFormula.setLayoutData(data);
+		Button button = new Button(composite, SWT.PUSH);
+		button.setText("Browse...");
+		button.addSelectionListener(new SelectionAdapter() {
+		      public void widgetSelected(SelectionEvent event) {
+		        DirectoryDialog dlg = new DirectoryDialog(getShell());
+
+		        dlg.setFilterPath(textDirectoryFormula.getText());
+
+		        dlg.setText("Select a Directory");
+
+		        // Customizable message displayed in the dialog
+		        dlg.setMessage("Select a directory where the file containing the mu-calculus formula will be saved");
+
+		        // Calling open() will open and run the dialog.
+		        // It will return the selected directory, or
+		        // null if user cancels
+		        String dir = dlg.open();
+		        if (dir != null) {
+		          // Set the text box to the new selection
+		        	textDirectoryFormula.setText(dir);
+		        	textDirectoryFormula.pack();
+		    		setPageComplete(true);
+		        	System.out.println("SET PAGE COMPLETE!!!");
+		        	System.out.println("IS IT??: "+ isPageComplete());
+		        	getWizard().getContainer().updateButtons();
+		        	composite.pack();
+		    		
+		        }
+		      }
+		    });
+		data = new GridData();
+//	    data.horizontalSpan = 1;
+//	    data.verticalSpan = 1;
+
+	    data.verticalAlignment = SWT.TOP;
+		button.setLayoutData(data);
 	}
 
 }
