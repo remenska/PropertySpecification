@@ -10,6 +10,7 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
 
 public class DisciplinedEnglishPage  extends WizardPage  {
 	protected Composite aman;
@@ -22,7 +23,7 @@ public class DisciplinedEnglishPage  extends WizardPage  {
 		super(pageName);
 		setTitle(pageName);
 		setDescription(description);
-		setPageComplete(false);
+//		setPageComplete(false);
 
 		// TODO Auto-generated constructor stub
 	}
@@ -32,10 +33,10 @@ public class DisciplinedEnglishPage  extends WizardPage  {
 		 startEvent = QuestionTreePage.textStartEvent.getText() ;
 		 endEvent = QuestionTreePage.textEndEvent.getText();
 		scope.put("Globally", "The required behavior must hold throughout the entire system execution, i.e., from the start until the end of any event sequence.");
-		scope.put("After Q", "The behavior must hold in a restricted interval in the event sequence, and this interval has a starting delimiter " + startEvent + ". The behavior must hold from the first occurrence of " + startEvent + " until the end of the system execution. Even if " + startEvent + " occurs more than once before the end of the event sequence, only the first occurrence begins the restricted interval; later occurrences of "+  startEvent + " do not have an effect." );
+		scope.put("After Q", "The behavior must hold in a restricted interval in the event sequence, and this interval has a starting delimiter " + startEvent + ". The behavior must hold from the first occurrence of " + startEvent + " until the end of the system execution. \nEven if " + startEvent + " occurs more than once before the end of the event sequence, only the first occurrence begins the restricted interval; later occurrences of "+  startEvent + " do not have an effect." );
 		scope.put("Before R", "The behavior must hold in a restricted interval in the event sequence, and this interval has a ending delimiter " + endEvent + ". The behavior is required to hold from the start of the event sequence through to the first occurrence of " + endEvent+", if it ever occurs. " + endEvent +" is not required to occur, and if it never occurs, then the behavior is not required to hold anywhere in the event sequence, i.e., system execution. ");
-		scope.put("After Q until R", "The behavior must hold in a restricted interval in the event sequence, and this interval has both a starting delimiter, " + startEvent+ ", and an ending delimiter " + endEvent + ". The behavior must hold from the first occurrence of " + startEvent + ", if it ever occurs, throughout the first subsequent occurrence of " + endEvent + ", if it ever occurs. Even if " + startEvent + " occurs more than once before the first occurence of " + endEvent + ", only the first of those occurences of " + startEvent + " potentially  begins the restricted interval; later occurrences of "+  startEvent + " do not have an effect. If an occurrence of " + startEvent + " is not followed by occurrence of " + endEvent + ", then the behavior is required to hold until the end of the event sequence." );
-		scope.put("Between Q and R", "The behavior must hold in a restricted interval in the event sequence, and this interval has both a starting delimiter, " + startEvent+ ", and an ending delimiter " + endEvent + ". The behavior must hold from the first occurrence of " + startEvent + ", if it ever occurs, throughout the first subsequent occurrence of " + endEvent + ", if it ever occurs. Even if " + startEvent + " occurs more than once before the first occurence of " + endEvent + ", only the first of those occurences of " + startEvent + " potentially  begins the restricted interval; later occurrences of "+  startEvent + " do not have an effect. If an occurrence of " + startEvent + " is not followed by occurrence of " + endEvent + ", then the behavior is not required to hold for the remainder of the event sequence." );
+		scope.put("After Q until R", "The behavior must hold in a restricted interval in the event sequence, and this interval has both a starting delimiter, " + startEvent+ ", and an ending delimiter " + endEvent + ". The behavior must hold from the first occurrence of " + startEvent + ", if it ever occurs, throughout the first subsequent occurrence of " + endEvent + ", if it ever occurs. \nEven if " + startEvent + " occurs more than once before the first occurence of " + endEvent + ", only the first of those occurences of " + startEvent + " potentially  begins the restricted interval; later occurrences of "+  startEvent + " do not have an effect. If an occurrence of " + startEvent + " is not followed by occurrence of " + endEvent + ", then the behavior is required to hold until the end of the event sequence." );
+		scope.put("Between Q and R", "The behavior must hold in a restricted interval in the event sequence, and this interval has both a starting delimiter, " + startEvent+ ", and an ending delimiter " + endEvent + ". The behavior must hold from the first occurrence of " + startEvent + ", if it ever occurs, throughout the first subsequent occurrence of " + endEvent + ", if it ever occurs. \nEven if " + startEvent + " occurs more than once before the first occurence of " + endEvent + ", only the first of those occurences of " + startEvent + " potentially  begins the restricted interval; later occurrences of "+  startEvent + " do not have an effect. If an occurrence of " + startEvent + " is not followed by occurrence of " + endEvent + ", then the behavior is not required to hold for the remainder of the event sequence." );
 		
 		
 	}
@@ -90,77 +91,28 @@ public class DisciplinedEnglishPage  extends WizardPage  {
 		styledText.setText(((BehaviorQuestionTreePage)this.getPreviousPage()).textEventA.getText());
 	}
 
-	public static void boldify(String originalText, String event){
-//		LinkedList<StyleRange> ranges = new LinkedList<StyleRange>();
+	public static void boldify(String originalText, String event, int style){
 		String newOrig = originalText;
-		System.out.println("Original text:" + newOrig);
-//		int index = newOrig.indexOf(startEvent);
-//		int prevIndex = index;
+
 		int index = newOrig.indexOf(event);
 		int prevIndex = 0;
 		String orig = newOrig; 
 		while (index !=-1 ){
-			System.out.println("----------------------------");
 			orig = newOrig;
+			
 			StyleRange styleRange = new StyleRange();
 			styleRange.start =  prevIndex + index;
-			System.out.println("Style would start at: " + styleRange.start);
-			System.out.println("index = " + index);
 			styleRange.length = event.length() ;
-			System.out.println("length = " + event.length());
-			styleRange.fontStyle = SWT.BOLD;
+			styleRange.fontStyle = style;
 			styledText.setStyleRange(styleRange);
-//			ranges.add(styleRange);
+			
 			newOrig = orig.substring(index+event.length(), orig.length());
-//			newOrig = orig.substring(index + startEvent.length());
-			System.out.println("newOrig = " + newOrig);
 			prevIndex = prevIndex + index + event.length();
 			index = newOrig.indexOf(event);
-//			index = newOrig.indexOf(startEvent);
-//			i++;
 		}
-		System.out.println("So far so goood....");
-//		System.out.println("ranges = " + ranges.toString());
-//		styledText.setStyleRanges((StyleRange[]) ranges.toArray());
 
-//		return originalText;
 	}
 	
-	public static void underline(String originalText, String event){
-//		LinkedList<StyleRange> ranges = new LinkedList<StyleRange>();
-		String newOrig = originalText;
-		System.out.println("Original text:" + newOrig);
-//		int index = newOrig.indexOf(startEvent);
-//		int prevIndex = index;
-		int index = newOrig.indexOf(event);
-		int prevIndex = 0;
-		String orig = newOrig; 
-		while (index !=-1 ){
-			System.out.println("----------------------------");
-			orig = newOrig;
-			StyleRange styleRange = new StyleRange();
-			styleRange.start =  prevIndex + index;
-			System.out.println("Style would start at: " + styleRange.start);
-			System.out.println("index = " + index);
-			styleRange.length = event.length() ;
-			System.out.println("length = " + event.length());
-			styleRange.fontStyle = SWT.UNDERLINE_SINGLE;
-			styledText.setStyleRange(styleRange);
-//			ranges.add(styleRange);
-			newOrig = orig.substring(index+event.length(), orig.length());
-//			newOrig = orig.substring(index + startEvent.length());
-			System.out.println("newOrig = " + newOrig);
-			prevIndex = prevIndex + index + event.length();
-			index = newOrig.indexOf(event);
-//			index = newOrig.indexOf(startEvent);
-//			i++;
-		}
-		System.out.println("So far so goood....");
-//		System.out.println("ranges = " + ranges.toString());
-//		styledText.setStyleRanges((StyleRange[]) ranges.toArray());
-
-//		return originalText;
-	}
 	
 	@Override
 	public void createControl(Composite parent) {
@@ -168,7 +120,7 @@ public class DisciplinedEnglishPage  extends WizardPage  {
 		System.out.println("NOW WE'RE IN!");
 		aman = composite;
 		GridLayout layout = new GridLayout();
-		layout.numColumns = 2;
+		layout.numColumns = 1;
 		composite.setLayout(layout);
 		setControl(composite);
 		GridData gridData = new GridData();
@@ -181,28 +133,23 @@ public class DisciplinedEnglishPage  extends WizardPage  {
 	
 		styledText.setLineJustify(0, 1, true);
 		styledText.setEditable(false);
-//		styledText.setLineAlignment(6, 1, SWT.RIGHT);
 		styledText.setWordWrap(true);
 		styledText.setLayoutData(gridData); 
 		fillScope();
 		fillBehavior();
 		String fullText = "SCOPE: \n" + scope.get(QuestionTreePage.scope) + "\n\nBEHAVIOR: \n" + behavior.get(QuestionTreePage.behavior);
-//		fullText.lastIndexOf(startEvent);
-		styledText.setText(fullText);
+		String pleaseReview = "\n\nClicking \"Finish\" will generate the Sequence Diagram, mu-calculus formula, as well as the monitoring process (when applicable) matching the elucidated property. ";
+		styledText.setText(fullText + pleaseReview);
 
-		boldify(fullText, startEvent);
-		boldify(fullText, endEvent);
-		boldify(fullText, eventA);
-		boldify(fullText, eventB);
-		boldify(fullText, eventC);
-		boldify(fullText, eventX);
-		underline(fullText, "SCOPE");
-		underline(fullText, "BEHAVIOR");
-//		StyleRange styleRange = new StyleRange();
-//		styleRange.start = 3;
-//		styleRange.length = 5;
-//		styleRange.fontStyle = SWT.BOLD;
-//		styledText.setStyleRange(styleRange);
+		boldify(fullText, startEvent, SWT.BOLD);
+		boldify(fullText, endEvent, SWT.BOLD);
+		boldify(fullText, eventA, SWT.BOLD);
+		boldify(fullText, eventB,SWT.BOLD);
+		boldify(fullText, eventC, SWT.BOLD);
+		boldify(fullText, eventX, SWT.BOLD);
+		boldify(fullText, "SCOPE", SWT.BOLD); boldify(fullText, "BEHAVIOR", SWT.BOLD);
+		boldify(fullText + pleaseReview, pleaseReview, SWT.ITALIC);
+		
 	}
 
 }
