@@ -1,6 +1,11 @@
 package info.remenska.myfirstplugin.wizards;
 
 import java.awt.Button;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 
 import org.eclipse.emf.common.util.BasicEList;
@@ -71,7 +76,8 @@ public class CapturePropertyWizard extends Wizard {
 		// here is where we generate the SD
 		
 		try {
-
+			final DisciplinedEnglishPage disciplinedEnglishPage = (DisciplinedEnglishPage) this.getPage("Disciplined English Summary: ");
+			
 			String undoLabel = "Create Diagrams";
 			TransactionalEditingDomain editDomain = UMLModeler
 					.getEditingDomain();
@@ -98,9 +104,38 @@ public class CapturePropertyWizard extends Wizard {
 
 								 System.out.println("------------...");
 								if(model.getName().equalsIgnoreCase("DanielaModel")){
-									createSequenceDiagram((Model) model); //$NON-NLS-1$
-									 System.out.println("Creating a new SD...");
-
+//									createSequenceDiagram((Model) model); //$NON-NLS-1$
+//									 System.out.println("Creating a new SD...");
+									String path = disciplinedEnglishPage.textDirectoryFormula.getText();
+									
+//									File f = new File(path+"/monitor_" + (int )(Math.random() * 500 + 1) + ".mcrl2");
+								
+									PrintWriter writer;
+									try {
+										String fullPath= path+"/monitor_" + (int )(Math.random() * 500 + 1) + ".mcrl2";
+										writer = new PrintWriter(path+"/monitor_" + (int )(Math.random() * 500 + 1) + ".mcrl2", "UTF-8");
+//										writer.println("The first line");
+										writer.println("% " + disciplinedEnglishPage.textFormula.getText());
+										writer.close();
+										
+									} catch (FileNotFoundException
+											| UnsupportedEncodingException e1) {
+										// TODO Auto-generated catch block
+										e1.printStackTrace();
+									}
+									
+									
+//									System.out.println("YAH: "+disciplinedEnglishPage.textDirectoryFormula.getText()+"/monitor.mcrl2");
+//									try {
+//										
+//										f.createNewFile();
+//										System.out.println("Created file: " + f.getName());
+//										
+//									} catch (IOException e) {
+//										// TODO Auto-generated catch block
+//										e.printStackTrace();
+//
+//									}
 
 								}
 							}
@@ -119,6 +154,8 @@ public class CapturePropertyWizard extends Wizard {
 
 	
 	private void createSequenceDiagram(Model m) {
+		
+	
 		int random = (int )(Math.random() * 50 + 1);
 		Collaboration coll = (Collaboration) m.createPackagedElement("PropertySpecCollaboration_" + random, UMLPackage.eINSTANCE.getCollaboration());
 		Interaction inter = (Interaction) coll.createOwnedBehavior("PropertySpecInteraction_" +random, UMLPackage.eINSTANCE.getInteraction());

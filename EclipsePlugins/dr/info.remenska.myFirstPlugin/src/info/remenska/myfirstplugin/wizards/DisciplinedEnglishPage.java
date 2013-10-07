@@ -23,7 +23,9 @@ public class DisciplinedEnglishPage  extends WizardPage  {
 	protected TreeMap<String, String> behavior;
 	static String eventA, eventB, eventC, eventX;
 	static String startEvent, endEvent;
-	static StyledText styledText;
+	public static StyledText styledText;
+	public static StyledText textFormula;
+	public static Text textDirectoryFormula;
 	protected DisciplinedEnglishPage(String pageName, String description) {
 		super(pageName);
 		setTitle(pageName);
@@ -154,10 +156,15 @@ public class DisciplinedEnglishPage  extends WizardPage  {
 		boldify(fullText, eventX, SWT.BOLD);
 		boldify(fullText, "SCOPE", SWT.BOLD); boldify(fullText, "BEHAVIOR", SWT.BOLD);
 		boldify(fullText + pleaseReview, pleaseReview, SWT.ITALIC);
+
 		
 		final Label labelFormula = new Label(composite,  SWT.NONE);
 		labelFormula.setText("The resulting mu-calculus formula:");
-		final StyledText textFormula = new StyledText(composite, SWT.BORDER | SWT.WRAP);
+		textFormula = new StyledText(composite, SWT.BORDER | SWT.WRAP);
+		gridData = new GridData();
+		gridData.horizontalSpan = 1;
+		gridData.verticalSpan = 2;
+		labelFormula.setLayoutData(gridData);
 		
 		textFormula.setLineJustify(0, 1, true);
 		textFormula.setEditable(false);
@@ -183,58 +190,74 @@ public class DisciplinedEnglishPage  extends WizardPage  {
 			modified = (Pattern.patterns.get(QuestionTreePage.scope).get(QuestionTreePage.behavior)).replaceAll("Q", QuestionTreePage.textStartEvent.getText()).replaceAll("R", QuestionTreePage.textEndEvent.getText()).replaceAll("P", QuestionTreePage.textEventA.getText()).replaceAll("S", QuestionTreePage.textEventB.getText()).replaceAll("T", QuestionTreePage.textEventC.getText()).replaceAll("Z",QuestionTreePage.textEventX.getText() );
 		
 		textFormula.setText(modified);
-		
 		final Label labelDirectoryFormula = new Label(composite, SWT.NONE);
-		labelDirectoryFormula.setText("Select a directory where the file containing the mu-calculus formula will be saved:");
-		final Text textDirectoryFormula = new Text(composite, SWT.BORDER);
-	    GridData data = new GridData();
-	    data.horizontalSpan = 1;
-	    data.verticalSpan = 2;
+		if (Pattern.patternsMonitorable.get(QuestionTreePage.scope).get(QuestionTreePage.behavior).booleanValue()){
+			System.out.println("Monitorable...");
+			labelDirectoryFormula.setText("Select a directory where the monitor mcrl2 code will be saved:");
+			GridData data = new GridData();
+		    data.horizontalSpan = 2;
+		    data.verticalSpan = 2;
+		    labelDirectoryFormula.setLayoutData(data);
+		    
+			textDirectoryFormula = new Text(composite, SWT.BORDER);
+		     data = new GridData();
+		    data.horizontalSpan = 1;
+		    data.verticalSpan = 1;
 
-	    data.verticalAlignment = SWT.BOTTOM;
+		    data.verticalAlignment = SWT.BOTTOM;
 
-	    textDirectoryFormula.setLayoutData(data);
-	    data = new GridData();
-//	    data.horizontalSpan = 1;
-//	    data.verticalSpan = 1;
-	    data.verticalAlignment = SWT.BOTTOM;
-	    labelDirectoryFormula.setLayoutData(data);
-		Button button = new Button(composite, SWT.PUSH);
-		button.setText("Browse...");
-		button.addSelectionListener(new SelectionAdapter() {
-		      public void widgetSelected(SelectionEvent event) {
-		        DirectoryDialog dlg = new DirectoryDialog(getShell());
+		    textDirectoryFormula.setLayoutData(data);
+		    data = new GridData();
+		    data.horizontalSpan = 1;
+		    data.verticalSpan = 1;
+		    data.verticalAlignment = SWT.BOTTOM;
+		    labelDirectoryFormula.setLayoutData(data);
+			Button button = new Button(composite, SWT.PUSH);
+			button.setText("Browse...");
+			button.addSelectionListener(new SelectionAdapter() {
+			      public void widgetSelected(SelectionEvent event) {
+			        DirectoryDialog dlg = new DirectoryDialog(getShell());
 
-		        dlg.setFilterPath(textDirectoryFormula.getText());
+			        dlg.setFilterPath(textDirectoryFormula.getText());
 
-		        dlg.setText("Select a Directory");
+			        dlg.setText("Select a Directory");
 
-		        // Customizable message displayed in the dialog
-		        dlg.setMessage("Select a directory where the file containing the mu-calculus formula will be saved");
+			        // Customizable message displayed in the dialog
+			        dlg.setMessage("Select a directory where the file containing the mu-calculus formula will be saved");
 
-		        // Calling open() will open and run the dialog.
-		        // It will return the selected directory, or
-		        // null if user cancels
-		        String dir = dlg.open();
-		        if (dir != null) {
-		          // Set the text box to the new selection
-		        	textDirectoryFormula.setText(dir);
-		        	textDirectoryFormula.pack();
-		    		setPageComplete(true);
-		        	System.out.println("SET PAGE COMPLETE!!!");
-		        	System.out.println("IS IT??: "+ isPageComplete());
-		        	getWizard().getContainer().updateButtons();
-		        	composite.pack();
-		    		
-		        }
-		      }
-		    });
-		data = new GridData();
-//	    data.horizontalSpan = 1;
-//	    data.verticalSpan = 1;
+			        // Calling open() will open and run the dialog.
+			        // It will return the selected directory, or
+			        // null if user cancels
+			        String dir = dlg.open();
+			        if (dir != null) {
+			          // Set the text box to the new selection
+			        	textDirectoryFormula.setText(dir);
+			        	textDirectoryFormula.pack();
+			    		setPageComplete(true);
+			        	composite.pack();
+			    		
+			        }
+			      }
+			    });
+			data = new GridData();
+		    data.horizontalSpan = 1;
+		    data.verticalSpan = 1;
 
-	    data.verticalAlignment = SWT.TOP;
-		button.setLayoutData(data);
+		    data.verticalAlignment = SWT.TOP;
+			button.setLayoutData(data);
+		}
+		else {
+		    GridData  data = new GridData();
+//		    data.horizontalSpan = 1;
+//		    data.verticalSpan = 1;
+		    data.verticalAlignment = SWT.BOTTOM;
+		    labelDirectoryFormula.setLayoutData(data);
+			labelDirectoryFormula.setText("The property is not monitorable. ");
+
+		}
+		
+		
+	
 	}
 
 }

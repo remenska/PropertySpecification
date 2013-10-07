@@ -4,11 +4,18 @@ import java.util.HashMap;
 
 public class Pattern {
   public static HashMap<String,HashMap<String,String>> patterns;
- 
+  public static HashMap<String, HashMap<String,Boolean>> patternsMonitorable; 
    public static void addPattern(String scope, String behavior, String formula){
 	   HashMap<String,String> behaviors = patterns.get(scope);
 	   behaviors.put(behavior, formula);
 	   patterns.put(scope,behaviors);
+   }
+   
+   public static void addPatternMonitorable(String scope, String behavior, Boolean isMonitorable){
+	   HashMap<String,Boolean> behaviorsMonitorable = patternsMonitorable.get(scope);
+	   behaviorsMonitorable.put(behavior, isMonitorable);
+	   patternsMonitorable.put(scope,behaviorsMonitorable);
+
    }
    
    public static void fill(){
@@ -20,7 +27,14 @@ public class Pattern {
 			  patterns.put("After Q", new HashMap<String, String>());
 			  patterns.put("Between Q and R", new HashMap<String, String>());
 			  patterns.put("After Q until R", new HashMap<String, String>());
-			  
+			  patternsMonitorable = new HashMap<String,HashMap<String,Boolean>>();
+//			  System.out.println(patterns.keySet());
+			  patternsMonitorable.put("Globally", new HashMap<String, Boolean>());
+			  patternsMonitorable.put("Before R", new HashMap<String, Boolean>());
+			  patternsMonitorable.put("After Q", new HashMap<String, Boolean>());
+			  patternsMonitorable.put("Between Q and R", new HashMap<String, Boolean>());
+			  patternsMonitorable.put("After Q until R", new HashMap<String, Boolean>());
+				  
 	   addPattern("Globally", "Absence", "[true*. P] false" );
 	   addPattern("Before R", "Absence", "[(not R)*. P. (not R)*. R] false");
 	   addPattern("After Q", "Absence", "[(not Q)*. Q. true*. P] false");
@@ -39,12 +53,6 @@ public class Pattern {
 	   addPattern("Between Q and R", "Universality", "[true*. Q. (not R)*. not (P or R). (not R)*. R] false");
 	   addPattern("After Q until R", "Universality", "[true*. Q. (not R)*. not (P or R)] false ");
 	   
-//	   addPattern("Globally", "Precedence", "[(not S)*. P] false ");
-//	   addPattern("Before R" , "Precedence" , "[(not (S or R))*. P. (not R)*. R] false " );
-//	   addPattern("After Q", "Precedence", "[(not Q)*. Q. (not S)*. P] false ");
-//	   addPattern("Between Q and R", "Precedence", "[true*. Q. (not (S or R))*. P. (not R)*. R] false");
-//	   addPattern("After Q until R", "Precedence", "[true*. Q. (not (S or R))*. P] false ");
-//	   
 	   addPattern("Globally", "Precedence", "[(not P)*. S] false ");
 	   addPattern("Before R" , "Precedence" , "[(not (P or R))*. S. (not R)*. R] false " );
 	   addPattern("After Q", "Precedence", "[(not Q)*. Q. (not P)*. S] false ");
@@ -58,12 +66,6 @@ public class Pattern {
 	   addPattern("Between Q and R", "Response", "[true*. Q. (not R)*. P. (not (S or R))*. R] false");
 	   addPattern("After Q until R", "Response", "[true*. Q. (not R)*. P] mu X. <true> true and [R] false and [not S] X");
 	   
-//	   addPattern("Globally", "Precedence Chain 1", "[(not S)*. (nil | (S. (not T)*)). P] false " );
-//	   addPattern("Before R", "Precedence Chain 1", " [(not (S or R))*. (nil | (S. (not (T or R))*)). P. (not R)*. R] false ");
-//	   addPattern("After Q", "Precedence Chain 1", " [(not Q)*. Q. (not S)*. (nil | (S. (not T)*)). P] false ");
-//	   addPattern("Between Q and R", "Precedence Chain 1", "[true*. Q. (not (S or R))*. (nil | (S. (not (T or R))*)). P.(not R)*. R] false");
-//	   addPattern("After Q until R", "Precedence Chain 1", " [true*. Q. (not (S or R))*. (nil | (S. (not (T or R))*)). P] false ");
-//	   
 	   addPattern("Globally", "Precedence Chain 1", "[(not S)*. (nil | (S. (not T)*)). P] false " );
 	   addPattern("Before R", "Precedence Chain 1", " [(not (S or R))*. (nil | (S. (not (T or R))*)). P. (not R)*. R] false ");
 	   addPattern("After Q", "Precedence Chain 1", " [(not Q)*. Q. (not S)*. (nil | (S. (not T)*)). P] false ");
@@ -102,8 +104,76 @@ public class Pattern {
 	  addPattern("After Q", "Bounded Existence", " [(not Q)*. Q. (not P)*. P. (not P)*. P] false ");
 	  addPattern("Between Q and R", "Bounded Existence", " [true*. Q. (not R)*. P. (not R)*. P. (not R)*. R] false ");
 	  addPattern("After Q until R", "Bounded Existence" , " [true*. Q. (not R)*. P. (not R)*. P] false ");
+	  ////  ////  ////  ////  ////  ////  ////  ////  ////  ////  ////  ////  ////  ////
+	   addPatternMonitorable("Globally", "Absence", Boolean.TRUE );
+	   addPatternMonitorable("Before R", "Absence", Boolean.TRUE );
+	   addPatternMonitorable("After Q", "Absence", Boolean.TRUE );
+	   addPatternMonitorable("Between Q and R", "Absence",Boolean.TRUE );
+	   addPatternMonitorable("After Q until R","Absence", Boolean.TRUE );
+	   
+	   addPatternMonitorable("Globally", "Existence",Boolean.FALSE );
+	   addPatternMonitorable("Before R", "Existence", Boolean.TRUE );
+	   addPatternMonitorable("After Q", "Existence", Boolean.FALSE );
+	   addPatternMonitorable("Between Q and R", "Existence", Boolean.TRUE );
+	   addPatternMonitorable("After Q until R", "Existence", Boolean.FALSE );
+	   
+	   addPatternMonitorable("Globally", "Universality", Boolean.TRUE );
+	   addPatternMonitorable("Before R", "Universality", Boolean.TRUE );
+	   addPatternMonitorable("After Q", "Universality", Boolean.TRUE );
+	   addPatternMonitorable("Between Q and R", "Universality", Boolean.TRUE );
+	   addPatternMonitorable("After Q until R", "Universality", Boolean.TRUE );
+	   
+	   addPatternMonitorable("Globally", "Precedence", Boolean.TRUE );
+	   addPatternMonitorable("Before R" , "Precedence" , Boolean.TRUE );
+	   addPatternMonitorable("After Q", "Precedence", Boolean.TRUE );
+	   addPatternMonitorable("Between Q and R", "Precedence", Boolean.TRUE );
+	   addPatternMonitorable("After Q until R", "Precedence",  Boolean.TRUE );
+	   
+	   
+	   addPatternMonitorable("Globally", "Response", Boolean.FALSE );
+	   addPatternMonitorable("Before R", "Response", Boolean.TRUE );
+	   addPatternMonitorable("After Q", "Response", Boolean.FALSE );
+	   addPatternMonitorable("Between Q and R", "Response", Boolean.TRUE );
+	   addPatternMonitorable("After Q until R", "Response", Boolean.FALSE );
+	   
+	   addPatternMonitorable("Globally", "Precedence Chain 1", Boolean.TRUE );
+	   addPatternMonitorable("Before R", "Precedence Chain 1", Boolean.TRUE);
+	   addPatternMonitorable("After Q", "Precedence Chain 1", Boolean.TRUE);
+	   addPatternMonitorable("Between Q and R", "Precedence Chain 1", Boolean.TRUE);
+	   addPatternMonitorable("After Q until R", "Precedence Chain 1", Boolean.TRUE);
 	  
-	  
+	   
+	   addPatternMonitorable("Globally", "Precedence Chain 2", Boolean.TRUE);
+	   addPatternMonitorable("Before R", "Precedence Chain 2", Boolean.TRUE);
+	   addPatternMonitorable("After Q", "Precedence Chain 2", Boolean.TRUE);
+	   addPatternMonitorable("Between Q and R", "Precedence Chain 2", Boolean.TRUE);
+	   addPatternMonitorable("After Q until R", "Precedence Chain 2",Boolean.TRUE);
+	   
+	   addPatternMonitorable("Globally", "Response Chain 1", Boolean.FALSE);
+	   addPatternMonitorable("Before R", "Response Chain 1", Boolean.FALSE);
+	   addPatternMonitorable("After Q", "Response Chain 1", Boolean.FALSE );
+	   addPatternMonitorable("Between Q and R", "Response Chain 1", Boolean.TRUE);
+	   addPatternMonitorable("After Q until R", "Response Chain 1", Boolean.FALSE);
+	   
+	   addPatternMonitorable("Globally", "Response Chain 2", Boolean.FALSE);
+	   addPatternMonitorable("Before R", "Response Chain 2", Boolean.TRUE);
+	   addPatternMonitorable("After Q", "Response Chain 2", Boolean.FALSE);
+	   addPatternMonitorable("Between Q and R", "Response Chain 2", Boolean.TRUE);
+	   addPatternMonitorable("After Q until R", "Response Chain 2", Boolean.FALSE);
+	   
+	   
+	   addPatternMonitorable("Globally", "Constrained Response Chain 2", Boolean.FALSE );
+	   addPatternMonitorable("Before R", "Constrained Response Chain 2", Boolean.TRUE);
+	   addPatternMonitorable("After Q", "Constrained Response Chain 2", Boolean.FALSE);
+	   addPatternMonitorable("Between Q and R", "Constrained Response Chain 2", Boolean.TRUE);
+	   addPatternMonitorable("After Q until R", "Constrained Response Chain 2", Boolean.FALSE);
+	   
+	   
+	   addPatternMonitorable("Globally", "Bounded Existence", Boolean.TRUE);
+	   addPatternMonitorable("Before R", "Bounded Existence", Boolean.TRUE);
+	   addPatternMonitorable("After Q", "Bounded Existence", Boolean.TRUE);
+	   addPatternMonitorable("Between Q and R", "Bounded Existence", Boolean.TRUE);
+	   addPatternMonitorable("After Q until R", "Bounded Existence" , Boolean.TRUE);
 	  
 //	  Questionnaire.answ12.setScope("Globally");
 	  Questionnaire.answ12.setScope("Globally");
