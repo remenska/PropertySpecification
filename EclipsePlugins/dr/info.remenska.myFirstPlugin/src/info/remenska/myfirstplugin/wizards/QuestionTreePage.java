@@ -53,6 +53,7 @@ import org.eclipse.swt.events.ExpandListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 
+import com.ibm.xtools.uml.type.IMessageElementType;
 import com.ibm.xtools.uml.type.UMLElementTypes;
 import com.ibm.xtools.uml.ui.internal.dialogs.UMLSelectExistingElementDialog;
 import com.ibm.xtools.uml.ui.internal.dialogs.UMLSelectElementDialog;
@@ -278,7 +279,7 @@ public class QuestionTreePage extends WizardPage {
 	public static LinkedHashMap<TreeNode<String>, String> scopeImage; 
 	public static LinkedHashMap<TreeNode<String>, LinkedList<Text>> fieldMap;
 	public static void fillTreeMap(){
-		String path = "/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/ScopeTimelineView/";
+		String path = "/home/daniela/git/PropertySpecification/ScopeTimelineView/";
 		scopeImage.put(Questionnaire.answ12, path+ "1.png");
 		scopeImage.put(Questionnaire.answ11, null);
 		scopeImage.put(Questionnaire.answ1111, path + "3.png");
@@ -393,18 +394,29 @@ public class QuestionTreePage extends WizardPage {
 //
 			@Override
 			public void handleEvent(Event event) {
-				 UMLSelectExistingElementDialog dialogOperation = new
-						 UMLSelectExistingElementDialog(getShell(),Collections.singletonList(UMLElementTypes.OPERATION));
+//						 UMLSelectExistingElementDialog(getShell(),Collections.   singletonList(UMLElementTypes.ASYNCH_CALL_MESSAGE | UMLElementTypes.SYNCH_CALL_MESSAGE));
+//				 UMLSelectExistingElementDialog(getShell(),Collections.singletonList(UMLElementTypes.CALL_OPERATION_ACTION));
+						 LinkedList<IMessageElementType> fuckYou = new LinkedList<IMessageElementType>();
+						 fuckYou.add(UMLElementTypes.ASYNCH_CALL_MESSAGE);
+						 fuckYou.add(UMLElementTypes.SYNCH_CALL_MESSAGE);
+						 UMLSelectExistingElementDialog dialogOperation = new
+
+						 UMLSelectExistingElementDialog(getShell(), fuckYou);
+
+//				 UMLSelectExistingElementDialog(getShell(),Collections.singletonList(UMLElementTypes.CALL_EVENT));
 				 dialogOperation.create();
 						if(dialogOperation.open()==Window.OK){
-							List<Operation> selected = (List<Operation>) dialogOperation.getSelectedElements();
-							System.out.println("Selected operation:"+ selected.get(0).getName()+" : "+selected.get(0).getQualifiedName());
-							System.out.println("Selected operation:"+ selected.get(0));
+							List<Message> selected = (List<Message>) dialogOperation.getSelectedElements();
+							System.out.println("Selected message:"+ selected.get(0).getName()+" : "+selected.get(0).getQualifiedName());
+							System.out.println("Object:" + selected.get(0).getConnector().getEnds().get(1).getRole().getName());
+							System.out.println("Class:" + selected.get(0).getConnector().getEnds().get(1).getRole().getType().getName());
 
-							((Text)event.widget).setText(selected.get(0).getQualifiedName());
+							System.out.println("Selected message:"+ selected.get(0));
+							// if it's NOT a reply message, then we care about the receiver object, and the class as well!
+							// how about parameters?
+							((Text)event.widget).setText(selected.get(0).getName());
 							((Text)event.widget).pack();
 							dialogOperation.close();
-							
 							checkIfValid();
 						}
 			}

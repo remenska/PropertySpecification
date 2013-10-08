@@ -1,6 +1,7 @@
 package info.remenska.myfirstplugin.wizards;
 
 import java.awt.Button;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -8,6 +9,7 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.transaction.RecordingCommand;
@@ -17,7 +19,12 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.internal.themes.WorkbenchPreview;
 import org.eclipse.uml2.uml.BehaviorExecutionSpecification;
 import org.eclipse.uml2.uml.Class;
@@ -86,14 +93,14 @@ public class CapturePropertyWizard extends Wizard {
 						protected void doExecute() {
 							// code to modify the model goes here
 							// Get selection
-							final Collection<Model> elements = UMLModeler.getOpenedModels();
+							final Collection<Model> models = UMLModeler.getOpenedModels();
 
-							if (elements.size() == 0) {
-										System.out.println("Cannot perform enumeration on current selection.\nPlease select a UML Element from the Project Explorer or\nselect a Notation element from a diagram."); //$NON-NLS-1$
-							}
-
+							if (models.size() == 0) {
+										System.out.println("Please open a UML model and select it. "); //$NON-NLS-1$
+							} else{
+		
 							// Log each elements
-							for (Model model:elements) {
+							for (Model model:models) {
 								
 //								 System.out.println("Model NAMESPACE"+((Model) model).getNamespace());
 								 System.out.println("Model qualified name: "+model.getQualifiedName());
@@ -103,42 +110,41 @@ public class CapturePropertyWizard extends Wizard {
 
 
 								 System.out.println("------------...");
-								if(model.getName().equalsIgnoreCase("DanielaModel")){
-//									createSequenceDiagram((Model) model); //$NON-NLS-1$
-//									 System.out.println("Creating a new SD...");
-									String path = disciplinedEnglishPage.textDirectoryFormula.getText();
-									
-//									File f = new File(path+"/monitor_" + (int )(Math.random() * 500 + 1) + ".mcrl2");
-								
-									PrintWriter writer;
-									try {
-										String fullPath= path+"/monitor_" + (int )(Math.random() * 500 + 1) + ".mcrl2";
-										writer = new PrintWriter(path+"/monitor_" + (int )(Math.random() * 500 + 1) + ".mcrl2", "UTF-8");
-//										writer.println("The first line");
-										writer.println("% " + disciplinedEnglishPage.textFormula.getText());
-										writer.close();
+								 //TODO: remove second condition?
+								 if(disciplinedEnglishPage.textDirectoryFormula!=null && !model.getName().equalsIgnoreCase("UMLPrimitiveTypes")){
+									 // property is monitorable, create an mCRL2 process
+									 String path = disciplinedEnglishPage.textDirectoryFormula.getText();
+
+										PrintWriter writer;
+										try {
+											String fullPath= path+"/monitor_" + (int )(Math.random() * 500 + 1) + ".mcrl2";
+											writer = new PrintWriter(fullPath, "UTF-8");
+											File f = new File(fullPath);
+
+//											writer.println("The first line");
+											writer.println("% " + disciplinedEnglishPage.textFormula.getText());
+											writer.close();
+
+											
+										} catch (FileNotFoundException
+												| UnsupportedEncodingException e1) {
+											// TODO Auto-generated catch block
+											e1.printStackTrace();
+										} 
 										
-									} catch (FileNotFoundException
-											| UnsupportedEncodingException e1) {
-										// TODO Auto-generated catch block
-										e1.printStackTrace();
-									}
+								 }
+								 
+								 // next create an SD
+								if(!model.getName().equalsIgnoreCase("UMLPrimitiveTypes")){
+//									createSequenceDiagram((Model) model); //$NON-NLS-1$
+									 System.out.println("Creating a new SD...");
 									
 									
-//									System.out.println("YAH: "+disciplinedEnglishPage.textDirectoryFormula.getText()+"/monitor.mcrl2");
-//									try {
-//										
-//										f.createNewFile();
-//										System.out.println("Created file: " + f.getName());
-//										
-//									} catch (IOException e) {
-//										// TODO Auto-generated catch block
-//										e.printStackTrace();
-//
-//									}
+								
 
 								}
 							}
+						}
 						}
 					});
 
