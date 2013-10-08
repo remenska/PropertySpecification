@@ -45,6 +45,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.internal.Workbench;
 import org.eclipse.uml2.uml.Message;
+import org.eclipse.uml2.uml.MessageSort;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ExpandAdapter;
@@ -270,16 +271,21 @@ public class QuestionTreePage extends WizardPage {
 	public TreeNode<String> dynamicQuestionnaire;
 	public static Label labelStartEvent, labelEndEvent;
 	public static Text textStartEvent, textEndEvent;
+	public static TraceLine trStartEvent, trEndEvent;
+	
 	public LinkedList<Text> ownedTexts;
 	public static Label labelEventA, labelEventB, labelEventC, labelEventX;
 	public static Text textEventA, textEventB, textEventC, textEventX;
+	public static TraceLine trEventA, trEventB, trEventC, trEventX;
+	
 	public static String scope, behavior;
 	public  Label labelGraphicsHolder;
 	public  Image scopeGraphical;
 	public static LinkedHashMap<TreeNode<String>, String> scopeImage; 
 	public static LinkedHashMap<TreeNode<String>, LinkedList<Text>> fieldMap;
+	public static HashMap<Text,TraceLine> traceLineMap;
 	public static void fillTreeMap(){
-		String path = "/home/daniela/git/PropertySpecification/ScopeTimelineView/";
+		String path = "/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/ScopeTimelineView/";
 		scopeImage.put(Questionnaire.answ12, path+ "1.png");
 		scopeImage.put(Questionnaire.answ11, null);
 		scopeImage.put(Questionnaire.answ1111, path + "3.png");
@@ -313,6 +319,20 @@ public class QuestionTreePage extends WizardPage {
 
 		fieldMap.put(Questionnaire.aansw131112,  new LinkedList(Arrays.asList(textEventA,textEventB,textEventC, textEventX)));
 		fieldMap.put(Questionnaire.aansw131111, new LinkedList(Arrays.asList(textEventA,textEventB,textEventC)));
+		
+		trEventA = new TraceLine();
+		trEventB = new TraceLine();
+		trEventC = new TraceLine();
+		trEventX = new TraceLine();
+		trStartEvent = new TraceLine();
+		trEndEvent = new TraceLine();
+		traceLineMap.put(textEventA, trEventA);
+		traceLineMap.put(textEventB, trEventB);
+		traceLineMap.put(textEventC, trEventC);
+		traceLineMap.put(textEventX, trEventX);
+		traceLineMap.put(textStartEvent, trStartEvent);
+		traceLineMap.put(textEndEvent, trEndEvent);
+
 	}
 	
 	private static String createIndent(int depth) {
@@ -387,6 +407,7 @@ public class QuestionTreePage extends WizardPage {
 		scopeImage = new LinkedHashMap<TreeNode<String>, String>();
 		fieldMap = new LinkedHashMap<TreeNode<String>, LinkedList<Text>>();
 		ownedTexts = new LinkedList<Text>();
+		traceLineMap = new HashMap<Text,TraceLine>();
 		ExpandBar root = new ExpandBar(composite, SWT.V_SCROLL | SWT.H_SCROLL);;
 
 		
@@ -412,8 +433,22 @@ public class QuestionTreePage extends WizardPage {
 							System.out.println("Class:" + selected.get(0).getConnector().getEnds().get(1).getRole().getType().getName());
 
 							System.out.println("Selected message:"+ selected.get(0));
+							
+							TraceLine trObj = new TraceLine();
+							trObj.setMethodCall(selected.get(0).getName());
+							trObj.setClassName(selected.get(0).getConnector().getEnds().get(1).getRole().getType().getName());
+							trObj.setObjectName(selected.get(0).getConnector().getEnds().get(1).getRole().getName());
+							
+							if (selected.get(0).getMessageSort().getLiteral().equals("reply"))
+								trObj.setIsReply(true);
+	
+							if (selected.get(0).getMessageSort().getLiteral().equals("asynchCall"))
+								trObj.setAsynchronous(true);
+	
+							traceLineMap.put((Text)event.widget, trObj);
 							// if it's NOT a reply message, then we care about the receiver object, and the class as well!
 							// how about parameters?
+							System.out.println(trObj);
 							((Text)event.widget).setText(selected.get(0).getName());
 							((Text)event.widget).pack();
 							dialogOperation.close();
@@ -544,5 +579,85 @@ public class QuestionTreePage extends WizardPage {
 }
 
 
+class TraceLine{
+	public boolean isReply = false;
+	public String className;
+	public String[] parameters;
+	public String methodCall;
+	public boolean isAsynchronous = false;
+	
+	public boolean isAsynchronous() {
+		return isAsynchronous;
+	}
 
+	public void setAsynchronous(boolean isAsynchronous) {
+		this.isAsynchronous = isAsynchronous;
+	}
+
+	public String getMethodCall() {
+		return methodCall;
+	}
+
+	public void setMethodCall(String methodCall) {
+		this.methodCall = methodCall;
+	}
+
+	public String[] getParameters() {
+		return parameters;
+	}
+
+	public void setParameters(String[] parameters) {
+		this.parameters = parameters;
+	}
+
+	public String getClassName() {
+		return className;
+	}
+
+	public void setClassName(String className) {
+		this.className = className;
+	}
+
+
+
+	public String objectName;
+	public String getObjectName() {
+		return objectName;
+	}
+
+	public void setObjectName(String objectName) {
+		this.objectName = objectName;
+	}
+
+	public boolean isReply(){
+		return isReply;
+	}
+	
+	public void setIsReply(boolean isReply){
+		this.isReply = isReply;
+	}
+	
+	
+	
+	public String toString(){
+		StringBuffer tmp = new StringBuffer();
+		if(this.isAsynchronous)
+			tmp.append("asynch_call(");
+		else if(isReply())
+			tmp.append("synch_reply(");
+		else
+			tmp.append("synch_call(");
+		
+		tmp.append(getClassName()+", ");
+		tmp.append(getObjectName()+", ");
+		
+		if (isReply())
+			tmp.append(getMethodCall()+"_return"+")");
+		else
+			tmp.append(getMethodCall()+")");
+		
+		return tmp.toString();
+	}
+	
+}
 

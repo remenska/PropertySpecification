@@ -167,7 +167,7 @@ public class DisciplinedEnglishPage  extends WizardPage  {
 		labelFormula.setLayoutData(gridData);
 		
 		textFormula.setLineJustify(0, 1, true);
-		textFormula.setEditable(false);
+//		textFormula.setEditable(false);
 		textFormula.setWordWrap(true);
 		 gridData = new GridData();
 		gridData.verticalAlignment = SWT.TOP;
@@ -176,20 +176,65 @@ public class DisciplinedEnglishPage  extends WizardPage  {
 		gridData.widthHint = 650;
 		textFormula.setLayoutData(gridData);
 		Pattern.fill();
+		StringBuffer modifiedBuffer = new StringBuffer();
+		modifiedBuffer.append(Pattern.patterns.get(QuestionTreePage.scope).get(QuestionTreePage.behavior));
+		modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll("Q", QuestionTreePage.traceLineMap.get(QuestionTreePage.textStartEvent).toString()));
+		modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll("R", QuestionTreePage.traceLineMap.get(QuestionTreePage.textEndEvent).toString()));
+		modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll("P", QuestionTreePage.traceLineMap.get(QuestionTreePage.textEventA).toString()));
+		modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll("S", QuestionTreePage.traceLineMap.get(QuestionTreePage.textEventB).toString()));
+
+		if (QuestionTreePage.behavior.equals("Precedence Chain 1")) {
+			modifiedBuffer = new StringBuffer();
+			modifiedBuffer.append(Pattern.patterns.get(QuestionTreePage.scope).get(QuestionTreePage.behavior));
+			modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll("Q", QuestionTreePage.traceLineMap.get(QuestionTreePage.textStartEvent).toString()));
+			modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll("R", QuestionTreePage.traceLineMap.get(QuestionTreePage.textEndEvent).toString()));
+			modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll("S", QuestionTreePage.traceLineMap.get(QuestionTreePage.textEventA).toString()));
+			modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll("T", QuestionTreePage.traceLineMap.get(QuestionTreePage.textEventB).toString()));
+			modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll("P", QuestionTreePage.traceLineMap.get(QuestionTreePage.textEventC).toString()));
+
+
+		} else if(QuestionTreePage.behavior.equals("Precedence Chain 2")){
+			
+			modifiedBuffer = new StringBuffer();
+			modifiedBuffer.append(Pattern.patterns.get(QuestionTreePage.scope).get(QuestionTreePage.behavior));
+			modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll("Q", QuestionTreePage.traceLineMap.get(QuestionTreePage.textStartEvent).toString()));
+			modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll("R", QuestionTreePage.traceLineMap.get(QuestionTreePage.textEndEvent).toString()));
+			modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll("P", QuestionTreePage.traceLineMap.get(QuestionTreePage.textEventA).toString()));
+			modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll("S", QuestionTreePage.traceLineMap.get(QuestionTreePage.textEventB).toString()));
+			modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll("T", QuestionTreePage.traceLineMap.get(QuestionTreePage.textEventC).toString()));
+
+		}	else if(QuestionTreePage.behavior.equals("Response Chain 1")) {
+			modifiedBuffer = new StringBuffer();
+			modifiedBuffer.append(Pattern.patterns.get(QuestionTreePage.scope).get(QuestionTreePage.behavior));
+			modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll("Q", QuestionTreePage.traceLineMap.get(QuestionTreePage.textStartEvent).toString()));
+			modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll("R", QuestionTreePage.traceLineMap.get(QuestionTreePage.textEndEvent).toString()));
+			modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll("S", QuestionTreePage.traceLineMap.get(QuestionTreePage.textEventA).toString()));
+			modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll("T", QuestionTreePage.traceLineMap.get(QuestionTreePage.textEventB).toString()));
+			modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll("P", QuestionTreePage.traceLineMap.get(QuestionTreePage.textEventC).toString()));
+
+		}	else if(QuestionTreePage.behavior.equals("Response Chain 2")){
+			modifiedBuffer = new StringBuffer();
+			modifiedBuffer.append(Pattern.patterns.get(QuestionTreePage.scope).get(QuestionTreePage.behavior));
+			modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll("Q", QuestionTreePage.traceLineMap.get(QuestionTreePage.textStartEvent).toString()));
+			modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll("R", QuestionTreePage.traceLineMap.get(QuestionTreePage.textEndEvent).toString()));
+			modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll("P", QuestionTreePage.traceLineMap.get(QuestionTreePage.textEventA).toString()));
+			modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll("S", QuestionTreePage.traceLineMap.get(QuestionTreePage.textEventB).toString()));
+			modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll("T", QuestionTreePage.traceLineMap.get(QuestionTreePage.textEventC).toString()));
+
+		}
+		else if(QuestionTreePage.behavior.equals("Constrained Response Chain 2")){
+			modifiedBuffer = new StringBuffer();
+			modifiedBuffer.append(Pattern.patterns.get(QuestionTreePage.scope).get(QuestionTreePage.behavior));
+			modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll("Q", QuestionTreePage.traceLineMap.get(QuestionTreePage.textStartEvent).toString()));
+			modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll("R", QuestionTreePage.traceLineMap.get(QuestionTreePage.textEndEvent).toString()));
+			modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll("P", QuestionTreePage.traceLineMap.get(QuestionTreePage.textEventA).toString()));
+			modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll("S", QuestionTreePage.traceLineMap.get(QuestionTreePage.textEventB).toString()));
+			modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll("T", QuestionTreePage.traceLineMap.get(QuestionTreePage.textEventC).toString()));
+			modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll("Z", QuestionTreePage.traceLineMap.get(QuestionTreePage.textEventX).toString()));
+
+		}
 		
-		String modified = (Pattern.patterns.get(QuestionTreePage.scope).get(QuestionTreePage.behavior)).replaceAll("Q", QuestionTreePage.textStartEvent.getText()).replaceAll("R", QuestionTreePage.textEndEvent.getText()).replaceAll("P", QuestionTreePage.textEventA.getText()).replaceAll("S", QuestionTreePage.textEventB.getText());
-		if (QuestionTreePage.behavior.equals("Precedence Chain 1"))
-			modified = (Pattern.patterns.get(QuestionTreePage.scope).get(QuestionTreePage.behavior)).replaceAll("Q", QuestionTreePage.textStartEvent.getText()).replaceAll("R", QuestionTreePage.textEndEvent.getText()).replaceAll("S", QuestionTreePage.textEventA.getText()).replaceAll("T", QuestionTreePage.textEventB.getText()).replaceAll("P", QuestionTreePage.textEventC.getText());
-		else if(QuestionTreePage.behavior.equals("Precedence Chain 2"))
-			modified = (Pattern.patterns.get(QuestionTreePage.scope).get(QuestionTreePage.behavior)).replaceAll("Q", QuestionTreePage.textStartEvent.getText()).replaceAll("R", QuestionTreePage.textEndEvent.getText()).replaceAll("P", QuestionTreePage.textEventA.getText()).replaceAll("S", QuestionTreePage.textEventB.getText()).replaceAll("T", QuestionTreePage.textEventC.getText());
-		else if(QuestionTreePage.behavior.equals("Response Chain 1"))
-			modified = (Pattern.patterns.get(QuestionTreePage.scope).get(QuestionTreePage.behavior)).replaceAll("Q", QuestionTreePage.textStartEvent.getText()).replaceAll("R", QuestionTreePage.textEndEvent.getText()).replaceAll("S", QuestionTreePage.textEventA.getText()).replaceAll("T", QuestionTreePage.textEventB.getText()).replaceAll("P", QuestionTreePage.textEventC.getText());
-		else if(QuestionTreePage.behavior.equals("Response Chain 2"))
-			modified = (Pattern.patterns.get(QuestionTreePage.scope).get(QuestionTreePage.behavior)).replaceAll("Q", QuestionTreePage.textStartEvent.getText()).replaceAll("R", QuestionTreePage.textEndEvent.getText()).replaceAll("P", QuestionTreePage.textEventA.getText()).replaceAll("S", QuestionTreePage.textEventB.getText()).replaceAll("T", QuestionTreePage.textEventC.getText());
-		else if(QuestionTreePage.behavior.equals("Constrained Response Chain 2"))
-			modified = (Pattern.patterns.get(QuestionTreePage.scope).get(QuestionTreePage.behavior)).replaceAll("Q", QuestionTreePage.textStartEvent.getText()).replaceAll("R", QuestionTreePage.textEndEvent.getText()).replaceAll("P", QuestionTreePage.textEventA.getText()).replaceAll("S", QuestionTreePage.textEventB.getText()).replaceAll("T", QuestionTreePage.textEventC.getText()).replaceAll("Z",QuestionTreePage.textEventX.getText() );
-		
-		textFormula.setText(modified);
+		textFormula.setText(modifiedBuffer.toString());
 		final Label labelDirectoryFormula = new Label(composite, SWT.NONE);
 		if (Pattern.patternsMonitorable.get(QuestionTreePage.scope).get(QuestionTreePage.behavior).booleanValue()){
 			System.out.println("Monitorable...");
