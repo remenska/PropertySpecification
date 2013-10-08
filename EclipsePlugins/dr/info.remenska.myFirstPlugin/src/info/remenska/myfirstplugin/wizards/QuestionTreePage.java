@@ -435,6 +435,7 @@ public class QuestionTreePage extends WizardPage {
 							System.out.println("Selected message:"+ selected.get(0));
 							
 							TraceLine trObj = new TraceLine();
+							trObj.setOriginMessage(selected.get(0));
 							trObj.setMethodCall(selected.get(0).getName());
 							trObj.setClassName(selected.get(0).getConnector().getEnds().get(1).getRole().getType().getName());
 							trObj.setObjectName(selected.get(0).getConnector().getEnds().get(1).getRole().getName());
@@ -586,7 +587,16 @@ class TraceLine{
 	public String[] parameters;
 	public String methodCall;
 	public boolean isAsynchronous = false;
+	Message originMessage;
 	
+	public Message getOriginMessage() {
+		return originMessage;
+	}
+
+	public void setOriginMessage(Message originMessage) {
+		this.originMessage = originMessage;
+	}
+
 	public boolean isAsynchronous() {
 		return isAsynchronous;
 	}

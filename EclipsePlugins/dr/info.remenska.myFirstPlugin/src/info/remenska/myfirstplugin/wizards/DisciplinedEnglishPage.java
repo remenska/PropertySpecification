@@ -124,6 +124,8 @@ public class DisciplinedEnglishPage  extends WizardPage  {
 	@Override
 	public void createControl(Composite parent) {
 		final Composite composite = new Composite(parent, SWT.NONE);
+
+        
 		System.out.println("NOW WE'RE IN!");
 		aman = composite;
 		GridLayout layout = new GridLayout();
@@ -261,8 +263,8 @@ public class DisciplinedEnglishPage  extends WizardPage  {
 			button.setText("Browse...");
 			button.addSelectionListener(new SelectionAdapter() {
 			      public void widgetSelected(SelectionEvent event) {
-			        DirectoryDialog dlg = new DirectoryDialog(getShell());
-
+			    	DirectoryDialog dlg = new DirectoryDialog(getShell());
+			        
 			        dlg.setFilterPath(textDirectoryFormula.getText());
 
 			        dlg.setText("Select a Directory");
