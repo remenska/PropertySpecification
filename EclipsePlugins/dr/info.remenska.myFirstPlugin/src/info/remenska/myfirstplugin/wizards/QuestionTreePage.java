@@ -438,7 +438,8 @@ public class QuestionTreePage extends WizardPage {
 							trObj.setMethodCall(selected.get(0).getName());
 							trObj.setClassName(selected.get(0).getConnector().getEnds().get(1).getRole().getType().getName());
 							trObj.setObjectName(selected.get(0).getConnector().getEnds().get(1).getRole().getName());
-							
+							trObj.setClassNameSource(selected.get(0).getConnector().getEnds().get(0).getRole().getType().getName());
+							trObj.setObjectNameSource(selected.get(0).getConnector().getEnds().get(0).getRole().getName());
 							if (selected.get(0).getMessageSort().getLiteral().equals("reply"))
 								trObj.setIsReply(true);
 	
@@ -621,6 +622,27 @@ class TraceLine{
 
 
 	public String objectName;
+	public String getClassNameSource() {
+		return classNameSource;
+	}
+
+	public void setClassNameSource(String classNameSource) {
+		this.classNameSource = classNameSource;
+	}
+
+	public String getObjectNameSource() {
+		return objectNameSource;
+	}
+
+	public void setObjectNameSource(String objectNameSource) {
+		this.objectNameSource = objectNameSource;
+	}
+
+
+
+	public String classNameSource;
+	public String objectNameSource;
+	
 	public String getObjectName() {
 		return objectName;
 	}
