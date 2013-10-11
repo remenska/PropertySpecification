@@ -79,13 +79,12 @@ public class PropertySpecificationScopes extends WizardPage {
 		styledText.setLayoutData(gridData); 
 //		styledText.setBounds(10,10,100,100);
 		styledText.setText(explanation);
-		
 		gridData = new GridData();
 		gridData.horizontalAlignment = GridData.BEGINNING;
 		gridData.verticalAlignment = SWT.TOP;
 		Label imageHolder = new Label(composite, SWT.WRAP | SWT.BORDER);
 		Image scopesGraphical = new Image(Display.getCurrent(),
-				   "/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/ScopeTimelineView/scopes.gif");
+				  "/home/daniela/git/PropertySpecification/ScopeTimelineView/scopes.gif");
 		imageHolder.setImage(scopesGraphical);
 		
 		imageHolder.setLayoutData(gridData);

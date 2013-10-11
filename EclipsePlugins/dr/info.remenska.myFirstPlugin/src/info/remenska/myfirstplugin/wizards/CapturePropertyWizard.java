@@ -299,7 +299,6 @@ public class CapturePropertyWizard extends Wizard {
 		Collaboration coll = (Collaboration) m.createPackagedElement("PropertySpecCollaboration_" + random, UMLPackage.eINSTANCE.getCollaboration());
 		Interaction inter = (Interaction) coll.createOwnedBehavior("PropertySpecInteraction_" +random, UMLPackage.eINSTANCE.getInteraction());
 		Message originMessage = QuestionTreePage.traceLineMap.get(QuestionTreePage.textStartEvent).getOriginMessage();
-
 		Class from = (Class) originMessage.getConnector().getEnds().get(0).getRole().getType();
 		System.out.println("Class FROM: "+ from );
 		//		Class from = (Class) QuestionTreePage.trStartEvent.getOriginMessage().getConnector().getEnds().get(0).getRole().getType();
