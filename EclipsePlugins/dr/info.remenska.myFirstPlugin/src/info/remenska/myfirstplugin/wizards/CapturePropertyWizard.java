@@ -144,10 +144,11 @@ public class CapturePropertyWizard extends Wizard {
 								 }
 								 
 								 // next create an SD
-								if(!model.getName().equalsIgnoreCase("UMLPrimitiveTypes")){
+								if(model.getName().equalsIgnoreCase("DanielaModel")){
 //									createSequenceDiagram((Model) model); //$NON-NLS-1$
 									 System.out.println("Creating a new SD...");
-									 draw_globallyAbsence(model);
+									 draw_afterQAbsence(model);
+//									 draw_globallyAbsence(model);
 									
 								
 
@@ -194,6 +195,212 @@ public class CapturePropertyWizard extends Wizard {
 		return allColaborations;
 	}
 	
+	public void draw_afterQAbsence(Model m){
+		
+		//TODO: no need to create events!!!
+		int random = (int )(Math.random() * 50 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_AfterQ_Absence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_AfterQ_Absence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+	
+		// stereotype needs to be applied
+		Message originAfterQ = QuestionTreePage.traceLineMap.get(QuestionTreePage.textStartEvent).getOriginMessage();
+		Class fromQ = (Class) ((MessageOccurrenceSpecification)originAfterQ.getSendEvent()).getCovereds().get(0).getRepresents().getType();
+		Class toQ = (Class) ((MessageOccurrenceSpecification)originAfterQ.getReceiveEvent()).getCovereds().get(0).getRepresents().getType();
+		
+		Property p1Q = coll.createOwnedAttribute(((MessageOccurrenceSpecification)originAfterQ.getSendEvent()).getCovereds().get(0).getRepresents().getName(), fromQ);
+		Property p2Q = coll.createOwnedAttribute(((MessageOccurrenceSpecification)originAfterQ.getReceiveEvent()).getCovereds().get(0).getRepresents().getName(), toQ);
+		
+		Lifeline lifeline1Q =  inter.createLifeline(p1Q.getName());
+		Lifeline lifeline2Q = inter.createLifeline(p2Q.getName());
+		
+		lifeline1Q.setRepresents(p1Q);
+		lifeline2Q.setRepresents(p2Q);
+		Message eventQ = inter.createMessage(originAfterQ.getName());
+		eventQ.setMessageSort(originAfterQ.getMessageSort());
+		
+		Connector cn1Q = inter.createOwnedConnector("connector1_"+(int )(Math.random() * 50 + 1));
+		cn1Q.setKind(ConnectorKind.ASSEMBLY_LITERAL);
+		
+		// create the connector ends, assign the roles
+		ConnectorEnd ce1Q = cn1Q.createEnd();
+		ConnectorEnd ce2Q = cn1Q.createEnd();
+		if (eventQ.getMessageSort().getLiteral().equals("reply"))
+		{
+			ce1Q.setRole(p2Q);		
+			ce2Q.setRole(p1Q);
+		} else
+		{
+			ce1Q.setRole(p1Q);		
+			ce2Q.setRole(p2Q);
+		}
+	
+		Operation op1Q = ((SendOperationEvent)((MessageOccurrenceSpecification) originAfterQ.getSendEvent()).getEvent()).getOperation();
+		
+		// NO NEED?
+		ExecutionEvent ev1Q = (ExecutionEvent) m.createPackagedElement("ExecutionEvent1_"+(int )(Math.random() * 500 + 1), UMLPackage.eINSTANCE.getExecutionEvent()); //TODO: needs to be unique
+		
+		
+		// can I deduce it?
+		ReceiveOperationEvent roeQ  = (ReceiveOperationEvent) ((MessageOccurrenceSpecification)originAfterQ.getReceiveEvent()).getEvent();
+		
+//		ReceiveOperationEvent roe = (ReceiveOperationEvent) m.createPackagedElement("ReceiveOperationEvent1_"+random, UMLPackage.eINSTANCE.getReceiveOperationEvent());
+		roeQ.setOperation(op1Q); //need to find the operation correspondign to this class!
+		
+		// can I deduce it again?
+		
+		SendOperationEvent soeQ = (SendOperationEvent) ((MessageOccurrenceSpecification)originAfterQ.getSendEvent()).getEvent();
+//		SendOperationEvent soe = (SendOperationEvent) m.createPackagedElement("SendOperationEvent1_"+random, UMLPackage.eINSTANCE.getSendOperationEvent());
+		soeQ.setOperation(op1Q);
+
+		
+		MessageOccurrenceSpecification seQ = (MessageOccurrenceSpecification) inter.createFragment(null, UMLPackage.eINSTANCE.getMessageOccurrenceSpecification());
+		seQ.setEvent(soeQ);
+		seQ.setMessage(eventQ);
+//		se.setName("se");// do we really need a name?
+		seQ.getCovereds().add(lifeline1Q);
+		
+		MessageOccurrenceSpecification reQ = (MessageOccurrenceSpecification) inter.createFragment(null, UMLPackage.eINSTANCE.getMessageOccurrenceSpecification());
+		reQ.setEvent(roeQ);
+		reQ.setMessage(eventQ);
+//		re.setName("re");
+		reQ.getCovereds().add(lifeline2Q);
+		
+		ExecutionOccurrenceSpecification eosQ = (ExecutionOccurrenceSpecification)inter.createFragment(null, UMLPackage.eINSTANCE.getExecutionOccurrenceSpecification());
+//		eos.setName("eos");
+		eosQ.setEvent(ev1Q);
+		eosQ.getCovereds().add(lifeline2Q);
+		
+		BehaviorExecutionSpecification besQ = (BehaviorExecutionSpecification) inter.createFragment(null, UMLPackage.eINSTANCE.getBehaviorExecutionSpecification());
+		besQ.setStart(reQ);
+		besQ.setFinish(eosQ);
+//		bes.setName("bes");
+		besQ.getCovereds().add(lifeline2Q);
+		
+		eosQ.setExecution(besQ);
+
+		// whew...
+	
+	// set the message properties
+		eventQ.setSendEvent(seQ);
+		eventQ.setReceiveEvent(reQ);
+		eventQ.setConnector(cn1Q);
+		
+		
+		// /// // /// /// / 
+		Message originMessageA = QuestionTreePage.traceLineMap.get(QuestionTreePage.textEventA).getOriginMessage();
+		Class from = (Class) ((MessageOccurrenceSpecification)originMessageA.getSendEvent()).getCovereds().get(0).getRepresents().getType();
+		Class to = (Class) ((MessageOccurrenceSpecification)originMessageA.getReceiveEvent()).getCovereds().get(0).getRepresents().getType();
+		
+		// this is how
+		//if(coll.getOwnedAttribute(name, type)!=null)
+		Property p1, p2;
+		if(coll.getOwnedAttribute(((MessageOccurrenceSpecification)originMessageA.getSendEvent()).getCovereds().get(0).getRepresents().getName(), from) != null)
+			 p1 = coll.getOwnedAttribute(((MessageOccurrenceSpecification)originMessageA.getSendEvent()).getCovereds().get(0).getRepresents().getName(), from);
+		else		
+			 p1 = coll.createOwnedAttribute(((MessageOccurrenceSpecification)originMessageA.getSendEvent()).getCovereds().get(0).getRepresents().getName(), from);
+		if (coll.getOwnedAttribute(((MessageOccurrenceSpecification)originMessageA.getReceiveEvent()).getCovereds().get(0).getRepresents().getName(), to) != null)
+			p2 = coll.getOwnedAttribute(((MessageOccurrenceSpecification)originMessageA.getReceiveEvent()).getCovereds().get(0).getRepresents().getName(), to);
+		else
+			p2 = coll.createOwnedAttribute(((MessageOccurrenceSpecification)originMessageA.getReceiveEvent()).getCovereds().get(0).getRepresents().getName(), to);
+		
+		
+
+		// NO, DON'T CREATE NEW LIFELINE IF THE PROPERTY IS THERE
+		Lifeline lifeline1 =  inter.getLifeline(p1.getName(), false, true);
+		Lifeline lifeline2 = inter.getLifeline(p2.getName(), false, true);
+		lifeline1.setRepresents(p1);
+		lifeline2.setRepresents(p2);
+		Message m1 = inter.createMessage(originMessageA.getName());
+		m1.setMessageSort(originMessageA.getMessageSort());
+		// here I need a combined fragment NEG
+		Connector cn1 = inter.createOwnedConnector("connector1_"+(int )(Math.random() * 50 + 1));
+		cn1.setKind(ConnectorKind.ASSEMBLY_LITERAL);
+		
+		// create the connector ends, assign the roles
+		ConnectorEnd ce1 = cn1.createEnd();
+		ConnectorEnd ce2 = cn1.createEnd();
+		if (m1.getMessageSort().getLiteral().equals("reply"))
+		{
+			ce1.setRole(p2);		
+			ce2.setRole(p1);
+		} else
+		{
+			ce1.setRole(p1);		
+			ce2.setRole(p2);
+		}
+	
+		
+		
+		Operation op1 = ((SendOperationEvent)((MessageOccurrenceSpecification) originMessageA.getSendEvent()).getEvent()).getOperation();
+		
+		// NO NEED?
+		ExecutionEvent ev1 = (ExecutionEvent) m.createPackagedElement("ExecutionEvent1_"+(int )(Math.random() * 500 + 1), UMLPackage.eINSTANCE.getExecutionEvent());
+		
+		// can I deduce it?
+		ReceiveOperationEvent roe  = (ReceiveOperationEvent) ((MessageOccurrenceSpecification)originMessageA.getReceiveEvent()).getEvent();
+		
+//		ReceiveOperationEvent roe = (ReceiveOperationEvent) m.createPackagedElement("ReceiveOperationEvent1_"+random, UMLPackage.eINSTANCE.getReceiveOperationEvent());
+		roe.setOperation(op1); //need to find the operation correspondign to this class!
+		
+		// can I deduce it again?
+		
+		SendOperationEvent soe = (SendOperationEvent) ((MessageOccurrenceSpecification)originMessageA.getSendEvent()).getEvent();
+//		SendOperationEvent soe = (SendOperationEvent) m.createPackagedElement("SendOperationEvent1_"+random, UMLPackage.eINSTANCE.getSendOperationEvent());
+		soe.setOperation(op1);
+
+		CombinedFragment neg = (CombinedFragment) inter.createFragment(null, UMLPackage.eINSTANCE.getCombinedFragment());
+		
+		neg.setInteractionOperator(InteractionOperatorKind.NEG_LITERAL);
+		InteractionOperand iop = neg.createOperand("NEG_operand");
+		neg.getCovereds().add(lifeline1);
+		neg.getCovereds().add(lifeline2);
+		MessageOccurrenceSpecification se = (MessageOccurrenceSpecification) iop.createFragment(null, UMLPackage.eINSTANCE.getMessageOccurrenceSpecification());
+		se.setEvent(soe);
+		se.setMessage(m1);
+//		se.setName("se");// do we really need a name?
+		se.getCovereds().add(lifeline1);
+		
+		MessageOccurrenceSpecification re = (MessageOccurrenceSpecification) iop.createFragment(null, UMLPackage.eINSTANCE.getMessageOccurrenceSpecification());
+		re.setEvent(roe);
+		re.setMessage(m1);
+//		re.setName("re");
+		re.getCovereds().add(lifeline2);
+		
+		ExecutionOccurrenceSpecification eos = (ExecutionOccurrenceSpecification)iop.createFragment(null, UMLPackage.eINSTANCE.getExecutionOccurrenceSpecification());
+//		eos.setName("eos");
+		eos.setEvent(ev1);
+		eos.getCovereds().add(lifeline2);
+		
+		BehaviorExecutionSpecification bes = (BehaviorExecutionSpecification) iop.createFragment(null, UMLPackage.eINSTANCE.getBehaviorExecutionSpecification());
+		bes.setStart(re);
+		bes.setFinish(eos);
+//		bes.setName("bes");
+		bes.getCovereds().add(lifeline2);
+		
+		eos.setExecution(bes);
+
+		// whew...
+	
+	// set the message properties
+		m1.setSendEvent(se);
+		m1.setReceiveEvent(re);
+		m1.setMessageSort(originMessageA.getMessageSort());
+		m1.setConnector(cn1);
+		// END_ this is all for one message: START_EVENT
+	
+		
+		
+		// and finally... create the diagrams
+		// note slightly different syntax here
+		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
+		d.setName("Diag_SD_AfterQ_Absence_Pattern_"+random);		
+		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
+	
+		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
+		cd.setName("Diag_COM_AfterQ_Absence_Pattern_"+random);		
+	}
+	
 	public void draw_globallyAbsence(Model m){
 		//TODO: no need to create events!!!
 		int random = (int )(Math.random() * 50 + 1);
@@ -212,23 +419,41 @@ public class CapturePropertyWizard extends Wizard {
 		lifeline1.setRepresents(p1);
 		lifeline2.setRepresents(p2);
 		Message m1 = inter.createMessage(originMessageA.getName());
+		m1.setMessageSort(originMessageA.getMessageSort());
 		// here I need a combined fragment NEG
 		Connector cn1 = inter.createOwnedConnector("connector1_"+random);
 		cn1.setKind(ConnectorKind.ASSEMBLY_LITERAL);
 		
 		// create the connector ends, assign the roles
 		ConnectorEnd ce1 = cn1.createEnd();
-		ce1.setRole(p1);		
 		ConnectorEnd ce2 = cn1.createEnd();
-		ce2.setRole(p2);
+		if (m1.getMessageSort().getLiteral().equals("reply"))
+		{
+			ce1.setRole(p2);		
+			ce2.setRole(p1);
+		} else
+		{
+			ce1.setRole(p1);		
+			ce2.setRole(p2);
+		}
+	
+		
 		
 		Operation op1 = ((SendOperationEvent)((MessageOccurrenceSpecification) originMessageA.getSendEvent()).getEvent()).getOperation();
 		
 		// NO NEED?
 		ExecutionEvent ev1 = (ExecutionEvent) m.createPackagedElement("ExecutionEvent1_"+random, UMLPackage.eINSTANCE.getExecutionEvent());
-		ReceiveOperationEvent roe = (ReceiveOperationEvent) m.createPackagedElement("ReceiveOperationEvent1_"+random, UMLPackage.eINSTANCE.getReceiveOperationEvent());
+		
+		// can I deduce it?
+		ReceiveOperationEvent roe  = (ReceiveOperationEvent) ((MessageOccurrenceSpecification)originMessageA.getReceiveEvent()).getEvent();
+		
+//		ReceiveOperationEvent roe = (ReceiveOperationEvent) m.createPackagedElement("ReceiveOperationEvent1_"+random, UMLPackage.eINSTANCE.getReceiveOperationEvent());
 		roe.setOperation(op1); //need to find the operation correspondign to this class!
-		SendOperationEvent soe = (SendOperationEvent) m.createPackagedElement("SendOperationEvent1_"+random, UMLPackage.eINSTANCE.getSendOperationEvent());
+		
+		// can I deduce it again?
+		
+		SendOperationEvent soe = (SendOperationEvent) ((MessageOccurrenceSpecification)originMessageA.getSendEvent()).getEvent();
+//		SendOperationEvent soe = (SendOperationEvent) m.createPackagedElement("SendOperationEvent1_"+random, UMLPackage.eINSTANCE.getSendOperationEvent());
 		soe.setOperation(op1);
 
 		CombinedFragment neg = (CombinedFragment) inter.createFragment(null, UMLPackage.eINSTANCE.getCombinedFragment());
