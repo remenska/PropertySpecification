@@ -27,6 +27,7 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -154,10 +155,14 @@ public class CapturePropertyWizard extends Wizard {
 									 System.out.println("Creating a new SD...");
 //									 draw_afterQAbsence(model);
 //									 draw_beforeRAbsence(model);
-									 draw_betweenQandRAbsence(model);
+//									 draw_betweenQandRAbsence(model);
 //									 draw_globallyAbsence(model);
 									
-								
+//									 draw_afterQExistence(model);
+//									 draw_globallyPrecedence(model);
+//									 draw_afterQUntilRPrecedence(model);
+//									 draw_afterQResponse(model);
+									 draw_betweenQandRResponse(model);
 
 								}
 							}
@@ -202,14 +207,32 @@ public class CapturePropertyWizard extends Wizard {
 		return allColaborations;
 	}
 	
-	public void draw_globallyExistence(Model m){
+	public void draw_beforeRExistence(Model m){
+		int random = (int )(Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_BeforeR_Absence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_Before_Absence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+		
+		existence(m, coll, inter, QuestionTreePage.textEventA);
+		beforeR(m,coll,inter);
+		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
+		d.setName("Diag_SD_BeforeR_Absence_Pattern_"+random);		
+		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
+	
+		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
+		cd.setName("Diag_COM_BeforeR_Absence_Pattern_"+random);	
+		
+	}
+	
+	public void draw_betweenQandRExistence(Model m){
 		
 		int random = (int )(Math.random() * 5000 + 1);
 
-		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_Globally_Existence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
-		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_Globally_Existence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
-	
-		existence(m,coll, inter);
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_Globally_Absence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_Globally_Absence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+		afterQ(m, coll, inter);
+		existence(m,coll, inter, QuestionTreePage.textEventA);
+		beforeR(m,coll,inter);
 		
 		// and finally... create the diagrams
 		// note slightly different syntax here
@@ -218,28 +241,299 @@ public class CapturePropertyWizard extends Wizard {
 		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
 	
 		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
-		cd.setName("Diag_COM_Globally_Absence_Pattern_"+random);	
+		cd.setName("Diag_COM_Globally_Absence_Pattern_"+random);
+		
 	}
 	
-	public void existence(Model m, Collaboration coll, Interaction inter){
+	public void draw_afterQUntilRExistence(Model m){
+		
 		int random = (int )(Math.random() * 5000 + 1);
 
-		Message originMessageA = QuestionTreePage.traceLineMap.get(QuestionTreePage.textEventA).getOriginMessage();
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_AfterQ_Absence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_AfterQ_Absence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+		afterQ(m, coll, inter);
+		
+		existence(m, coll, inter, QuestionTreePage.textEventA);
+		untilR(m, coll, inter);
+		
+		// and finally... create the diagrams
+				// note slightly different syntax here
+		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
+		d.setName("Diag_SD_AfterQ_UntilR_Absence_Pattern_"+random);		
+		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
+			
+		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
+		cd.setName("Diag_COM_AfterQ_UntilR_Absence_Pattern_"+random);		
+				
+	}
+	
+	public void draw_afterQUntilRResponse(Model m){
+		
+		int random = (int )(Math.random() * 5000 + 1);
 
-		Class from = (Class) ((MessageOccurrenceSpecification)originMessageA.getSendEvent()).getCovereds().get(0).getRepresents().getType();
-		Class to = (Class) ((MessageOccurrenceSpecification)originMessageA.getReceiveEvent()).getCovereds().get(0).getRepresents().getType();
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_AfterQ_Response_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_AfterQ_Response_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+		afterQ(m, coll, inter);
+		
+		response(m, coll, inter);
+		untilR(m, coll, inter);
+		
+		// and finally... create the diagrams
+				// note slightly different syntax here
+		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
+		d.setName("Diag_SD_AfterQ_UntilR_Response_Pattern_"+random);		
+		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
+			
+		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
+		cd.setName("Diag_COM_AfterQ_UntilR_Response_Pattern_"+random);		
+		
+	}
+	
+	public void draw_beforeRResponse(Model m){
+		
+		int random = (int )(Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_BeforeR_Response_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_Before_Response_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+		
+		response(m, coll, inter);
+		beforeR(m,coll,inter);
+		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
+		d.setName("Diag_SD_BeforeR_Response_Pattern_"+random);		
+		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
+	
+		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
+		cd.setName("Diag_COM_BeforeR_Response_Pattern_"+random);	
+	}
+	
+	
+	public void draw_afterQResponse(Model m){
+		int random = (int )(Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_AfterQ_Response_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_AfterQ_Absence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+		afterQ(m, coll, inter);
+		
+		response(m, coll, inter);
+		// and finally... create the diagrams
+		// note slightly different syntax here
+		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
+		d.setName("Diag_SD_AfterQ_Response_Pattern_"+random);		
+		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
+	
+		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
+		cd.setName("Diag_COM_AfterQ_Response_Pattern_"+random);		
+	}
+	
+	public void draw_afterQExistence(Model m){
+		
+		int random = (int )(Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_AfterQ_Absence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_AfterQ_Absence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+		afterQ(m, coll, inter);
+		
+		existence(m, coll, inter, QuestionTreePage.textEventA);
+		// and finally... create the diagrams
+		// note slightly different syntax here
+		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
+		d.setName("Diag_SD_AfterQ_Absence_Pattern_"+random);		
+		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
+	
+		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
+		cd.setName("Diag_COM_AfterQ_Absence_Pattern_"+random);	
+	}
+	
+	
+	public void draw_globallyExistence(Model m){
+		
+		int random = (int )(Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_Globally_Existence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_Globally_Existence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+	
+		existence(m,coll, inter, QuestionTreePage.textEventA);
+		
+		// and finally... create the diagrams
+		// note slightly different syntax here
+		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
+		d.setName("Diag_SD_Globally_Existence_Pattern_"+random);		
+		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
+	
+		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
+		cd.setName("Diag_COM_Globally_Existence_Pattern_"+random);	
+	}
+	
+	public void draw_globallyResponse(Model m){
+		int random = (int )(Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_Globally_Response_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_Globally_Response_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+	
+		response(m,coll, inter);
+		
+		// and finally... create the diagrams
+		// note slightly different syntax here
+		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
+		d.setName("Diag_SD_Globally_Response_Pattern_"+random);		
+		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
+	
+		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
+		cd.setName("Diag_COM_Globally_Response_Pattern_"+random);	
+		
+	}
+	
+	public void draw_globallyPrecedence(Model m){
+		
+		int random = (int )(Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_Globally_Precedence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_Globally_Precedence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+	
+		precedence(m,coll, inter);
+		
+		// and finally... create the diagrams
+		// note slightly different syntax here
+		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
+		d.setName("Diag_SD_Globally_Precedence_Pattern_"+random);		
+		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
+	
+		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
+		cd.setName("Diag_COM_Globally_Precedence_Pattern_"+random);	
+	
+	}
+	
+	public void response(Model m, Collaboration coll, Interaction inter){
+		
+		regMessage(m, coll, inter, QuestionTreePage.textEventA);
+		//// /// //// // // //// / ///
+		existence(m, coll, inter, QuestionTreePage.textEventB);
+		
+	}
+	
+	public void regMessage(Model m, Collaboration coll, Interaction inter, Text textEvent){
+		
+		int random = (int )(Math.random() * 5000 + 1);
+
+		Message originMessage = QuestionTreePage.traceLineMap.get(textEvent).getOriginMessage();
+
+		Class from = (Class) ((MessageOccurrenceSpecification)originMessage.getSendEvent()).getCovereds().get(0).getRepresents().getType();
+		Class to = (Class) ((MessageOccurrenceSpecification)originMessage.getReceiveEvent()).getCovereds().get(0).getRepresents().getType();
 		
 		
-		Property p1 = coll.getOwnedAttribute(((MessageOccurrenceSpecification)originMessageA.getSendEvent()).getCovereds().get(0).getRepresents().getName(), from, false, UMLPackage.Literals.PROPERTY, true);
-		Property p2 = coll.getOwnedAttribute(((MessageOccurrenceSpecification)originMessageA.getReceiveEvent()).getCovereds().get(0).getRepresents().getName(), to, false, UMLPackage.Literals.PROPERTY, true);
+		Property p1 = coll.getOwnedAttribute(((MessageOccurrenceSpecification)originMessage.getSendEvent()).getCovereds().get(0).getRepresents().getName(), from, false, UMLPackage.Literals.PROPERTY, true);
+		Property p2 = coll.getOwnedAttribute(((MessageOccurrenceSpecification)originMessage.getReceiveEvent()).getCovereds().get(0).getRepresents().getName(), to, false, UMLPackage.Literals.PROPERTY, true);
+				
+		Lifeline lifeline1B =  inter.getLifeline(p1.getName(), false, true);
+		Lifeline lifeline2B = inter.getLifeline(p2.getName(), false, true);
+
+		lifeline1B.setRepresents(p1);
+		lifeline2B.setRepresents(p2);
+		Message m1B = inter.createMessage(originMessage.getName());
+		m1B.setMessageSort(originMessage.getMessageSort());
+		
+		// here I need a combined fragment NEG
+		Connector cn1B = inter.createOwnedConnector("connector1_"+random);
+		cn1B.setKind(ConnectorKind.ASSEMBLY_LITERAL);
+		
+		// create the connector ends, assign the roles
+		ConnectorEnd ce1B = cn1B.createEnd();
+		ConnectorEnd ce2B = cn1B.createEnd();
+		if (m1B.getMessageSort().getLiteral().equals("reply"))
+		{
+			ce1B.setRole(p2);		
+			ce2B.setRole(p1);
+		} else
+		{
+			ce1B.setRole(p1);		
+			ce2B.setRole(p2);
+		}
+	
+		
+		Operation op1 = ((SendOperationEvent)((MessageOccurrenceSpecification) originMessage.getSendEvent()).getEvent()).getOperation();
+		
+		// NO NEED?
+		ExecutionEvent ev1 = (ExecutionEvent) m.createPackagedElement("ExecutionEvent1_"+(int )(Math.random() * 5000 + 1), UMLPackage.eINSTANCE.getExecutionEvent());
+		
+		// can I deduce it?
+		ReceiveOperationEvent roe  = (ReceiveOperationEvent) ((MessageOccurrenceSpecification)originMessage.getReceiveEvent()).getEvent();
+		
+//		ReceiveOperationEvent roe = (ReceiveOperationEvent) m.createPackagedElement("ReceiveOperationEvent1_"+random, UMLPackage.eINSTANCE.getReceiveOperationEvent());
+		roe.setOperation(op1); //need to find the operation correspondign to this class!
+		
+		// can I deduce it again?
+		
+		SendOperationEvent soe = (SendOperationEvent) ((MessageOccurrenceSpecification)originMessage.getSendEvent()).getEvent();
+//		SendOperationEvent soe = (SendOperationEvent) m.createPackagedElement("SendOperationEvent1_"+random, UMLPackage.eINSTANCE.getSendOperationEvent());
+		soe.setOperation(op1);
+
+//		CombinedFragment neg = (CombinedFragment) inter.createFragment(null, UMLPackage.eINSTANCE.getCombinedFragment());
+		
+//		neg.setInteractionOperator(InteractionOperatorKind.ASSERT_LITERAL);
+//		InteractionOperand iop = neg.createOperand("ASSERT_operand");
+		MessageOccurrenceSpecification se = (MessageOccurrenceSpecification) inter.createFragment(null, UMLPackage.eINSTANCE.getMessageOccurrenceSpecification());
+		se.setEvent(soe);
+		se.setMessage(m1B);
+//		se.setName("se");// do we really need a name?
+		se.getCovereds().add(lifeline1B);
+		
+		MessageOccurrenceSpecification re = (MessageOccurrenceSpecification) inter.createFragment(null, UMLPackage.eINSTANCE.getMessageOccurrenceSpecification());
+		re.setEvent(roe);
+		re.setMessage(m1B);
+//		re.setName("re");
+		re.getCovereds().add(lifeline2B);
+		
+		ExecutionOccurrenceSpecification eos = (ExecutionOccurrenceSpecification)inter.createFragment(null, UMLPackage.eINSTANCE.getExecutionOccurrenceSpecification());
+//		eos.setName("eos");
+		eos.setEvent(ev1);
+		eos.getCovereds().add(lifeline2B);
+		
+		BehaviorExecutionSpecification bes = (BehaviorExecutionSpecification) inter.createFragment(null, UMLPackage.eINSTANCE.getBehaviorExecutionSpecification());
+		bes.setStart(re);
+		bes.setFinish(eos);
+//		bes.setName("bes");
+		bes.getCovereds().add(lifeline2B);
+		
+		eos.setExecution(bes);
+
+		// whew...
+	
+	// set the message properties
+		m1B.setSendEvent(se);
+		m1B.setReceiveEvent(re);
+		m1B.setMessageSort(originMessage.getMessageSort());
+		m1B.setConnector(cn1B);
+		// END_ this is all for one message
+	}
+	
+	public void precedence(Model m, Collaboration coll, Interaction inter){
+		
+		existence(m, coll, inter, QuestionTreePage.textEventA);
+		//// /// //// // // //// / ///
+		
+		regMessage(m, coll, inter, QuestionTreePage.textEventB);
+		
+	}
+	
+	public void existence(Model m, Collaboration coll, Interaction inter, Text textEvent){
+		int random = (int )(Math.random() * 5000 + 1);
+
+		Message originMessage = QuestionTreePage.traceLineMap.get(textEvent).getOriginMessage();
+
+		Class from = (Class) ((MessageOccurrenceSpecification)originMessage.getSendEvent()).getCovereds().get(0).getRepresents().getType();
+		Class to = (Class) ((MessageOccurrenceSpecification)originMessage.getReceiveEvent()).getCovereds().get(0).getRepresents().getType();
+		
+		
+		Property p1 = coll.getOwnedAttribute(((MessageOccurrenceSpecification)originMessage.getSendEvent()).getCovereds().get(0).getRepresents().getName(), from, false, UMLPackage.Literals.PROPERTY, true);
+		Property p2 = coll.getOwnedAttribute(((MessageOccurrenceSpecification)originMessage.getReceiveEvent()).getCovereds().get(0).getRepresents().getName(), to, false, UMLPackage.Literals.PROPERTY, true);
 				
 		Lifeline lifeline1 =  inter.getLifeline(p1.getName(), false, true);
 		Lifeline lifeline2 = inter.getLifeline(p2.getName(), false, true);
 
 		lifeline1.setRepresents(p1);
 		lifeline2.setRepresents(p2);
-		Message m1 = inter.createMessage(originMessageA.getName());
-		m1.setMessageSort(originMessageA.getMessageSort());
+		Message m1 = inter.createMessage(originMessage.getName());
+		m1.setMessageSort(originMessage.getMessageSort());
 		
 		// here I need a combined fragment NEG
 		Connector cn1 = inter.createOwnedConnector("connector1_"+random);
@@ -259,20 +553,20 @@ public class CapturePropertyWizard extends Wizard {
 		}
 	
 		
-		Operation op1 = ((SendOperationEvent)((MessageOccurrenceSpecification) originMessageA.getSendEvent()).getEvent()).getOperation();
+		Operation op1 = ((SendOperationEvent)((MessageOccurrenceSpecification) originMessage.getSendEvent()).getEvent()).getOperation();
 		
 		// NO NEED?
 		ExecutionEvent ev1 = (ExecutionEvent) m.createPackagedElement("ExecutionEvent1_"+(int )(Math.random() * 5000 + 1), UMLPackage.eINSTANCE.getExecutionEvent());
 		
 		// can I deduce it?
-		ReceiveOperationEvent roe  = (ReceiveOperationEvent) ((MessageOccurrenceSpecification)originMessageA.getReceiveEvent()).getEvent();
+		ReceiveOperationEvent roe  = (ReceiveOperationEvent) ((MessageOccurrenceSpecification)originMessage.getReceiveEvent()).getEvent();
 		
 //		ReceiveOperationEvent roe = (ReceiveOperationEvent) m.createPackagedElement("ReceiveOperationEvent1_"+random, UMLPackage.eINSTANCE.getReceiveOperationEvent());
 		roe.setOperation(op1); //need to find the operation correspondign to this class!
 		
 		// can I deduce it again?
 		
-		SendOperationEvent soe = (SendOperationEvent) ((MessageOccurrenceSpecification)originMessageA.getSendEvent()).getEvent();
+		SendOperationEvent soe = (SendOperationEvent) ((MessageOccurrenceSpecification)originMessage.getSendEvent()).getEvent();
 //		SendOperationEvent soe = (SendOperationEvent) m.createPackagedElement("SendOperationEvent1_"+random, UMLPackage.eINSTANCE.getSendOperationEvent());
 		soe.setOperation(op1);
 
@@ -312,7 +606,7 @@ public class CapturePropertyWizard extends Wizard {
 	// set the message properties
 		m1.setSendEvent(se);
 		m1.setReceiveEvent(re);
-		m1.setMessageSort(originMessageA.getMessageSort());
+		m1.setMessageSort(originMessage.getMessageSort());
 		m1.setConnector(cn1);
 		// END_ this is all for one message
 	}
@@ -477,7 +771,7 @@ public class CapturePropertyWizard extends Wizard {
 			
 				Operation op1R = ((SendOperationEvent)((MessageOccurrenceSpecification) originBeforeR.getSendEvent()).getEvent()).getOperation();
 				
-				ExecutionEvent ev1R = (ExecutionEvent) m.createPackagedElement("ExecutionEvent1_"+(int )(Math.random() * 500 + 1), UMLPackage.eINSTANCE.getExecutionEvent()); 
+				ExecutionEvent ev1R = (ExecutionEvent) m.createPackagedElement("ExecutionEvent1_"+(int )(Math.random() * 5000 + 1), UMLPackage.eINSTANCE.getExecutionEvent()); 
 				
 				
 				// can I deduce it?
@@ -575,7 +869,7 @@ public void untilR(Model m, Collaboration coll, Interaction inter){
 
 	Operation op1R = ((SendOperationEvent)((MessageOccurrenceSpecification) originBeforeR.getSendEvent()).getEvent()).getOperation();
 	
-	ExecutionEvent ev1R = (ExecutionEvent) m.createPackagedElement("ExecutionEvent1_"+(int )(Math.random() * 500 + 1), UMLPackage.eINSTANCE.getExecutionEvent()); 
+	ExecutionEvent ev1R = (ExecutionEvent) m.createPackagedElement("ExecutionEvent1_"+(int )(Math.random() * 5000 + 1), UMLPackage.eINSTANCE.getExecutionEvent()); 
 	
 	
 	// can I deduce it?
@@ -646,6 +940,101 @@ public void untilR(Model m, Collaboration coll, Interaction inter){
 				Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
 				cd.setName("Diag_COM_AfterQ_UntilR_Absence_Pattern_"+random);		
 				
+	}
+	
+	public void draw_beforeRPrecedence(Model m){
+		int random = (int )(Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_BeforeR_Absence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_Before_Absence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+		
+		precedence(m, coll, inter);
+		beforeR(m,coll,inter);
+		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
+		d.setName("Diag_SD_BeforeR_Absence_Pattern_"+random);		
+		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
+	
+		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
+		cd.setName("Diag_COM_BeforeR_Absence_Pattern_"+random);	
+		
+	}
+	
+	
+	public void draw_afterQUntilRPrecedence(Model m){
+		int random = (int )(Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_AfterQ_Absence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_AfterQ_Absence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+		afterQ(m, coll, inter);
+		
+		precedence(m, coll, inter);
+		untilR(m, coll, inter);
+		
+		// and finally... create the diagrams
+				// note slightly different syntax here
+		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
+		d.setName("Diag_SD_AfterQ_UntilR_Absence_Pattern_"+random);		
+		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
+			
+		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
+		cd.setName("Diag_COM_AfterQ_UntilR_Absence_Pattern_"+random);		
+	}
+	
+	public void draw_betweenQandRResponse(Model m){
+		int random = (int )(Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_Globally_Absence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_Globally_Absence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+		afterQ(m, coll, inter);
+		response(m,coll, inter);
+		beforeR(m,coll,inter);
+		
+		// and finally... create the diagrams
+		// note slightly different syntax here
+		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
+		d.setName("Diag_SD_Globally_Absence_Pattern_"+random);		
+		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
+	
+		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
+		cd.setName("Diag_COM_Globally_Absence_Pattern_"+random);	
+	}
+	
+	public void draw_betweenQandRPrecedence(Model m){
+		
+		int random = (int )(Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_Globally_Absence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_Globally_Absence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+		afterQ(m, coll, inter);
+		precedence(m,coll, inter);
+		beforeR(m,coll,inter);
+		
+		// and finally... create the diagrams
+		// note slightly different syntax here
+		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
+		d.setName("Diag_SD_Globally_Absence_Pattern_"+random);		
+		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
+	
+		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
+		cd.setName("Diag_COM_Globally_Absence_Pattern_"+random);
+	}
+	
+	public void draw_afterQPrecedence(Model m){
+		int random = (int )(Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_AfterQ_Precedence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_AfterQ_Precedence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+		afterQ(m, coll, inter);
+		
+		precedence(m, coll, inter);
+		// and finally... create the diagrams
+		// note slightly different syntax here
+		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
+		d.setName("Diag_SD_AfterQ_Precedence_Pattern_"+random);		
+		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
+	
+		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
+		cd.setName("Diag_COM_AfterQ_Precedence_Pattern_"+random);		
 	}
 	
 	public void draw_afterQAbsence(Model m){
