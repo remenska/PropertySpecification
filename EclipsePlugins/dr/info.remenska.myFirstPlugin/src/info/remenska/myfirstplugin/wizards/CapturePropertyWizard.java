@@ -10,12 +10,15 @@ import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.transaction.RecordingCommand;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
@@ -52,9 +55,10 @@ import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.ReceiveOperationEvent;
 import org.eclipse.uml2.uml.SendOperationEvent;
+import org.eclipse.uml2.uml.Stereotype;
 import org.eclipse.uml2.uml.UMLPackage;
 import org.eclipse.uml2.uml.internal.impl.CollaborationImpl;
-
+import org.eclipse.uml2.uml.Profile;
 import com.ibm.xtools.modeler.ui.UMLModeler;
 import com.ibm.xtools.umlnotation.UMLDiagramKind;
 
@@ -84,6 +88,7 @@ public class CapturePropertyWizard extends Wizard {
 		Rectangle clientArea = this.getShell().getClientArea ();
 		System.out.println("Client Area: "+ clientArea + " AAAA" + getShell().getMaximized());
 		this.getShell().setSize(clientArea.width, clientArea.height);
+
 //		this.getShell().pack();
 	}
 	@Override
@@ -147,7 +152,9 @@ public class CapturePropertyWizard extends Wizard {
 								if(model.getName().equalsIgnoreCase("DanielaModel")){
 //									createSequenceDiagram((Model) model); //$NON-NLS-1$
 									 System.out.println("Creating a new SD...");
-									 draw_afterQAbsence(model);
+//									 draw_afterQAbsence(model);
+//									 draw_beforeRAbsence(model);
+									 draw_betweenQandRAbsence(model);
 //									 draw_globallyAbsence(model);
 									
 								
@@ -195,231 +202,45 @@ public class CapturePropertyWizard extends Wizard {
 		return allColaborations;
 	}
 	
-	public void draw_afterQAbsence(Model m){
+	public void draw_globallyExistence(Model m){
 		
-		//TODO: no need to create events!!!
-		int random = (int )(Math.random() * 50 + 1);
+		int random = (int )(Math.random() * 5000 + 1);
 
-		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_AfterQ_Absence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
-		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_AfterQ_Absence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_Globally_Existence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_Globally_Existence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
 	
-		// stereotype needs to be applied
-		Message originAfterQ = QuestionTreePage.traceLineMap.get(QuestionTreePage.textStartEvent).getOriginMessage();
-		Class fromQ = (Class) ((MessageOccurrenceSpecification)originAfterQ.getSendEvent()).getCovereds().get(0).getRepresents().getType();
-		Class toQ = (Class) ((MessageOccurrenceSpecification)originAfterQ.getReceiveEvent()).getCovereds().get(0).getRepresents().getType();
-		
-		Property p1Q = coll.createOwnedAttribute(((MessageOccurrenceSpecification)originAfterQ.getSendEvent()).getCovereds().get(0).getRepresents().getName(), fromQ);
-		Property p2Q = coll.createOwnedAttribute(((MessageOccurrenceSpecification)originAfterQ.getReceiveEvent()).getCovereds().get(0).getRepresents().getName(), toQ);
-		
-		Lifeline lifeline1Q =  inter.createLifeline(p1Q.getName());
-		Lifeline lifeline2Q = inter.createLifeline(p2Q.getName());
-		
-		lifeline1Q.setRepresents(p1Q);
-		lifeline2Q.setRepresents(p2Q);
-		Message eventQ = inter.createMessage(originAfterQ.getName());
-		eventQ.setMessageSort(originAfterQ.getMessageSort());
-		
-		Connector cn1Q = inter.createOwnedConnector("connector1_"+(int )(Math.random() * 50 + 1));
-		cn1Q.setKind(ConnectorKind.ASSEMBLY_LITERAL);
-		
-		// create the connector ends, assign the roles
-		ConnectorEnd ce1Q = cn1Q.createEnd();
-		ConnectorEnd ce2Q = cn1Q.createEnd();
-		if (eventQ.getMessageSort().getLiteral().equals("reply"))
-		{
-			ce1Q.setRole(p2Q);		
-			ce2Q.setRole(p1Q);
-		} else
-		{
-			ce1Q.setRole(p1Q);		
-			ce2Q.setRole(p2Q);
-		}
-	
-		Operation op1Q = ((SendOperationEvent)((MessageOccurrenceSpecification) originAfterQ.getSendEvent()).getEvent()).getOperation();
-		
-		// NO NEED?
-		ExecutionEvent ev1Q = (ExecutionEvent) m.createPackagedElement("ExecutionEvent1_"+(int )(Math.random() * 500 + 1), UMLPackage.eINSTANCE.getExecutionEvent()); //TODO: needs to be unique
-		
-		
-		// can I deduce it?
-		ReceiveOperationEvent roeQ  = (ReceiveOperationEvent) ((MessageOccurrenceSpecification)originAfterQ.getReceiveEvent()).getEvent();
-		
-//		ReceiveOperationEvent roe = (ReceiveOperationEvent) m.createPackagedElement("ReceiveOperationEvent1_"+random, UMLPackage.eINSTANCE.getReceiveOperationEvent());
-		roeQ.setOperation(op1Q); //need to find the operation correspondign to this class!
-		
-		// can I deduce it again?
-		
-		SendOperationEvent soeQ = (SendOperationEvent) ((MessageOccurrenceSpecification)originAfterQ.getSendEvent()).getEvent();
-//		SendOperationEvent soe = (SendOperationEvent) m.createPackagedElement("SendOperationEvent1_"+random, UMLPackage.eINSTANCE.getSendOperationEvent());
-		soeQ.setOperation(op1Q);
-
-		
-		MessageOccurrenceSpecification seQ = (MessageOccurrenceSpecification) inter.createFragment(null, UMLPackage.eINSTANCE.getMessageOccurrenceSpecification());
-		seQ.setEvent(soeQ);
-		seQ.setMessage(eventQ);
-//		se.setName("se");// do we really need a name?
-		seQ.getCovereds().add(lifeline1Q);
-		
-		MessageOccurrenceSpecification reQ = (MessageOccurrenceSpecification) inter.createFragment(null, UMLPackage.eINSTANCE.getMessageOccurrenceSpecification());
-		reQ.setEvent(roeQ);
-		reQ.setMessage(eventQ);
-//		re.setName("re");
-		reQ.getCovereds().add(lifeline2Q);
-		
-		ExecutionOccurrenceSpecification eosQ = (ExecutionOccurrenceSpecification)inter.createFragment(null, UMLPackage.eINSTANCE.getExecutionOccurrenceSpecification());
-//		eos.setName("eos");
-		eosQ.setEvent(ev1Q);
-		eosQ.getCovereds().add(lifeline2Q);
-		
-		BehaviorExecutionSpecification besQ = (BehaviorExecutionSpecification) inter.createFragment(null, UMLPackage.eINSTANCE.getBehaviorExecutionSpecification());
-		besQ.setStart(reQ);
-		besQ.setFinish(eosQ);
-//		bes.setName("bes");
-		besQ.getCovereds().add(lifeline2Q);
-		
-		eosQ.setExecution(besQ);
-
-		// whew...
-	
-	// set the message properties
-		eventQ.setSendEvent(seQ);
-		eventQ.setReceiveEvent(reQ);
-		eventQ.setConnector(cn1Q);
-		
-		
-		// /// // /// /// / 
-		Message originMessageA = QuestionTreePage.traceLineMap.get(QuestionTreePage.textEventA).getOriginMessage();
-		Class from = (Class) ((MessageOccurrenceSpecification)originMessageA.getSendEvent()).getCovereds().get(0).getRepresents().getType();
-		Class to = (Class) ((MessageOccurrenceSpecification)originMessageA.getReceiveEvent()).getCovereds().get(0).getRepresents().getType();
-		
-		// this is how
-		//if(coll.getOwnedAttribute(name, type)!=null)
-		Property p1, p2;
-		if(coll.getOwnedAttribute(((MessageOccurrenceSpecification)originMessageA.getSendEvent()).getCovereds().get(0).getRepresents().getName(), from) != null)
-			 p1 = coll.getOwnedAttribute(((MessageOccurrenceSpecification)originMessageA.getSendEvent()).getCovereds().get(0).getRepresents().getName(), from);
-		else		
-			 p1 = coll.createOwnedAttribute(((MessageOccurrenceSpecification)originMessageA.getSendEvent()).getCovereds().get(0).getRepresents().getName(), from);
-		if (coll.getOwnedAttribute(((MessageOccurrenceSpecification)originMessageA.getReceiveEvent()).getCovereds().get(0).getRepresents().getName(), to) != null)
-			p2 = coll.getOwnedAttribute(((MessageOccurrenceSpecification)originMessageA.getReceiveEvent()).getCovereds().get(0).getRepresents().getName(), to);
-		else
-			p2 = coll.createOwnedAttribute(((MessageOccurrenceSpecification)originMessageA.getReceiveEvent()).getCovereds().get(0).getRepresents().getName(), to);
-		
-		
-
-		// NO, DON'T CREATE NEW LIFELINE IF THE PROPERTY IS THERE
-		Lifeline lifeline1 =  inter.getLifeline(p1.getName(), false, true);
-		Lifeline lifeline2 = inter.getLifeline(p2.getName(), false, true);
-		lifeline1.setRepresents(p1);
-		lifeline2.setRepresents(p2);
-		Message m1 = inter.createMessage(originMessageA.getName());
-		m1.setMessageSort(originMessageA.getMessageSort());
-		// here I need a combined fragment NEG
-		Connector cn1 = inter.createOwnedConnector("connector1_"+(int )(Math.random() * 50 + 1));
-		cn1.setKind(ConnectorKind.ASSEMBLY_LITERAL);
-		
-		// create the connector ends, assign the roles
-		ConnectorEnd ce1 = cn1.createEnd();
-		ConnectorEnd ce2 = cn1.createEnd();
-		if (m1.getMessageSort().getLiteral().equals("reply"))
-		{
-			ce1.setRole(p2);		
-			ce2.setRole(p1);
-		} else
-		{
-			ce1.setRole(p1);		
-			ce2.setRole(p2);
-		}
-	
-		
-		
-		Operation op1 = ((SendOperationEvent)((MessageOccurrenceSpecification) originMessageA.getSendEvent()).getEvent()).getOperation();
-		
-		// NO NEED?
-		ExecutionEvent ev1 = (ExecutionEvent) m.createPackagedElement("ExecutionEvent1_"+(int )(Math.random() * 500 + 1), UMLPackage.eINSTANCE.getExecutionEvent());
-		
-		// can I deduce it?
-		ReceiveOperationEvent roe  = (ReceiveOperationEvent) ((MessageOccurrenceSpecification)originMessageA.getReceiveEvent()).getEvent();
-		
-//		ReceiveOperationEvent roe = (ReceiveOperationEvent) m.createPackagedElement("ReceiveOperationEvent1_"+random, UMLPackage.eINSTANCE.getReceiveOperationEvent());
-		roe.setOperation(op1); //need to find the operation correspondign to this class!
-		
-		// can I deduce it again?
-		
-		SendOperationEvent soe = (SendOperationEvent) ((MessageOccurrenceSpecification)originMessageA.getSendEvent()).getEvent();
-//		SendOperationEvent soe = (SendOperationEvent) m.createPackagedElement("SendOperationEvent1_"+random, UMLPackage.eINSTANCE.getSendOperationEvent());
-		soe.setOperation(op1);
-
-		CombinedFragment neg = (CombinedFragment) inter.createFragment(null, UMLPackage.eINSTANCE.getCombinedFragment());
-		
-		neg.setInteractionOperator(InteractionOperatorKind.NEG_LITERAL);
-		InteractionOperand iop = neg.createOperand("NEG_operand");
-		neg.getCovereds().add(lifeline1);
-		neg.getCovereds().add(lifeline2);
-		MessageOccurrenceSpecification se = (MessageOccurrenceSpecification) iop.createFragment(null, UMLPackage.eINSTANCE.getMessageOccurrenceSpecification());
-		se.setEvent(soe);
-		se.setMessage(m1);
-//		se.setName("se");// do we really need a name?
-		se.getCovereds().add(lifeline1);
-		
-		MessageOccurrenceSpecification re = (MessageOccurrenceSpecification) iop.createFragment(null, UMLPackage.eINSTANCE.getMessageOccurrenceSpecification());
-		re.setEvent(roe);
-		re.setMessage(m1);
-//		re.setName("re");
-		re.getCovereds().add(lifeline2);
-		
-		ExecutionOccurrenceSpecification eos = (ExecutionOccurrenceSpecification)iop.createFragment(null, UMLPackage.eINSTANCE.getExecutionOccurrenceSpecification());
-//		eos.setName("eos");
-		eos.setEvent(ev1);
-		eos.getCovereds().add(lifeline2);
-		
-		BehaviorExecutionSpecification bes = (BehaviorExecutionSpecification) iop.createFragment(null, UMLPackage.eINSTANCE.getBehaviorExecutionSpecification());
-		bes.setStart(re);
-		bes.setFinish(eos);
-//		bes.setName("bes");
-		bes.getCovereds().add(lifeline2);
-		
-		eos.setExecution(bes);
-
-		// whew...
-	
-	// set the message properties
-		m1.setSendEvent(se);
-		m1.setReceiveEvent(re);
-		m1.setMessageSort(originMessageA.getMessageSort());
-		m1.setConnector(cn1);
-		// END_ this is all for one message: START_EVENT
-	
-		
+		existence(m,coll, inter);
 		
 		// and finally... create the diagrams
 		// note slightly different syntax here
 		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
-		d.setName("Diag_SD_AfterQ_Absence_Pattern_"+random);		
+		d.setName("Diag_SD_Globally_Absence_Pattern_"+random);		
 		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
 	
 		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
-		cd.setName("Diag_COM_AfterQ_Absence_Pattern_"+random);		
+		cd.setName("Diag_COM_Globally_Absence_Pattern_"+random);	
 	}
 	
-	public void draw_globallyAbsence(Model m){
-		//TODO: no need to create events!!!
-		int random = (int )(Math.random() * 50 + 1);
+	public void existence(Model m, Collaboration coll, Interaction inter){
+		int random = (int )(Math.random() * 5000 + 1);
 
-		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_Globally_Absence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
-		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_Globally_Absence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
-	
 		Message originMessageA = QuestionTreePage.traceLineMap.get(QuestionTreePage.textEventA).getOriginMessage();
-		Class from = (Class) originMessageA.getConnector().getEnds().get(0).getRole().getType();
-		Class to = (Class) originMessageA.getConnector().getEnds().get(1).getRole().getType();
-		Property p1 = coll.createOwnedAttribute(originMessageA.getConnector().getEnds().get(0).getRole().getName(), from);
-		Property p2 = coll.createOwnedAttribute(originMessageA.getConnector().getEnds().get(1).getRole().getName(), to);
+
+		Class from = (Class) ((MessageOccurrenceSpecification)originMessageA.getSendEvent()).getCovereds().get(0).getRepresents().getType();
+		Class to = (Class) ((MessageOccurrenceSpecification)originMessageA.getReceiveEvent()).getCovereds().get(0).getRepresents().getType();
 		
-		Lifeline lifeline1 =  inter.createLifeline(p1.getName());
-		Lifeline lifeline2 = inter.createLifeline(p2.getName());
+		
+		Property p1 = coll.getOwnedAttribute(((MessageOccurrenceSpecification)originMessageA.getSendEvent()).getCovereds().get(0).getRepresents().getName(), from, false, UMLPackage.Literals.PROPERTY, true);
+		Property p2 = coll.getOwnedAttribute(((MessageOccurrenceSpecification)originMessageA.getReceiveEvent()).getCovereds().get(0).getRepresents().getName(), to, false, UMLPackage.Literals.PROPERTY, true);
+				
+		Lifeline lifeline1 =  inter.getLifeline(p1.getName(), false, true);
+		Lifeline lifeline2 = inter.getLifeline(p2.getName(), false, true);
+
 		lifeline1.setRepresents(p1);
 		lifeline2.setRepresents(p2);
 		Message m1 = inter.createMessage(originMessageA.getName());
 		m1.setMessageSort(originMessageA.getMessageSort());
+		
 		// here I need a combined fragment NEG
 		Connector cn1 = inter.createOwnedConnector("connector1_"+random);
 		cn1.setKind(ConnectorKind.ASSEMBLY_LITERAL);
@@ -438,11 +259,457 @@ public class CapturePropertyWizard extends Wizard {
 		}
 	
 		
+		Operation op1 = ((SendOperationEvent)((MessageOccurrenceSpecification) originMessageA.getSendEvent()).getEvent()).getOperation();
+		
+		// NO NEED?
+		ExecutionEvent ev1 = (ExecutionEvent) m.createPackagedElement("ExecutionEvent1_"+(int )(Math.random() * 5000 + 1), UMLPackage.eINSTANCE.getExecutionEvent());
+		
+		// can I deduce it?
+		ReceiveOperationEvent roe  = (ReceiveOperationEvent) ((MessageOccurrenceSpecification)originMessageA.getReceiveEvent()).getEvent();
+		
+//		ReceiveOperationEvent roe = (ReceiveOperationEvent) m.createPackagedElement("ReceiveOperationEvent1_"+random, UMLPackage.eINSTANCE.getReceiveOperationEvent());
+		roe.setOperation(op1); //need to find the operation correspondign to this class!
+		
+		// can I deduce it again?
+		
+		SendOperationEvent soe = (SendOperationEvent) ((MessageOccurrenceSpecification)originMessageA.getSendEvent()).getEvent();
+//		SendOperationEvent soe = (SendOperationEvent) m.createPackagedElement("SendOperationEvent1_"+random, UMLPackage.eINSTANCE.getSendOperationEvent());
+		soe.setOperation(op1);
+
+		CombinedFragment neg = (CombinedFragment) inter.createFragment(null, UMLPackage.eINSTANCE.getCombinedFragment());
+		
+		neg.setInteractionOperator(InteractionOperatorKind.ASSERT_LITERAL);
+		InteractionOperand iop = neg.createOperand("ASSERT_operand");
+		neg.getCovereds().add(lifeline1);
+		neg.getCovereds().add(lifeline2);
+		MessageOccurrenceSpecification se = (MessageOccurrenceSpecification) iop.createFragment(null, UMLPackage.eINSTANCE.getMessageOccurrenceSpecification());
+		se.setEvent(soe);
+		se.setMessage(m1);
+//		se.setName("se");// do we really need a name?
+		se.getCovereds().add(lifeline1);
+		
+		MessageOccurrenceSpecification re = (MessageOccurrenceSpecification) iop.createFragment(null, UMLPackage.eINSTANCE.getMessageOccurrenceSpecification());
+		re.setEvent(roe);
+		re.setMessage(m1);
+//		re.setName("re");
+		re.getCovereds().add(lifeline2);
+		
+		ExecutionOccurrenceSpecification eos = (ExecutionOccurrenceSpecification)iop.createFragment(null, UMLPackage.eINSTANCE.getExecutionOccurrenceSpecification());
+//		eos.setName("eos");
+		eos.setEvent(ev1);
+		eos.getCovereds().add(lifeline2);
+		
+		BehaviorExecutionSpecification bes = (BehaviorExecutionSpecification) iop.createFragment(null, UMLPackage.eINSTANCE.getBehaviorExecutionSpecification());
+		bes.setStart(re);
+		bes.setFinish(eos);
+//		bes.setName("bes");
+		bes.getCovereds().add(lifeline2);
+		
+		eos.setExecution(bes);
+
+		// whew...
+	
+	// set the message properties
+		m1.setSendEvent(se);
+		m1.setReceiveEvent(re);
+		m1.setMessageSort(originMessageA.getMessageSort());
+		m1.setConnector(cn1);
+		// END_ this is all for one message
+	}
+	
+	
+	public void draw_beforeRAbsence(Model m){
+			
+		int random = (int )(Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_BeforeR_Absence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_Before_Absence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+		
+		absence(m, coll, inter);
+		beforeR(m,coll,inter);
+		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
+		d.setName("Diag_SD_BeforeR_Absence_Pattern_"+random);		
+		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
+	
+		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
+		cd.setName("Diag_COM_BeforeR_Absence_Pattern_"+random);	
+	}
+	
+	public void afterQ(Model m, Collaboration coll, Interaction inter){
+		Message originAfterQ = QuestionTreePage.traceLineMap.get(QuestionTreePage.textStartEvent).getOriginMessage();
+		Class fromQ = (Class) ((MessageOccurrenceSpecification)originAfterQ.getSendEvent()).getCovereds().get(0).getRepresents().getType();
+		Class toQ = (Class) ((MessageOccurrenceSpecification)originAfterQ.getReceiveEvent()).getCovereds().get(0).getRepresents().getType();
+		
+		
+		Property p1Q = coll.getOwnedAttribute(((MessageOccurrenceSpecification)originAfterQ.getSendEvent()).getCovereds().get(0).getRepresents().getName(), fromQ, false, UMLPackage.Literals.PROPERTY, true);
+		Property p2Q = coll.getOwnedAttribute(((MessageOccurrenceSpecification)originAfterQ.getReceiveEvent()).getCovereds().get(0).getRepresents().getName(), toQ, false, UMLPackage.Literals.PROPERTY, true);
+		
+		
+		Lifeline lifeline1Q =  inter.getLifeline(p1Q.getName(), false, true);
+		Lifeline lifeline2Q = inter.getLifeline(p2Q.getName(), false, true);
+		
+		lifeline1Q.setRepresents(p1Q);
+		lifeline2Q.setRepresents(p2Q);
+		Message eventQ = inter.createMessage(originAfterQ.getName());
+		
+		// apply stereotype
+				EList<Stereotype> applicableStereotypes = eventQ.getApplicableStereotypes();
+				for(Stereotype stereotype:applicableStereotypes){
+					if(stereotype.getName().equals("after"))
+						eventQ.applyStereotype(stereotype);
+				}
+				
+				Connector cn1Q = inter.createOwnedConnector("connector1_"+(int )(Math.random() * 50 + 1));
+				cn1Q.setKind(ConnectorKind.ASSEMBLY_LITERAL);
+				
+				// create the connector ends, assign the roles
+				ConnectorEnd ce1Q = cn1Q.createEnd();
+				ConnectorEnd ce2Q = cn1Q.createEnd();
+				if (eventQ.getMessageSort().getLiteral().equals("reply"))
+				{
+					ce1Q.setRole(p2Q);		
+					ce2Q.setRole(p1Q);
+				} else
+				{
+					ce1Q.setRole(p1Q);		
+					ce2Q.setRole(p2Q);
+				}
+			
+				
+				Operation op1Q = ((SendOperationEvent)((MessageOccurrenceSpecification) originAfterQ.getSendEvent()).getEvent()).getOperation();
+				
+				// NO NEED?
+				ExecutionEvent ev1Q = (ExecutionEvent) m.createPackagedElement("ExecutionEvent1_"+(int )(Math.random() * 5000 + 1), UMLPackage.eINSTANCE.getExecutionEvent()); 
+				
+				
+				// can I deduce it?
+				ReceiveOperationEvent roeQ  = (ReceiveOperationEvent) ((MessageOccurrenceSpecification)originAfterQ.getReceiveEvent()).getEvent();
+				
+//				ReceiveOperationEvent roe = (ReceiveOperationEvent) m.createPackagedElement("ReceiveOperationEvent1_"+random, UMLPackage.eINSTANCE.getReceiveOperationEvent());
+				roeQ.setOperation(op1Q); //need to find the operation correspondign to this class!
+				
+				// can I deduce it again?
+				
+				SendOperationEvent soeQ = (SendOperationEvent) ((MessageOccurrenceSpecification)originAfterQ.getSendEvent()).getEvent();
+//				SendOperationEvent soe = (SendOperationEvent) m.createPackagedElement("SendOperationEvent1_"+random, UMLPackage.eINSTANCE.getSendOperationEvent());
+				soeQ.setOperation(op1Q);
+
+				
+				MessageOccurrenceSpecification seQ = (MessageOccurrenceSpecification) inter.createFragment(null, UMLPackage.eINSTANCE.getMessageOccurrenceSpecification());
+				seQ.setEvent(soeQ);
+				seQ.setMessage(eventQ);
+				
+//				se.setName("se");// do we really need a name?
+				seQ.getCovereds().add(lifeline1Q);
+				
+				MessageOccurrenceSpecification reQ = (MessageOccurrenceSpecification) inter.createFragment(null, UMLPackage.eINSTANCE.getMessageOccurrenceSpecification());
+				reQ.setEvent(roeQ);
+				reQ.setMessage(eventQ);
+//				re.setName("re");
+				reQ.getCovereds().add(lifeline2Q);
+				
+				ExecutionOccurrenceSpecification eosQ = (ExecutionOccurrenceSpecification)inter.createFragment(null, UMLPackage.eINSTANCE.getExecutionOccurrenceSpecification());
+//				eos.setName("eos");
+				eosQ.setEvent(ev1Q);
+				eosQ.getCovereds().add(lifeline2Q);
+				
+				BehaviorExecutionSpecification besQ = (BehaviorExecutionSpecification) inter.createFragment(null, UMLPackage.eINSTANCE.getBehaviorExecutionSpecification());
+				besQ.setStart(reQ);
+				besQ.setFinish(eosQ);
+//				bes.setName("bes");
+				besQ.getCovereds().add(lifeline2Q);
+				
+				eosQ.setExecution(besQ);
+
+				// whew...
+			
+			// set the message properties
+				eventQ.setSendEvent(seQ);
+				eventQ.setReceiveEvent(reQ);
+				eventQ.setConnector(cn1Q);
+	}
+	
+	
+	public void beforeR(Model m, Collaboration coll, Interaction inter){
+		
+		// // //// /// / //// / /// 
+		
+				// stereotype needs to be applied
+				Message originBeforeR = QuestionTreePage.traceLineMap.get(QuestionTreePage.textEndEvent).getOriginMessage();
+				Class fromR = (Class) ((MessageOccurrenceSpecification)originBeforeR.getSendEvent()).getCovereds().get(0).getRepresents().getType();
+				Class toR = (Class) ((MessageOccurrenceSpecification)originBeforeR.getReceiveEvent()).getCovereds().get(0).getRepresents().getType();
+					
+				Property p1R = coll.getOwnedAttribute(((MessageOccurrenceSpecification)originBeforeR.getSendEvent()).getCovereds().get(0).getRepresents().getName(), fromR, false, UMLPackage.Literals.PROPERTY, true);
+				Property p2R = coll.getOwnedAttribute(((MessageOccurrenceSpecification)originBeforeR.getReceiveEvent()).getCovereds().get(0).getRepresents().getName(), toR, false, UMLPackage.Literals.PROPERTY, true);
+				
+				// NO, DON'T CREATE NEW LIFELINE IF THE PROPERTY IS THERE
+				Lifeline lifeline1R =  inter.getLifeline(p1R.getName(), false, true);
+				Lifeline lifeline2R = inter.getLifeline(p2R.getName(), false, true);
+				
+				lifeline1R.setRepresents(p1R);
+				lifeline2R.setRepresents(p2R);
+				Message eventR = inter.createMessage(originBeforeR.getName());
+				eventR.setMessageSort(originBeforeR.getMessageSort());
+				
+				// apply stereotype
+				EList<Stereotype> applicableStereotypes = eventR.getApplicableStereotypes();
+				for(Stereotype stereotype:applicableStereotypes){
+					if(stereotype.getName().equals("before"))
+						eventR.applyStereotype(stereotype);
+				}
+				
+				
+				Connector cn1R = inter.createOwnedConnector("connector1_"+(int )(Math.random() * 50 + 1));
+				cn1R.setKind(ConnectorKind.ASSEMBLY_LITERAL);
+				
+				// create the connector ends, assign the roles
+				ConnectorEnd ce1R = cn1R.createEnd();
+				ConnectorEnd ce2R = cn1R.createEnd();
+				if (eventR.getMessageSort().getLiteral().equals("reply"))
+				{
+					ce1R.setRole(p2R);		
+					ce2R.setRole(p1R);
+				} else
+				{
+					ce1R.setRole(p1R);		
+					ce2R.setRole(p2R);
+				}
+			
+				Operation op1R = ((SendOperationEvent)((MessageOccurrenceSpecification) originBeforeR.getSendEvent()).getEvent()).getOperation();
+				
+				ExecutionEvent ev1R = (ExecutionEvent) m.createPackagedElement("ExecutionEvent1_"+(int )(Math.random() * 500 + 1), UMLPackage.eINSTANCE.getExecutionEvent()); 
+				
+				
+				// can I deduce it?
+				ReceiveOperationEvent roeR  = (ReceiveOperationEvent) ((MessageOccurrenceSpecification)originBeforeR.getReceiveEvent()).getEvent();
+				
+//				ReceiveOperationEvent roe = (ReceiveOperationEvent) m.createPackagedElement("ReceiveOperationEvent1_"+random, UMLPackage.eINSTANCE.getReceiveOperationEvent());
+				roeR.setOperation(op1R); //need to find the operation correspondign to this class!
+				
+				// can I deduce it again?
+				
+				SendOperationEvent soeR = (SendOperationEvent) ((MessageOccurrenceSpecification)originBeforeR.getSendEvent()).getEvent();
+//				SendOperationEvent soe = (SendOperationEvent) m.createPackagedElement("SendOperationEvent1_"+random, UMLPackage.eINSTANCE.getSendOperationEvent());
+				soeR.setOperation(op1R);
+
+				
+				MessageOccurrenceSpecification seR = (MessageOccurrenceSpecification) inter.createFragment(null, UMLPackage.eINSTANCE.getMessageOccurrenceSpecification());
+				seR.setEvent(soeR);
+				seR.setMessage(eventR);
+//				se.setName("se");// do we really need a name?
+				seR.getCovereds().add(lifeline1R);
+				
+				MessageOccurrenceSpecification reR = (MessageOccurrenceSpecification) inter.createFragment(null, UMLPackage.eINSTANCE.getMessageOccurrenceSpecification());
+				reR.setEvent(roeR);
+				reR.setMessage(eventR);
+//				re.setName("re");
+				reR.getCovereds().add(lifeline2R);
+				
+				ExecutionOccurrenceSpecification eosR = (ExecutionOccurrenceSpecification)inter.createFragment(null, UMLPackage.eINSTANCE.getExecutionOccurrenceSpecification());
+//				eos.setName("eos");
+				eosR.setEvent(ev1R);
+				eosR.getCovereds().add(lifeline2R);
+				
+				BehaviorExecutionSpecification besR = (BehaviorExecutionSpecification) inter.createFragment(null, UMLPackage.eINSTANCE.getBehaviorExecutionSpecification());
+				besR.setStart(reR);
+				besR.setFinish(eosR);
+//				bes.setName("bes");
+				besR.getCovereds().add(lifeline2R);
+				
+				eosR.setExecution(besR);
+
+				// whew...
+			
+			// set the message properties
+				eventR.setSendEvent(seR);
+				eventR.setReceiveEvent(reR);
+				eventR.setConnector(cn1R);
+		
+	}
+	
+	
+public void untilR(Model m, Collaboration coll, Interaction inter){
+		
+	// // //// /// / //// / /// 
+	
+	// stereotype needs to be applied
+	Message originBeforeR = QuestionTreePage.traceLineMap.get(QuestionTreePage.textEndEvent).getOriginMessage();
+	Class fromR = (Class) ((MessageOccurrenceSpecification)originBeforeR.getSendEvent()).getCovereds().get(0).getRepresents().getType();
+	Class toR = (Class) ((MessageOccurrenceSpecification)originBeforeR.getReceiveEvent()).getCovereds().get(0).getRepresents().getType();
+		
+	Property p1R = coll.getOwnedAttribute(((MessageOccurrenceSpecification)originBeforeR.getSendEvent()).getCovereds().get(0).getRepresents().getName(), fromR, false, UMLPackage.Literals.PROPERTY, true);
+	Property p2R = coll.getOwnedAttribute(((MessageOccurrenceSpecification)originBeforeR.getReceiveEvent()).getCovereds().get(0).getRepresents().getName(), toR, false, UMLPackage.Literals.PROPERTY, true);
+	
+	// NO, DON'T CREATE NEW LIFELINE IF THE PROPERTY IS THERE
+	Lifeline lifeline1R =  inter.getLifeline(p1R.getName(), false, true);
+	Lifeline lifeline2R = inter.getLifeline(p2R.getName(), false, true);
+	
+	lifeline1R.setRepresents(p1R);
+	lifeline2R.setRepresents(p2R);
+	Message eventR = inter.createMessage(originBeforeR.getName());
+	eventR.setMessageSort(originBeforeR.getMessageSort());
+	
+	// apply stereotype
+	EList<Stereotype> applicableStereotypes = eventR.getApplicableStereotypes();
+	for(Stereotype stereotype:applicableStereotypes){
+		if(stereotype.getName().equals("until"))
+			eventR.applyStereotype(stereotype);
+	}
+	
+	
+	Connector cn1R = inter.createOwnedConnector("connector1_"+(int )(Math.random() * 50 + 1));
+	cn1R.setKind(ConnectorKind.ASSEMBLY_LITERAL);
+	
+	// create the connector ends, assign the roles
+	ConnectorEnd ce1R = cn1R.createEnd();
+	ConnectorEnd ce2R = cn1R.createEnd();
+	if (eventR.getMessageSort().getLiteral().equals("reply"))
+	{
+		ce1R.setRole(p2R);		
+		ce2R.setRole(p1R);
+	} else
+	{
+		ce1R.setRole(p1R);		
+		ce2R.setRole(p2R);
+	}
+
+	Operation op1R = ((SendOperationEvent)((MessageOccurrenceSpecification) originBeforeR.getSendEvent()).getEvent()).getOperation();
+	
+	ExecutionEvent ev1R = (ExecutionEvent) m.createPackagedElement("ExecutionEvent1_"+(int )(Math.random() * 500 + 1), UMLPackage.eINSTANCE.getExecutionEvent()); 
+	
+	
+	// can I deduce it?
+	ReceiveOperationEvent roeR  = (ReceiveOperationEvent) ((MessageOccurrenceSpecification)originBeforeR.getReceiveEvent()).getEvent();
+	
+//	ReceiveOperationEvent roe = (ReceiveOperationEvent) m.createPackagedElement("ReceiveOperationEvent1_"+random, UMLPackage.eINSTANCE.getReceiveOperationEvent());
+	roeR.setOperation(op1R); //need to find the operation correspondign to this class!
+	
+	// can I deduce it again?
+	
+	SendOperationEvent soeR = (SendOperationEvent) ((MessageOccurrenceSpecification)originBeforeR.getSendEvent()).getEvent();
+//	SendOperationEvent soe = (SendOperationEvent) m.createPackagedElement("SendOperationEvent1_"+random, UMLPackage.eINSTANCE.getSendOperationEvent());
+	soeR.setOperation(op1R);
+
+	
+	MessageOccurrenceSpecification seR = (MessageOccurrenceSpecification) inter.createFragment(null, UMLPackage.eINSTANCE.getMessageOccurrenceSpecification());
+	seR.setEvent(soeR);
+	seR.setMessage(eventR);
+//	se.setName("se");// do we really need a name?
+	seR.getCovereds().add(lifeline1R);
+	
+	MessageOccurrenceSpecification reR = (MessageOccurrenceSpecification) inter.createFragment(null, UMLPackage.eINSTANCE.getMessageOccurrenceSpecification());
+	reR.setEvent(roeR);
+	reR.setMessage(eventR);
+//	re.setName("re");
+	reR.getCovereds().add(lifeline2R);
+	
+	ExecutionOccurrenceSpecification eosR = (ExecutionOccurrenceSpecification)inter.createFragment(null, UMLPackage.eINSTANCE.getExecutionOccurrenceSpecification());
+//	eos.setName("eos");
+	eosR.setEvent(ev1R);
+	eosR.getCovereds().add(lifeline2R);
+	
+	BehaviorExecutionSpecification besR = (BehaviorExecutionSpecification) inter.createFragment(null, UMLPackage.eINSTANCE.getBehaviorExecutionSpecification());
+	besR.setStart(reR);
+	besR.setFinish(eosR);
+//	bes.setName("bes");
+	besR.getCovereds().add(lifeline2R);
+	
+	eosR.setExecution(besR);
+
+	// whew...
+
+// set the message properties
+	eventR.setSendEvent(seR);
+	eventR.setReceiveEvent(reR);
+	eventR.setConnector(cn1R);
+		
+}
+	
+
+
+	public void draw_afterQUntilRAbsence(Model m){
+		int random = (int )(Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_AfterQ_Absence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_AfterQ_Absence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+		afterQ(m, coll, inter);
+		
+		absence(m, coll, inter);
+		untilR(m, coll, inter);
+		
+		// and finally... create the diagrams
+				// note slightly different syntax here
+				Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
+				d.setName("Diag_SD_AfterQ_UntilR_Absence_Pattern_"+random);		
+				UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
+			
+				Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
+				cd.setName("Diag_COM_AfterQ_UntilR_Absence_Pattern_"+random);		
+				
+	}
+	
+	public void draw_afterQAbsence(Model m){
+
+		int random = (int )(Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_AfterQ_Absence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_AfterQ_Absence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+		afterQ(m, coll, inter);
+		
+		absence(m, coll, inter);
+		// and finally... create the diagrams
+		// note slightly different syntax here
+		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
+		d.setName("Diag_SD_AfterQ_Absence_Pattern_"+random);		
+		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
+	
+		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
+		cd.setName("Diag_COM_AfterQ_Absence_Pattern_"+random);		
+	}
+	
+	public void absence(Model m, Collaboration coll, Interaction inter){
+		
+		int random = (int )(Math.random() * 5000 + 1);
+
+		Message originMessageA = QuestionTreePage.traceLineMap.get(QuestionTreePage.textEventA).getOriginMessage();
+
+		Class from = (Class) ((MessageOccurrenceSpecification)originMessageA.getSendEvent()).getCovereds().get(0).getRepresents().getType();
+		Class to = (Class) ((MessageOccurrenceSpecification)originMessageA.getReceiveEvent()).getCovereds().get(0).getRepresents().getType();
+		
+		
+		Property p1 = coll.getOwnedAttribute(((MessageOccurrenceSpecification)originMessageA.getSendEvent()).getCovereds().get(0).getRepresents().getName(), from, false, UMLPackage.Literals.PROPERTY, true);
+		Property p2 = coll.getOwnedAttribute(((MessageOccurrenceSpecification)originMessageA.getReceiveEvent()).getCovereds().get(0).getRepresents().getName(), to, false, UMLPackage.Literals.PROPERTY, true);
+				
+		Lifeline lifeline1 =  inter.getLifeline(p1.getName(), false, true);
+		Lifeline lifeline2 = inter.getLifeline(p2.getName(), false, true);
+
+		lifeline1.setRepresents(p1);
+		lifeline2.setRepresents(p2);
+		Message m1 = inter.createMessage(originMessageA.getName());
+		m1.setMessageSort(originMessageA.getMessageSort());
+		
+		// here I need a combined fragment NEG
+		Connector cn1 = inter.createOwnedConnector("connector1_"+random);
+		cn1.setKind(ConnectorKind.ASSEMBLY_LITERAL);
+		
+		// create the connector ends, assign the roles
+		ConnectorEnd ce1 = cn1.createEnd();
+		ConnectorEnd ce2 = cn1.createEnd();
+		if (m1.getMessageSort().getLiteral().equals("reply"))
+		{
+			ce1.setRole(p2);		
+			ce2.setRole(p1);
+		} else
+		{
+			ce1.setRole(p1);		
+			ce2.setRole(p2);
+		}
+	
 		
 		Operation op1 = ((SendOperationEvent)((MessageOccurrenceSpecification) originMessageA.getSendEvent()).getEvent()).getOperation();
 		
 		// NO NEED?
-		ExecutionEvent ev1 = (ExecutionEvent) m.createPackagedElement("ExecutionEvent1_"+random, UMLPackage.eINSTANCE.getExecutionEvent());
+		ExecutionEvent ev1 = (ExecutionEvent) m.createPackagedElement("ExecutionEvent1_"+(int )(Math.random() * 5000 + 1), UMLPackage.eINSTANCE.getExecutionEvent());
 		
 		// can I deduce it?
 		ReceiveOperationEvent roe  = (ReceiveOperationEvent) ((MessageOccurrenceSpecification)originMessageA.getReceiveEvent()).getEvent();
@@ -494,9 +761,37 @@ public class CapturePropertyWizard extends Wizard {
 		m1.setReceiveEvent(re);
 		m1.setMessageSort(originMessageA.getMessageSort());
 		m1.setConnector(cn1);
-		// END_ this is all for one message: START_EVENT
+		// END_ this is all for one message
 	
+	}
+	
+	public void draw_betweenQandRAbsence(Model m){
+		int random = (int )(Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_Globally_Absence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_Globally_Absence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+		afterQ(m, coll, inter);
+		absence(m,coll, inter);
+		beforeR(m,coll,inter);
 		
+		// and finally... create the diagrams
+		// note slightly different syntax here
+		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
+		d.setName("Diag_SD_Globally_Absence_Pattern_"+random);		
+		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
+	
+		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
+		cd.setName("Diag_COM_Globally_Absence_Pattern_"+random);
+		
+	}
+	
+	public void draw_globallyAbsence(Model m){
+		int random = (int )(Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_Globally_Absence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_Globally_Absence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+	
+		absence(m,coll, inter);
 		
 		// and finally... create the diagrams
 		// note slightly different syntax here
