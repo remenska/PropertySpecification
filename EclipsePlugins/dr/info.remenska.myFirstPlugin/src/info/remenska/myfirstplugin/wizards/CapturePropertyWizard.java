@@ -155,27 +155,41 @@ public class CapturePropertyWizard extends Wizard {
 								 
 								 // next create an SD
 								if(model.getName().equalsIgnoreCase("DanielaModel")){
-//									createSequenceDiagram((Model) model); //$NON-NLS-1$
 									 System.out.println("Creating a new SD...");
-//									 draw_afterQAbsence(model);
-//									 draw_beforeRAbsence(model);
-//									 draw_betweenQandRAbsence(model);
-//									 draw_globallyAbsence(model);
-									
-//									 draw_afterQExistence(model);
-//									 draw_globallyPrecedence(model);
-//									 draw_afterQUntilRPrecedence(model);
-//									 draw_afterQResponse(model);
-//									 draw_betweenQandRResponse(model);
-//									 draw_globallyBoundedExistence(model);
-//									 draw_afterQUntilRBoundedExistence(model);
-//									 draw_afterQUntilRResponseChain(model);
-//									 draw_globallyResponseChain2(model);
-//									 draw_afterQUntilRResponseChain2(model);
-//									 draw_afterQUntilRPrecedenceChain(model);
-//									 draw_betweenQandRPrecedenceChain2(model);
-//									 draw_globallyConstrainedResponseChain(model);
-									 draw_afterQUntilRConstrainedResponseChain(model);
+
+									 PropertyPattern propPattern = null;
+									 if(QuestionTreePage.behavior.equals("Absence"))
+											 propPattern = new Absence(model);
+									 else if(QuestionTreePage.behavior.equals("Existence"))
+										 	propPattern = new Existence(model);
+									 else if(QuestionTreePage.behavior.equals("Bounded Existence"))
+										 	propPattern = new BoundedExistence(model);
+									 else if(QuestionTreePage.behavior.equals("Precedence"))
+										 	propPattern = new Precedence(model);
+									 else if(QuestionTreePage.behavior.equals("Precedence Chain 1"))
+											 propPattern = new PrecedenceChain(model);
+									 else if(QuestionTreePage.behavior.equals("Precedence Chain 2"))
+										 	 propPattern = new PrecedenceChain2(model);
+									 else if(QuestionTreePage.behavior.equals("Response"))
+										 	propPattern = new Response(model);
+									 else if(QuestionTreePage.behavior.equals("Response Chain 1"))
+										   propPattern = new ResponseChain(model);
+									 else if(QuestionTreePage.behavior.equals("Response Chain 2"))
+										 propPattern = new ResponseChain2(model);
+									 else if(QuestionTreePage.behavior.equals("Constrained Response Chain 2"))
+										 propPattern = new ConstrainedChainPattern(model);
+									 
+									 if(QuestionTreePage.scope.equals("Before R"))
+										 propPattern.draw(PropertyPattern.BEFORE);
+									 else if(QuestionTreePage.scope.equals("After Q"))
+										 propPattern.draw(PropertyPattern.AFTER);
+									 else if(QuestionTreePage.scope.equals("Between Q and R"))
+										 propPattern.draw(PropertyPattern.BETWEEN);
+									 else if(QuestionTreePage.scope.equals("After Q until R"))
+										 propPattern.draw(PropertyPattern.UNTIL);
+									 else if(QuestionTreePage.scope.equals("Globally"))
+										 propPattern.draw(PropertyPattern.GLOBALLY);
+									 
 
 								}
 							}
@@ -224,17 +238,17 @@ public class CapturePropertyWizard extends Wizard {
 	
 		int random = (int )(Math.random() * 5000 + 1);
 
-		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_BeforeR_Absence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
-		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_Before_Absence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_BeforeR_BoundedExistence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_Before_BoundedExistence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
 		
 		bounded_existence(m, coll, inter, QuestionTreePage.textEventA);
 		beforeR(m,coll,inter);
 		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
-		d.setName("Diag_SD_BeforeR_Absence_Pattern_"+random);		
+		d.setName("Diag_SD_BeforeR_BoundedExistence_Pattern_"+random);		
 		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
 	
 		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
-		cd.setName("Diag_COM_BeforeR_Absence_Pattern_"+random);	
+		cd.setName("Diag_COM_BeforeR_BoundedExistence_Pattern_"+random);	
 		
 	}
 	
@@ -242,17 +256,17 @@ public class CapturePropertyWizard extends Wizard {
 	public void draw_beforeRExistence(Model m){
 		int random = (int )(Math.random() * 5000 + 1);
 
-		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_BeforeR_Absence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
-		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_Before_Absence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_BeforeR_BoundedExistence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_BeforeR_BoundedExistence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
 		
 		existence(m, coll, inter, QuestionTreePage.textEventA);
 		beforeR(m,coll,inter);
 		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
-		d.setName("Diag_SD_BeforeR_Absence_Pattern_"+random);		
+		d.setName("Diag_SD_BeforeR_BoundedExistence_Pattern_"+random);		
 		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
 	
 		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
-		cd.setName("Diag_COM_BeforeR_Absence_Pattern_"+random);	
+		cd.setName("Diag_COM_BeforeR_BoundedExistence_Pattern_"+random);	
 		
 	}
 	
@@ -260,8 +274,8 @@ public class CapturePropertyWizard extends Wizard {
 		
 		int random = (int )(Math.random() * 5000 + 1);
 
-		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_Globally_Absence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
-		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_Globally_Absence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_BetweenQandR_Existence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_BetweenQandR_Existence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
 		afterQ(m, coll, inter);
 		existence(m,coll, inter, QuestionTreePage.textEventA);
 		beforeR(m,coll,inter);
@@ -269,11 +283,11 @@ public class CapturePropertyWizard extends Wizard {
 		// and finally... create the diagrams
 		// note slightly different syntax here
 		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
-		d.setName("Diag_SD_Globally_Absence_Pattern_"+random);		
+		d.setName("Diag_SD_BetweenQandR_Existence_Pattern_"+random);		
 		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
 	
 		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
-		cd.setName("Diag_COM_Globally_Absence_Pattern_"+random);
+		cd.setName("Diag_COM_BetweenQandR_Existence_Pattern_"+random);
 		
 	}
 	
@@ -281,8 +295,8 @@ public class CapturePropertyWizard extends Wizard {
 		
 		int random = (int )(Math.random() * 5000 + 1);
 
-		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_AfterQ_Absence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
-		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_AfterQ_Absence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_AfterQUntilR_Existence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_AfterQUntilR_Existence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
 		afterQ(m, coll, inter);
 		
 		existence(m, coll, inter, QuestionTreePage.textEventA);
@@ -291,11 +305,11 @@ public class CapturePropertyWizard extends Wizard {
 		// and finally... create the diagrams
 				// note slightly different syntax here
 		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
-		d.setName("Diag_SD_AfterQ_UntilR_Absence_Pattern_"+random);		
+		d.setName("Diag_SD_AfterQUntilR_Existence_Pattern_"+random);		
 		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
 			
 		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
-		cd.setName("Diag_COM_AfterQ_UntilR_Absence_Pattern_"+random);		
+		cd.setName("Diag_COM_AfterQUntilR_Existence_Pattern_"+random);		
 				
 	}
 	
@@ -303,8 +317,8 @@ public class CapturePropertyWizard extends Wizard {
 		
 		int random = (int )(Math.random() * 5000 + 1);
 
-		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_AfterQ_Response_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
-		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_AfterQ_Response_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_AfterQUntilR_Response_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_AfterQUntilR_Response_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
 		afterQ(m, coll, inter);
 		
 		response(m, coll, inter);
@@ -313,11 +327,11 @@ public class CapturePropertyWizard extends Wizard {
 		// and finally... create the diagrams
 				// note slightly different syntax here
 		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
-		d.setName("Diag_SD_AfterQ_UntilR_Response_Pattern_"+random);		
+		d.setName("Diag_SD_AfterQUntilR_Response_Pattern_"+random);		
 		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
 			
 		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
-		cd.setName("Diag_COM_AfterQ_UntilR_Response_Pattern_"+random);		
+		cd.setName("Diag_COM_AfterQUntilR_Response_Pattern_"+random);		
 		
 	}
 
@@ -325,8 +339,8 @@ public class CapturePropertyWizard extends Wizard {
 		
 		int random = (int )(Math.random() * 5000 + 1);
 
-		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_AfterQ_Response_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
-		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_AfterQ_Response_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_AfterQUntilR_ResponseChain_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_AfterQUntilR_ResponseChain_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
 		afterQ(m, coll, inter);
 		
 		response_chain(m, coll, inter);
@@ -335,11 +349,11 @@ public class CapturePropertyWizard extends Wizard {
 		// and finally... create the diagrams
 				// note slightly different syntax here
 		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
-		d.setName("Diag_SD_AfterQ_UntilR_Response_Pattern_"+random);		
+		d.setName("Diag_SD_AfterQUntilR_ResponseChain_Pattern_"+random);		
 		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
 			
 		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
-		cd.setName("Diag_COM_AfterQ_UntilR_Response_Pattern_"+random);		
+		cd.setName("Diag_COM_AfterQUntilR_ResponseChain_Pattern_"+random);		
 		
 	}	
 	
@@ -347,8 +361,8 @@ public class CapturePropertyWizard extends Wizard {
 		
 		int random = (int )(Math.random() * 5000 + 1);
 
-		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_AfterQ_Response_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
-		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_AfterQ_Response_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_AfterQUntilR_ConstrainedResponseChain_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_AfterQUntilR_ConstrainedResponseChain_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
 		afterQ(m, coll, inter);
 		
 		constrained_response_chain(m, coll, inter);
@@ -357,11 +371,11 @@ public class CapturePropertyWizard extends Wizard {
 		// and finally... create the diagrams
 				// note slightly different syntax here
 		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
-		d.setName("Diag_SD_AfterQ_UntilR_Response_Pattern_"+random);		
+		d.setName("Diag_SD_AfterQUntilR_ConstrainedResponseChain_Pattern_"+random);		
 		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
 			
 		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
-		cd.setName("Diag_COM_AfterQ_UntilR_Response_Pattern_"+random);		
+		cd.setName("Diag_COM_AfterQUntilR_ConstrainedResponseChain_Pattern_"+random);		
 		
 	}	
 	
@@ -369,8 +383,8 @@ public class CapturePropertyWizard extends Wizard {
 		
 		int random = (int )(Math.random() * 5000 + 1);
 
-		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_AfterQ_Response_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
-		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_AfterQ_Response_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_AfterQUntilR_ResponseChain2_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_AfterQUntilR_ResponseChain2_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
 		afterQ(m, coll, inter);
 		
 		response_chain2(m, coll, inter);
@@ -379,11 +393,11 @@ public class CapturePropertyWizard extends Wizard {
 		// and finally... create the diagrams
 				// note slightly different syntax here
 		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
-		d.setName("Diag_SD_AfterQ_UntilR_Response_Pattern_"+random);		
+		d.setName("Diag_SD_AfterQUntilR_ResponseChain2_Pattern_"+random);		
 		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
 			
 		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
-		cd.setName("Diag_COM_AfterQ_UntilR_Response_Pattern_"+random);		
+		cd.setName("Diag_COM_AfterQUntilR_ResponseChain2_Pattern_"+random);		
 		
 	}	
 
@@ -408,17 +422,17 @@ public class CapturePropertyWizard extends Wizard {
 		
 		int random = (int )(Math.random() * 5000 + 1);
 
-		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_BeforeR_Response_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
-		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_Before_Response_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_BeforeR_ResponseChain_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_BeforeR_ResponseChain_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
 		
 		response_chain(m, coll, inter);
 		beforeR(m,coll,inter);
 		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
-		d.setName("Diag_SD_BeforeR_Response_Pattern_"+random);		
+		d.setName("Diag_SD_BeforeR_ResponseChain_Pattern_"+random);		
 		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
 	
 		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
-		cd.setName("Diag_COM_BeforeR_Response_Pattern_"+random);	
+		cd.setName("Diag_COM_BeforeR_ResponseChain_Pattern_"+random);	
 	}
 	
 	
@@ -426,17 +440,17 @@ public class CapturePropertyWizard extends Wizard {
 		
 		int random = (int )(Math.random() * 5000 + 1);
 
-		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_BeforeR_Response_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
-		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_Before_Response_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_BeforeR_ConstrainedResponseChain_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_BeforeR_ConstrainedResponseChain_" +random, UMLPackage.eINSTANCE.getInteraction());
 		
 		constrained_response_chain(m, coll, inter);
 		beforeR(m,coll,inter);
 		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
-		d.setName("Diag_SD_BeforeR_Response_Pattern_"+random);		
+		d.setName("Diag_SD_BeforeR_ConstrainedResponseChain_Pattern_"+random);		
 		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
 	
 		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
-		cd.setName("Diag_COM_BeforeR_Response_Pattern_"+random);	
+		cd.setName("Diag_COM_BeforeR_ConstrainedResponseChain_Pattern_"+random);	
 	}
 	
 	public void draw_beforeRResponseChain2(Model m){
@@ -625,6 +639,7 @@ public class CapturePropertyWizard extends Wizard {
 		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
 		cd.setName("Diag_COM_Globally_Existence_Pattern_"+random);
 	}
+	
 	public void draw_globallyExistence(Model m){
 		
 		int random = (int )(Math.random() * 5000 + 1);
