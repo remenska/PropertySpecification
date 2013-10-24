@@ -183,13 +183,16 @@ public class CapturePropertyWizard extends Wizard {
 										 propPattern.draw(PropertyPattern.BEFORE);
 									 else if(QuestionTreePage.scope.equals("After Q"))
 										 propPattern.draw(PropertyPattern.AFTER);
+									 else if(QuestionTreePage.scope.equals("After Q variant"))
+										 propPattern.draw(PropertyPattern.AFTER_LAST); 
 									 else if(QuestionTreePage.scope.equals("Between Q and R"))
 										 propPattern.draw(PropertyPattern.BETWEEN);
 									 else if(QuestionTreePage.scope.equals("After Q until R"))
-										 propPattern.draw(PropertyPattern.UNTIL);
+										 propPattern.draw(PropertyPattern.AFTER_UNTIL);
 									 else if(QuestionTreePage.scope.equals("Globally"))
 										 propPattern.draw(PropertyPattern.GLOBALLY);
-									 
+									 else if(QuestionTreePage.scope.equals("Before R variant"))
+										 propPattern.draw(PropertyPattern.UNTIL);
 
 								}
 							}

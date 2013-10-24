@@ -43,14 +43,14 @@ public class Pattern {
 	   addPattern("Before R", "Absence", "[(not R)*. P. (not R)*. R] false");
 	   addPattern("Before R variant", "Absence", "[(not R)*. P] false");
 	   addPattern("After Q", "Absence", "[(not Q)*. Q. true*. P] false");
-	   addPattern("After Q variant", "Absence", "[true*. Q (not Q)*](([true*. Q]false) => [true*.(P + Q)]false)");
+	   addPattern("After Q variant", "Absence", "[true*. Q (not Q)*](([true*. Q]false) => [true*. P]false)");
 	   addPattern("Between Q and R", "Absence", "[true*. Q. (not R)*. P. (not R)*. R] false" );
 	   addPattern("After Q until R", "Absence", "[true*. Q. (not R)*. P] false");
 	   
 	   addPattern("Globally", "Existence","mu X. <true> true and [not P] X" );
 	   addPattern("Before R", "Existence", "[(not P)*. R] false");
 	   addPattern("Before R variant", "Existence", "mu X. ( [not P]X && [R]false and <true>true)");
-	   addPattern("After Q", "Existence", "[(not Q)*. Q] mu X. <true> true and [not P] X");
+	   addPattern("After Q", "Existence", "[(not Q)*. Q] mu X. (<true> true and [not P] X)");
 	   addPattern("After Q variant", "Existence", "[true*. Q](([true*. Q] false) => mu X. ([not P]X and <true>true))");
 	   addPattern("Between Q and R", "Existence", "[true*. Q. (not (P or R))*. R] false");
 	   addPattern("After Q until R", "Existence", "[true*. Q] mu X. <true> true and [R] false and [not P] X");
@@ -66,7 +66,7 @@ public class Pattern {
 	   addPattern("Before R" , "Precedence" , "[(not (P or R))*. S. (not R)*. R] false " );
 	   addPattern("Before R variant" , "Precedence" , "[ (not (S or R))*. P] false " );
 	   addPattern("After Q", "Precedence", "[true*. Q](([true*. Q]false) => [(not S)*. P] false) ");
-	   addPattern("After Q variant", "Precedence", "[(not Q)*. Q. (not P)*. S] false ");
+	   addPattern("After Q variant", "Precedence", "[true*. Q](([true*. Q]false) => [(not S)*. P] false)  ");
 	   addPattern("Between Q and R", "Precedence", "[true*. Q. (not (P or R))*. S. (not R)*. R] false");
 	   addPattern("After Q until R", "Precedence", "[true*. Q. (not (P or R))*. S] false ");
 	   
@@ -226,9 +226,9 @@ public class Pattern {
 //	  Questionnaire.answ12.setScope("Globally");
 	  Questionnaire.answ12.setScope("Globally");
 	  Questionnaire.answ111111.setScope("After Q");
-	  Questionnaire.answ111112.setScope("After Q variant"); //variant, the formula should be adapted
+	  Questionnaire.answ111112.setScope("After Q variant"); 
 	  
-	  Questionnaire.answ111211.setScope("Before R variant"); //variant, the formula should be adapted
+	  Questionnaire.answ111211.setScope("Before R variant"); 
 	  Questionnaire.answ111212.setScope("Before R"); 
 	  
 	  Questionnaire.answ1131111.setScope("After Q until R");

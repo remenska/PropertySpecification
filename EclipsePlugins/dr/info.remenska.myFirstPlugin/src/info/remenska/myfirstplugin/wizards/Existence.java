@@ -38,25 +38,82 @@ public class Existence extends PropertyPattern {
 	public void draw(int scope) {
 		// TODO Auto-generated method stub
 		switch (scope) {
-		case 1:
+		case PropertyPattern.BEFORE:
 			draw_beforeRExistence(m);
 			break;
-		case 2:
+		case PropertyPattern.AFTER:
 			draw_afterQExistence(m);
 			break;
-
-		case 3:
-			draw_betweenQandRExistence(m);
+			
+		case PropertyPattern.AFTER_LAST:
+			draw_afterLastQExistence(m);
 			break;
 
-		case 4:
+		case PropertyPattern.BETWEEN:
+			draw_betweenQandRExistence(m);
+			break;
+			
+		case PropertyPattern.UNTIL:
+			draw_UntilRExistence(m);
+			break;
+		case PropertyPattern.AFTER_UNTIL:
 			draw_afterQUntilRExistence(m);
 			break;
 
-		case 5:
+		case PropertyPattern.GLOBALLY:
 			draw_globallyExistence(m);
 			break;
 		}
+	}
+
+	public void draw_afterLastQExistence(Model m2) {
+		int random = (int) (Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement(
+				"Collab_AfterLastQ_Existence_Pattern_" + random,
+				UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior(
+				"Inter_AfterLastQ_Existence_Pattern_" + random,
+				UMLPackage.eINSTANCE.getInteraction());
+		afterLastQ(m, coll, inter);
+
+		existence(m, coll, inter, QuestionTreePage.textEventA);
+		// and finally... create the diagrams
+		// note slightly different syntax here
+		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter,
+				UMLDiagramKind.SEQUENCE_LITERAL, inter);
+		d.setName("Diag_SD_AfterLastQ_Existence_Pattern_" + random);
+		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);
+
+		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter,
+				UMLDiagramKind.COMMUNICATION_LITERAL, inter);
+		cd.setName("Diag_COM_AfterLastQ_Existence_Pattern_" + random);		
+	}
+
+	public void draw_UntilRExistence(Model m2) {
+		int random = (int) (Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement(
+				"Collab_UntilR_Existence_Pattern_" + random,
+				UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior(
+				"Inter_UntilR_Existence_Pattern_" + random,
+				UMLPackage.eINSTANCE.getInteraction());
+
+		existence(m, coll, inter, QuestionTreePage.textEventA);
+		untilR(m, coll, inter);
+
+		// and finally... create the diagrams
+		// note slightly different syntax here
+		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter,
+				UMLDiagramKind.SEQUENCE_LITERAL, inter);
+		d.setName("Diag_SD_UntilR_Existence_Pattern_" + random);
+		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);
+
+		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter,
+				UMLDiagramKind.COMMUNICATION_LITERAL, inter);
+		cd.setName("Diag_COM_UntilR_Existence_Pattern_" + random);
+		
 	}
 
 	public void draw_beforeRExistence(Model m) {

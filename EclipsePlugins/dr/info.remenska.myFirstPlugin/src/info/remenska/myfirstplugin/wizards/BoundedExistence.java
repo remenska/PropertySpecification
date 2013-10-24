@@ -41,25 +41,69 @@ public class BoundedExistence extends PropertyPattern {
 	public void draw(int scope) {
 		// TODO Auto-generated method stub
 		switch (scope) {
-		case 1:
+		case PropertyPattern.BEFORE:
 			draw_beforeRBoundedExistence(m);
 			break;
-		case 2:
+		case PropertyPattern.AFTER:
 			draw_afterQBoundedExistence(m);
 			break;
-
-		case 3:
-			draw_beteenQandRBoundedExistence(m);
+		case PropertyPattern.AFTER_LAST:
+			draw_afterLastQBoundedExistence(m);
 			break;
 
-		case 4:
+		case PropertyPattern.BETWEEN:
+			draw_beteenQandRBoundedExistence(m);
+			break;
+			
+		case PropertyPattern.UNTIL:
+			draw_UntilRBoundedExistence(m);
+			break;
+
+		case PropertyPattern.AFTER_UNTIL:
 			draw_afterQUntilRBoundedExistence(m);
 			break;
 
-		case 5:
+		case PropertyPattern.GLOBALLY:
 			draw_globallyBoundedExistence(m);
 			break;
 		}
+	}
+
+	public void draw_afterLastQBoundedExistence(Model m2) {
+		int random = (int )(Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_AfterLastQ_BoundedExistence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_AfterLastQ_BoundedExistence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+		afterLastQ(m, coll, inter);
+		
+		bounded_existence(m, coll, inter, QuestionTreePage.textEventA);
+		// and finally... create the diagrams
+		// note slightly different syntax here
+		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
+		d.setName("Diag_SD_AfterLastQ_BoundedExistence_Pattern_"+random);		
+		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
+	
+		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
+		cd.setName("Diag_COM_AfterLastQ_BoundedExistence_Pattern_"+random);				
+	}
+
+	public void draw_UntilRBoundedExistence(Model m2) {
+		int random = (int )(Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_UntilR_BoundedExistence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter__UntilR_BoundedExistence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+		
+		bounded_existence(m, coll, inter, QuestionTreePage.textEventA);
+		untilR(m, coll, inter);
+		
+		// and finally... create the diagrams
+				// note slightly different syntax here
+				Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
+				d.setName("Diag_SD_UntilR_BoundedExistence_Pattern_"+random);		
+				UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
+			
+				Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
+				cd.setName("Diag_COM_UntilR_BoundedExistence_Pattern_"+random);				
 	}
 
 	public void draw_beforeRBoundedExistence(Model m){
@@ -84,8 +128,8 @@ public class BoundedExistence extends PropertyPattern {
 		
 		int random = (int )(Math.random() * 5000 + 1);
 
-		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_AfterQ_BoundedExistence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
-		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_AfterQ_BoundedExistence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_AfterQ_UntilR_BoundedExistence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_AfterQ_UntilR_BoundedExistence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
 		afterQ(m, coll, inter);
 		
 		bounded_existence(m, coll, inter, QuestionTreePage.textEventA);

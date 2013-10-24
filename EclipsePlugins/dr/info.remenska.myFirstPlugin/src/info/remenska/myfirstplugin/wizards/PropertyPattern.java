@@ -22,11 +22,14 @@ import org.eclipse.uml2.uml.Stereotype;
 import org.eclipse.uml2.uml.UMLPackage;
 
 public abstract class PropertyPattern {
-	public static int BEFORE = 1;
-	public static int AFTER = 2;
-	public static int BETWEEN = 3;
-	public static int UNTIL = 4;
-	public static int GLOBALLY = 5;
+	public static final int BEFORE = 1;
+	public static final int AFTER = 2;
+	public static final int BETWEEN = 3;
+	public static final int UNTIL = 4;
+	public static final int AFTER_UNTIL = 5;
+	public static final int GLOBALLY = 6;
+	public static final int AFTER_LAST = 7;
+
 	public void draw(int scope){
 		
 	}
@@ -124,7 +127,100 @@ public abstract class PropertyPattern {
 				eventQ.setReceiveEvent(reQ);
 				eventQ.setConnector(cn1Q);
 	}
-	
+
+	public void afterLastQ(Model m, Collaboration coll, Interaction inter){
+		Message originAfterQ = QuestionTreePage.traceLineMap.get(QuestionTreePage.textStartEvent).getOriginMessage();
+		Class fromQ = (Class) ((MessageOccurrenceSpecification)originAfterQ.getSendEvent()).getCovereds().get(0).getRepresents().getType();
+		Class toQ = (Class) ((MessageOccurrenceSpecification)originAfterQ.getReceiveEvent()).getCovereds().get(0).getRepresents().getType();
+		
+		
+		Property p1Q = coll.getOwnedAttribute(((MessageOccurrenceSpecification)originAfterQ.getSendEvent()).getCovereds().get(0).getRepresents().getName(), fromQ, false, UMLPackage.Literals.PROPERTY, true);
+		Property p2Q = coll.getOwnedAttribute(((MessageOccurrenceSpecification)originAfterQ.getReceiveEvent()).getCovereds().get(0).getRepresents().getName(), toQ, false, UMLPackage.Literals.PROPERTY, true);
+		
+		
+		Lifeline lifeline1Q =  inter.getLifeline(p1Q.getName(), false, true);
+		Lifeline lifeline2Q = inter.getLifeline(p2Q.getName(), false, true);
+		
+		lifeline1Q.setRepresents(p1Q);
+		lifeline2Q.setRepresents(p2Q);
+		Message eventQ = inter.createMessage(originAfterQ.getName());
+		
+		// apply stereotype
+				EList<Stereotype> applicableStereotypes = eventQ.getApplicableStereotypes();
+				for(Stereotype stereotype:applicableStereotypes){
+					if(stereotype.getName().equals("after_last"))
+						eventQ.applyStereotype(stereotype);
+				}
+				
+				Connector cn1Q = inter.createOwnedConnector("connector1_"+(int )(Math.random() * 50 + 1));
+				cn1Q.setKind(ConnectorKind.ASSEMBLY_LITERAL);
+				
+				// create the connector ends, assign the roles
+				ConnectorEnd ce1Q = cn1Q.createEnd();
+				ConnectorEnd ce2Q = cn1Q.createEnd();
+				if (eventQ.getMessageSort().getLiteral().equals("reply"))
+				{
+					ce1Q.setRole(p2Q);		
+					ce2Q.setRole(p1Q);
+				} else
+				{
+					ce1Q.setRole(p1Q);		
+					ce2Q.setRole(p2Q);
+				}
+			
+				
+				Operation op1Q = ((SendOperationEvent)((MessageOccurrenceSpecification) originAfterQ.getSendEvent()).getEvent()).getOperation();
+				
+				// NO NEED?
+				ExecutionEvent ev1Q = (ExecutionEvent) m.createPackagedElement("ExecutionEvent1_"+(int )(Math.random() * 5000 + 1), UMLPackage.eINSTANCE.getExecutionEvent()); 
+				
+				
+				// can I deduce it?
+				ReceiveOperationEvent roeQ  = (ReceiveOperationEvent) ((MessageOccurrenceSpecification)originAfterQ.getReceiveEvent()).getEvent();
+				
+//				ReceiveOperationEvent roe = (ReceiveOperationEvent) m.createPackagedElement("ReceiveOperationEvent1_"+random, UMLPackage.eINSTANCE.getReceiveOperationEvent());
+				roeQ.setOperation(op1Q); //need to find the operation correspondign to this class!
+				
+				// can I deduce it again?
+				
+				SendOperationEvent soeQ = (SendOperationEvent) ((MessageOccurrenceSpecification)originAfterQ.getSendEvent()).getEvent();
+//				SendOperationEvent soe = (SendOperationEvent) m.createPackagedElement("SendOperationEvent1_"+random, UMLPackage.eINSTANCE.getSendOperationEvent());
+				soeQ.setOperation(op1Q);
+
+				
+				MessageOccurrenceSpecification seQ = (MessageOccurrenceSpecification) inter.createFragment(null, UMLPackage.eINSTANCE.getMessageOccurrenceSpecification());
+				seQ.setEvent(soeQ);
+				seQ.setMessage(eventQ);
+				
+//				se.setName("se");// do we really need a name?
+				seQ.getCovereds().add(lifeline1Q);
+				
+				MessageOccurrenceSpecification reQ = (MessageOccurrenceSpecification) inter.createFragment(null, UMLPackage.eINSTANCE.getMessageOccurrenceSpecification());
+				reQ.setEvent(roeQ);
+				reQ.setMessage(eventQ);
+//				re.setName("re");
+				reQ.getCovereds().add(lifeline2Q);
+				
+				ExecutionOccurrenceSpecification eosQ = (ExecutionOccurrenceSpecification)inter.createFragment(null, UMLPackage.eINSTANCE.getExecutionOccurrenceSpecification());
+//				eos.setName("eos");
+				eosQ.setEvent(ev1Q);
+				eosQ.getCovereds().add(lifeline2Q);
+				
+				BehaviorExecutionSpecification besQ = (BehaviorExecutionSpecification) inter.createFragment(null, UMLPackage.eINSTANCE.getBehaviorExecutionSpecification());
+				besQ.setStart(reQ);
+				besQ.setFinish(eosQ);
+//				bes.setName("bes");
+				besQ.getCovereds().add(lifeline2Q);
+				
+				eosQ.setExecution(besQ);
+
+				// whew...
+			
+			// set the message properties
+				eventQ.setSendEvent(seQ);
+				eventQ.setReceiveEvent(reQ);
+				eventQ.setConnector(cn1Q);
+	}	
 public void beforeR(Model m, Collaboration coll, Interaction inter){
 		
 		// // //// /// / //// / /// 

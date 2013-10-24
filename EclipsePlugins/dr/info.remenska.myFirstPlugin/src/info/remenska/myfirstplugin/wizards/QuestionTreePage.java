@@ -285,7 +285,7 @@ public class QuestionTreePage extends WizardPage {
 	public static LinkedHashMap<TreeNode<String>, LinkedList<Text>> fieldMap;
 	public static HashMap<Text,TraceLine> traceLineMap;
 	public static void fillTreeMap(){
-		String path = "/home/daniela/git/PropertySpecification/ScopeTimelineView/";
+		String path = "/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/ScopeTimelineView/";
 		scopeImage.put(Questionnaire.answ12, path+ "1.png");
 		scopeImage.put(Questionnaire.answ11, null);
 		scopeImage.put(Questionnaire.answ1111, path + "3.png");

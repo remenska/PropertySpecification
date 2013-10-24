@@ -10,6 +10,7 @@ public class Questionnaire {
 	public static 			TreeNode<String> quest11111 = answ1111.addChild("What if there are multiple occurrences of START before the end of the event sequence?", true);
 	public static 				TreeNode<String> answ111111 = quest11111.addChild("Only the first occurrence of START starts the restricted interval; \n later occurrences of START do not have an effect.", false); // AFTER-Q
 	public static 				TreeNode<String> answ111112 = quest11111.addChild("Only the last occurrence of START starts the restricted interval; \n each occurrence of START resets the beginning of a restricted interval. ", false); //can it be implemented? AFTER-Q variant (ASK if possible)
+	
 	public static 		TreeNode<String> answ1112 = quest111.addChild("There is a restricted interval in the event sequence and it has an ending \n delimiter, END: the behavior is required to hold from the start of the event sequence \n through to the first occurrence of END. ", false);
 	public static 			TreeNode<String> quest11121 = answ1112.addChild("If END does not occur, is the behavior still required to hold, until the end of the event sequence?", true);
 	public static 				TreeNode<String> answ111211 = quest11121.addChild("Yes, if END does not occur, the behavior is required to hold throughout the entire event sequence.", false); // can it be implemented?

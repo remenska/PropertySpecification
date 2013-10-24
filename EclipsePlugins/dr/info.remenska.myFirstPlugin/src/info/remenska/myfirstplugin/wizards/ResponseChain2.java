@@ -41,25 +41,81 @@ public class ResponseChain2 extends PropertyPattern {
 	public void draw(int scope) {
 		// TODO Auto-generated method stub
 		switch (scope) {
-		case 1:
+		case PropertyPattern.BEFORE:
 			draw_beforeRResponseChain2(m);
 			break;
-		case 2:
+		case PropertyPattern.AFTER:
 			draw_afterQResponseChain2(m);
 			break;
-
-		case 3:
+		case PropertyPattern.AFTER_LAST:
+			draw_afterLastQResponseChain2(m);
+			break;
+		case PropertyPattern.BETWEEN:
 			draw_betweenQandRResponseChain2(m);
 			break;
 
-		case 4:
+		case PropertyPattern.UNTIL:
+			draw_UntilRResponseChain2(m);
+			break;
+			
+		case PropertyPattern.AFTER_UNTIL:
 			draw_afterQUntilRResponseChain2(m);
 			break;
 
-		case 5:
+		case PropertyPattern.GLOBALLY:
 			draw_globallyResponseChain2(m);
 			break;
 		}
+	}
+
+	private void draw_afterLastQResponseChain2(Model m2) {
+		int random = (int) (Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement(
+				"Collab_AfterLastQ_ResponseChain2_Pattern_" + random,
+				UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior(
+				"Inter_AfterLastQ_ResponseChain2_Pattern_" + random,
+				UMLPackage.eINSTANCE.getInteraction());
+		afterLastQ(m, coll, inter);
+
+		response_chain2(m, coll, inter);
+		// and finally... create the diagrams
+		// note slightly different syntax here
+		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter,
+				UMLDiagramKind.SEQUENCE_LITERAL, inter);
+		d.setName("Diag_SD_AfterLastQ_ResponseChain2_Pattern_" + random);
+		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);
+
+		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter,
+				UMLDiagramKind.COMMUNICATION_LITERAL, inter);
+		cd.setName("Diag_COM_AfterLastQ_ResponseChain2_Pattern_" + random);		
+	}
+
+	public void draw_UntilRResponseChain2(Model m2) {
+		int random = (int) (Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement(
+				"Collab_UntilR_ResponseChain2_Pattern_" + random,
+				UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior(
+				"Inter_UntilR_ResponseChain2_Pattern_" + random,
+				UMLPackage.eINSTANCE.getInteraction());
+
+		response_chain2(m, coll, inter);
+		untilR(m, coll, inter);
+
+		// and finally... create the diagrams
+		// note slightly different syntax here
+		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter,
+				UMLDiagramKind.SEQUENCE_LITERAL, inter);
+		d.setName("Diag_SD_UntilR_ResponseChain2_Pattern_" + random);
+		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);
+
+		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter,
+				UMLDiagramKind.COMMUNICATION_LITERAL, inter);
+		cd.setName("Diag_COM_UntilR_ResponseChain2_Pattern_" + random);
+		
 	}
 
 	public void draw_beforeRResponseChain2(Model m) {

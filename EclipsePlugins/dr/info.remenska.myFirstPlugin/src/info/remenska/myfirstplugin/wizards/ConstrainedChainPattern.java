@@ -41,25 +41,68 @@ public class ConstrainedChainPattern extends PropertyPattern {
 	public void draw(int scope) {
 		// TODO Auto-generated method stub
 		switch (scope) {
-		case 1:
+		case PropertyPattern.BEFORE:
 			draw_beforeRConstrainedResponseChain(m);
 			break;
-		case 2:
+		case PropertyPattern.AFTER:
 			draw_afterQConstrainedResponseChain(m);
 			break;
-
-		case 3:
+		case PropertyPattern.AFTER_LAST:
+			draw_afterLastQConstrainedResponseChain(m);
+			break;
+		case PropertyPattern.BETWEEN:
 			draw_betweenQandRConstrainedResponseChain(m);
 			break;
-
-		case 4:
+		case PropertyPattern.UNTIL:
+			draw_UntilRConstrainedResponseChain(m);
+			break;
+		case PropertyPattern.AFTER_UNTIL:
 			draw_afterQUntilRConstrainedResponseChain(m);
 			break;
 
-		case 5:
+		case PropertyPattern.GLOBALLY:
 			draw_globallyConstrainedResponseChain(m);
 			break;
 		}
+	}
+
+public void draw_afterLastQConstrainedResponseChain(Model m2) {
+	
+	int random = (int )(Math.random() * 5000 + 1);
+
+	Collaboration coll = (Collaboration) m.createPackagedElement("Collab_AfterLastQ_ConstrainedResponseChain_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+	Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_AfterLastQ_ConstrainedResponseChain_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+	afterLastQ(m, coll, inter);
+	
+	constrained_response_chain(m, coll, inter);
+	// and finally... create the diagrams
+	// note slightly different syntax here
+	Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
+	d.setName("Diag_SD_AfterLastQ_ConstrainedResponseChain_Pattern_"+random);		
+	UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
+
+	Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
+	cd.setName("Diag_COM_AfterLastQ_ConstrainedResponseChain_Pattern_"+random);		
+	}
+
+public void draw_UntilRConstrainedResponseChain(Model m2) {
+	int random = (int )(Math.random() * 5000 + 1);
+
+	Collaboration coll = (Collaboration) m.createPackagedElement("Collab_UntilR_ConstrainedResponseChain_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+	Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_UntilR_ConstrainedResponseChain_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+	
+	constrained_response_chain(m, coll, inter);
+	untilR(m, coll, inter);
+	
+	// and finally... create the diagrams
+			// note slightly different syntax here
+	Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
+	d.setName("Diag_SD_UntilR_ConstrainedResponseChain_Pattern_"+random);		
+	UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
+		
+	Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
+	cd.setName("Diag_COMUntilR_ConstrainedResponseChain_Pattern_"+random);		
+	
 	}
 
 public void draw_beforeRConstrainedResponseChain(Model m){

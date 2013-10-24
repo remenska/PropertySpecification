@@ -41,25 +41,78 @@ public class Precedence extends PropertyPattern {
 	public void draw(int scope) {
 		// TODO Auto-generated method stub
 		switch (scope) {
-		case 1:
+		case PropertyPattern.BEFORE:
 			draw_beforeRPrecedence(m);
 			break;
-		case 2:
+		case PropertyPattern.AFTER:
 			draw_afterQPrecedence(m);
 			break;
-
-		case 3:
+		case PropertyPattern.AFTER_LAST:
+			draw_afterLastQPrecedence(m);
+			break;
+		case PropertyPattern.BETWEEN:
 			draw_betweenQandRPrecedence(m);
 			break;
-
-		case 4:
+		case PropertyPattern.UNTIL:
+			draw_UntilRPrecedence(m);
+			break;
+		case PropertyPattern.AFTER_UNTIL:
 			draw_afterQUntilRPrecedence(m);
 			break;
 
-		case 5:
+		case PropertyPattern.GLOBALLY:
 			draw_globallyPrecedence(m);
 			break;
 		}
+	}
+
+	public void draw_afterLastQPrecedence(Model m2) {
+		int random = (int) (Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement(
+				"Collab_AfterLastQ_Precedence_Pattern_" + random,
+				UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior(
+				"Inter_AfterLastQ_Precedence_Pattern_" + random,
+				UMLPackage.eINSTANCE.getInteraction());
+		afterLastQ(m, coll, inter);
+
+		precedence(m, coll, inter);
+		// and finally... create the diagrams
+		// note slightly different syntax here
+		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter,
+				UMLDiagramKind.SEQUENCE_LITERAL, inter);
+		d.setName("Diag_SD_AfterLastQ_Precedence_Pattern_" + random);
+		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);
+
+		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter,
+				UMLDiagramKind.COMMUNICATION_LITERAL, inter);
+		cd.setName("Diag_COM_AfterLastQ_Precedence_Pattern_" + random);		
+	}
+
+	public void draw_UntilRPrecedence(Model m2) {
+		int random = (int) (Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement(
+				"Collab_UntilR_Precedence_Pattern_" + random,
+				UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior(
+				"Inter_UntilR_Precedence_Pattern_" + random,
+				UMLPackage.eINSTANCE.getInteraction());
+
+		precedence(m, coll, inter);
+		untilR(m, coll, inter);
+
+		// and finally... create the diagrams
+		// note slightly different syntax here
+		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter,
+				UMLDiagramKind.SEQUENCE_LITERAL, inter);
+		d.setName("Diag_SD_UntilR_Precedence_Pattern_" + random);
+		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);
+
+		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter,
+				UMLDiagramKind.COMMUNICATION_LITERAL, inter);
+		cd.setName("Diag_COM_UntilR_Precedence_Pattern_" + random);		
 	}
 
 	public void draw_beforeRPrecedence(Model m) {
@@ -89,10 +142,10 @@ public class Precedence extends PropertyPattern {
 		int random = (int) (Math.random() * 5000 + 1);
 
 		Collaboration coll = (Collaboration) m.createPackagedElement(
-				"Collab_AfterQ_Precedence_Pattern_" + random,
+				"Collab_AfterQ_UntilR_Precedence_Pattern_" + random,
 				UMLPackage.eINSTANCE.getCollaboration());
 		Interaction inter = (Interaction) coll.createOwnedBehavior(
-				"Inter_AfterQ_Precedence_Pattern_" + random,
+				"Inter_AfterQ_UntilR_Precedence_Pattern_" + random,
 				UMLPackage.eINSTANCE.getInteraction());
 		afterQ(m, coll, inter);
 
