@@ -25,7 +25,6 @@ public class PropertySpecificationScopes extends WizardPage {
 		setTitle(pageName);
 		setDescription(description);
 
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -119,11 +118,9 @@ public class PropertySpecificationScopes extends WizardPage {
 	                PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL(new URL(e.text));
 	              } 
 	             catch (PartInitException ex) {
-	                // TODO Auto-generated catch block
 	                 ex.printStackTrace();
 	            } 
 	            catch (MalformedURLException ex) {
-	                // TODO Auto-generated catch block
 	                ex.printStackTrace();
 	            }
 	        }

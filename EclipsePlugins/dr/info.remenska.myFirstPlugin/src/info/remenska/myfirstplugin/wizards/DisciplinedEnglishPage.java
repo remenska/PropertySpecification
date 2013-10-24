@@ -32,7 +32,6 @@ public class DisciplinedEnglishPage  extends WizardPage  {
 		setDescription(description);
 //		setPageComplete(false);
 
-		// TODO Auto-generated constructor stub
 	}
 	
 	public void fillScope(){

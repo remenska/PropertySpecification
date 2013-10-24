@@ -509,7 +509,6 @@ public class QuestionTreePage extends WizardPage {
 
 		@Override
 		public void itemCollapsed(ExpandEvent e) {
-			// TODO Auto-generated method stub
 			 // we need to propagate the height to all ExpandItem parents in the hierarchy
 			
 			ExpandItem itemExpanded = (ExpandItem) e.item;

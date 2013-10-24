@@ -16,7 +16,6 @@ public class ScopeQuestionTreePage extends QuestionTreePage {
 	protected ScopeQuestionTreePage(String pageName, String description,
 			TreeNode<String> questionnaire) {
 		super(pageName, description, questionnaire);
-		// TODO Auto-generated constructor stub
 	}
 	
 	public void addEventSlots(Composite composite, ExpandBar root, Listener operationListener){

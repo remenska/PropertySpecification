@@ -98,7 +98,6 @@ public class CapturePropertyWizard extends Wizard {
 	}
 	@Override
 	public boolean performFinish() {
-		// TODO Auto-generated method stub
 		// here is where we generate the SD
 		
 		try {
@@ -147,7 +146,6 @@ public class CapturePropertyWizard extends Wizard {
 											
 										} catch (FileNotFoundException
 												| UnsupportedEncodingException e1) {
-											// TODO Auto-generated catch block
 											e1.printStackTrace();
 										} 
 										

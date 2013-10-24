@@ -39,7 +39,6 @@ public class ResponseChain2 extends PropertyPattern {
 
 	@Override
 	public void draw(int scope) {
-		// TODO Auto-generated method stub
 		switch (scope) {
 		case PropertyPattern.BEFORE:
 			draw_beforeRResponseChain2(m);

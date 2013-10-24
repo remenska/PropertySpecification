@@ -122,7 +122,6 @@ public class TreeNode<T> implements Iterable<TreeNode<T>>, Comparable<T> {
 
 	@Override
 	public int compareTo(Object arg0) {
-		// TODO Auto-generated method stub
 		if(this.data.equals(((TreeNode<T>)arg0).data))
 			return 0;
 		else return -1;
