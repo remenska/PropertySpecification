@@ -29,6 +29,8 @@ public abstract class PropertyPattern {
 	public static final int AFTER_UNTIL = 5;
 	public static final int GLOBALLY = 6;
 	public static final int AFTER_LAST = 7;
+	public static final int AFTER_LAST_UNTIL = 8;
+	public static final int BETWEEN_LAST = 9;
 
 	public void draw(int scope){
 		

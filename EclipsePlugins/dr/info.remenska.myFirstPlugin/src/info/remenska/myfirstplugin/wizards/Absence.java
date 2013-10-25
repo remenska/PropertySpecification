@@ -58,7 +58,66 @@ public class Absence extends PropertyPattern {
 		case PropertyPattern.GLOBALLY:
 			draw_globallyAbsence(m);
 			break;
+			
+		case PropertyPattern.AFTER_LAST_UNTIL:
+			draw_afterLastQUntilRAbsence(m);
+			break;
+			
+		case PropertyPattern.BETWEEN_LAST:
+			draw_betweenLastQandRAbsence(m);
+			break;
 		}
+	}
+
+	public void draw_betweenLastQandRAbsence(Model m2) {
+		int random = (int) (Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement(
+				"Collab_BetweenLastQandR_Absence_Pattern_" + random,
+				UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior(
+				"Inter_BetweenLatQandR_Absence_Pattern_" + random,
+				UMLPackage.eINSTANCE.getInteraction());
+		afterLastQ(m, coll, inter);
+		absence(m, coll, inter);
+		beforeR(m, coll, inter);
+
+		// and finally... create the diagrams
+		// note slightly different syntax here
+		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter,
+				UMLDiagramKind.SEQUENCE_LITERAL, inter);
+		d.setName("Diag_SD_BetweenLastQandR_Absence_Pattern_" + random);
+		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);
+
+		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter,
+				UMLDiagramKind.COMMUNICATION_LITERAL, inter);
+		cd.setName("Diag_COM_BetweenLastQandR_Absence_Pattern_" + random);		
+	}
+
+	public void draw_afterLastQUntilRAbsence(Model m2) {
+		int random = (int) (Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement(
+				"Collab_AfterLastQUntilR_Absence_Pattern_" + random,
+				UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior(
+				"Inter_AfterLastQUntilR_Absence_Pattern_" + random,
+				UMLPackage.eINSTANCE.getInteraction());
+		afterLastQ(m, coll, inter);
+
+		absence(m, coll, inter);
+		untilR(m, coll, inter);
+
+		// and finally... create the diagrams
+		// note slightly different syntax here
+		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter,
+				UMLDiagramKind.SEQUENCE_LITERAL, inter);
+		d.setName("Diag_SD_AfterLastQ_UntilR_Absence_Pattern_" + random);
+		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);
+
+		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter,
+				UMLDiagramKind.COMMUNICATION_LITERAL, inter);
+		cd.setName("Diag_COM_AfterLastQ_UntilR_Absence_Pattern_" + random);
 	}
 
 	public void draw_afterLastQAbsence(Model m2) {

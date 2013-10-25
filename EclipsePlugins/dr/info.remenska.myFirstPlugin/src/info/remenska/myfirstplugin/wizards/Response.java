@@ -64,10 +64,70 @@ public class Response extends PropertyPattern {
 		case PropertyPattern.GLOBALLY:
 			draw_globallyResponse(m);
 			break;
+			
+		case PropertyPattern.AFTER_LAST_UNTIL:
+			draw_afterLastQUntilRResponse(m);
+			break;
+			
+		case PropertyPattern.BETWEEN_LAST:
+			draw_betweenLastQandRResponse(m);
+			break;
 		}
 	}
 
-	private void draw_afterLastQResponse(Model m2) {
+	public void draw_betweenLastQandRResponse(Model m2) {
+		int random = (int) (Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement(
+				"Collab_BetweenLastQandR_Response_Pattern_" + random,
+				UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior(
+				"Inter_BetweenLastQandR_Response_Pattern_" + random,
+				UMLPackage.eINSTANCE.getInteraction());
+		afterLastQ(m, coll, inter);
+		response(m, coll, inter);
+		beforeR(m, coll, inter);
+
+		// and finally... create the diagrams
+		// note slightly different syntax here
+		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter,
+				UMLDiagramKind.SEQUENCE_LITERAL, inter);
+		d.setName("Diag_SD_BetweenLastQandR_Response_Pattern_" + random);
+		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);
+
+		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter,
+				UMLDiagramKind.COMMUNICATION_LITERAL, inter);
+		cd.setName("Diag_COM_BetweenLastQandR_Response_Pattern_" + random);		
+	}
+
+	public void draw_afterLastQUntilRResponse(Model m2) {
+
+		int random = (int) (Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement(
+				"Collab_AfterLastQUntilR_Response_Pattern_" + random,
+				UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior(
+				"Inter_AfterLastQUntilR_Response_Pattern_" + random,
+				UMLPackage.eINSTANCE.getInteraction());
+		afterLastQ(m, coll, inter);
+
+		response(m, coll, inter);
+		untilR(m, coll, inter);
+
+		// and finally... create the diagrams
+		// note slightly different syntax here
+		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter,
+				UMLDiagramKind.SEQUENCE_LITERAL, inter);
+		d.setName("Diag_SD_AfterLastQUntilR_Response_Pattern_" + random);
+		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);
+
+		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter,
+				UMLDiagramKind.COMMUNICATION_LITERAL, inter);
+		cd.setName("Diag_COM_AfterLastQUntilR_Response_Pattern_" + random);		
+	}
+
+	public void draw_afterLastQResponse(Model m2) {
 		int random = (int) (Math.random() * 5000 + 1);
 
 		Collaboration coll = (Collaboration) m.createPackagedElement(

@@ -62,7 +62,68 @@ public class Existence extends PropertyPattern {
 		case PropertyPattern.GLOBALLY:
 			draw_globallyExistence(m);
 			break;
+			
+
+		case PropertyPattern.AFTER_LAST_UNTIL:
+			draw_afterLastQUntilRExistence(m);
+			break;			
+
+		case PropertyPattern.BETWEEN_LAST:
+			draw_betweenLastQandRExistence(m);
+			break;
 		}
+	}
+
+	public void draw_betweenLastQandRExistence(Model m2) {
+		int random = (int) (Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement(
+				"Collab_BetweenLastQandR_Existence_Pattern_" + random,
+				UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior(
+				"Inter_BetweenLastQandR_Existence_Pattern_" + random,
+				UMLPackage.eINSTANCE.getInteraction());
+		afterLastQ(m, coll, inter);
+		existence(m, coll, inter, QuestionTreePage.textEventA);
+		beforeR(m, coll, inter);
+
+		// and finally... create the diagrams
+		// note slightly different syntax here
+		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter,
+				UMLDiagramKind.SEQUENCE_LITERAL, inter);
+		d.setName("Diag_SD_BetweenLastQandR_Existence_Pattern_" + random);
+		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);
+
+		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter,
+				UMLDiagramKind.COMMUNICATION_LITERAL, inter);
+		cd.setName("Diag_COM_BetweenLastQandR_Existence_Pattern_" + random);
+		
+	}
+
+	public void draw_afterLastQUntilRExistence(Model m2) {
+		int random = (int) (Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement(
+				"Collab_AfterLastQUntilR_Existence_Pattern_" + random,
+				UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior(
+				"Inter_AfterLastQUntilR_Existence_Pattern_" + random,
+				UMLPackage.eINSTANCE.getInteraction());
+		afterLastQ(m, coll, inter);
+
+		existence(m, coll, inter, QuestionTreePage.textEventA);
+		untilR(m, coll, inter);
+
+		// and finally... create the diagrams
+		// note slightly different syntax here
+		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter,
+				UMLDiagramKind.SEQUENCE_LITERAL, inter);
+		d.setName("Diag_SD_AfterLastQUntilR_Existence_Pattern_" + random);
+		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);
+
+		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter,
+				UMLDiagramKind.COMMUNICATION_LITERAL, inter);
+		cd.setName("Diag_COM_AfterLastQUntilR_Existence_Pattern_" + random);
 	}
 
 	public void draw_afterLastQExistence(Model m2) {

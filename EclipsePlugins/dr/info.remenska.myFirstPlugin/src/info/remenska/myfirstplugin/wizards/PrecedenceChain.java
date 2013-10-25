@@ -62,7 +62,54 @@ public class PrecedenceChain extends PropertyPattern {
 		case PropertyPattern.GLOBALLY:
 			draw_globallyPrecedenceChain(m);
 			break;
+			
+		case PropertyPattern.AFTER_LAST_UNTIL:
+			draw_afterLastQUntilRPrecedenceChain(m);
+			break;
+			
+		case PropertyPattern.BETWEEN_LAST:
+			draw_betweenLastQandRPrecedenceChain(m);
+			break;
 		}
+	}
+
+		public void draw_betweenLastQandRPrecedenceChain(Model m2) {
+			int random = (int )(Math.random() * 5000 + 1);
+
+			Collaboration coll = (Collaboration) m.createPackagedElement("Collab_BetweenLastQandR_PrecedenceChain_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+			Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_BetweenLastQandR_PrecedenceChain_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+			afterLastQ(m, coll, inter);
+			precedence_chain(m,coll, inter);
+			beforeR(m,coll,inter);
+			
+			// and finally... create the diagrams
+			// note slightly different syntax here
+			Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
+			d.setName("Diag_SD_BetweenLastQandR_PrecedenceChain_Pattern_"+random);		
+			UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
+		
+			Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
+			cd.setName("Diag_COM_BetweenLastQandR_PrecedenceChain_Pattern_"+random);		
+	}
+
+		public void draw_afterLastQUntilRPrecedenceChain(Model m2) {
+			int random = (int )(Math.random() * 5000 + 1);
+
+			Collaboration coll = (Collaboration) m.createPackagedElement("Collab_AfterLastQ_UntilR_PrecedenceChain_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+			Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_AfterLastQ_UntilR_PrecedenceChain_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+			afterLastQ(m, coll, inter);
+			
+			precedence_chain(m, coll, inter);
+			untilR(m, coll, inter);
+			
+			// and finally... create the diagrams
+					// note slightly different syntax here
+			Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
+			d.setName("Diag_SD_AfterLastQ_UntilR_PrecedenceChain_Pattern_"+random);		
+			UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
+				
+			Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
+			cd.setName("Diag_COM_AfterLastQ_UntilR_PrecedenceChain_Pattern_"+random);			
 	}
 
 		public void draw_afterLastQPrecedenceChain(Model m2) {

@@ -298,10 +298,10 @@ public class Pattern {
 	  Questionnaire.answ111212.setScope("Before R"); 
 	  
 	  Questionnaire.answ1131111.setScope("After Q until R");
-	  Questionnaire.answ1131211.setScope("After Q until R"); //variant, can it be implemented?
+	  Questionnaire.answ1131211.setScope("After Q until R variant"); 
 
 	  Questionnaire.answ1131112.setScope("Between Q and R");
-	  Questionnaire.answ1131212.setScope("Between Q and R"); //variant, can it be implemented?
+	  Questionnaire.answ1131212.setScope("Between Q and R variant"); 
 
 	  Questionnaire.aansw1111.setBehavior("Absence");
 	  

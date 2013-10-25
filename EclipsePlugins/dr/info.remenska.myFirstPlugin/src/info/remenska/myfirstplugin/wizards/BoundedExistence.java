@@ -65,7 +65,57 @@ public class BoundedExistence extends PropertyPattern {
 		case PropertyPattern.GLOBALLY:
 			draw_globallyBoundedExistence(m);
 			break;
+
+		case PropertyPattern.AFTER_LAST_UNTIL:
+			draw_afterLastQUntilRBoundedExistence(m);
+			break;
+			
+		case PropertyPattern.BETWEEN_LAST:
+			draw_betweenLastQandRBoundedExistence(m);
+			break;
 		}
+	}
+
+	public void draw_betweenLastQandRBoundedExistence(Model m2) {
+		
+		int random = (int )(Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_BetweenLastQAndR_BoundedExistence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_BetweenLastQAndR_BoundedExistence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+		afterLastQ(m, coll, inter);
+		bounded_existence(m, coll, inter, QuestionTreePage.textEventA);
+		beforeR(m,coll,inter);
+		
+		// and finally... create the diagrams
+		// note slightly different syntax here
+		Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
+		d.setName("Diag_SD_BetweenLastQAndR_BoundedExistence_Pattern_"+random);		
+		UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
+	
+		Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
+		cd.setName("Diag_COM_BetweenLastQAndR_BoundedExistence_Pattern_"+random);
+		
+				
+	}
+
+	public void draw_afterLastQUntilRBoundedExistence(Model m2) {
+		int random = (int )(Math.random() * 5000 + 1);
+
+		Collaboration coll = (Collaboration) m.createPackagedElement("Collab_AfterLastQ_UntilR_BoundedExistence_Pattern_" + random, UMLPackage.eINSTANCE.getCollaboration());
+		Interaction inter = (Interaction) coll.createOwnedBehavior("Inter_AfterLastQ_UntilR_BoundedExistence_Pattern_" +random, UMLPackage.eINSTANCE.getInteraction());
+		afterLastQ(m, coll, inter);
+		
+		bounded_existence(m, coll, inter, QuestionTreePage.textEventA);
+		untilR(m, coll, inter);
+		
+		// and finally... create the diagrams
+				// note slightly different syntax here
+				Diagram d = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.SEQUENCE_LITERAL,inter);
+				d.setName("Diag_SD_AfterLastQ_UntilR_BoundedExistence_Pattern_"+random);		
+				UMLModeler.getUMLDiagramHelper().openDiagramEditor(d);		
+			
+				Diagram cd = UMLModeler.getUMLDiagramHelper().createDiagram(inter, UMLDiagramKind.COMMUNICATION_LITERAL,inter);
+				cd.setName("Diag_COM_AfterLastQ_UntilR_BoundedExistence_Pattern_"+random);				
 	}
 
 	public void draw_afterLastQBoundedExistence(Model m2) {
