@@ -24,7 +24,7 @@ public class Pattern {
 //		  System.out.println(patterns.keySet());
 			  patterns.put("Globally", new HashMap<String, String>());
 			  patterns.put("Before R", new HashMap<String, String>());
-			  patterns.put("Before R variant", new HashMap<String, String>());
+			  patterns.put("Before R variant", new HashMap<String, String>()); //like until, if R does not happen, the property still must hold
 			  patterns.put("After Q", new HashMap<String, String>());
 			  patterns.put("After Q variant", new HashMap<String, String>());
 			  patterns.put("Between Q and R", new HashMap<String, String>());
@@ -47,11 +47,11 @@ public class Pattern {
 	   addPattern("Before R variant", "Absence", "[(not R)*. P] false"); 
 	   addPattern("After Q", "Absence", "[(not Q)*. Q. true*. P] false");
 //	   addPattern("After Q variant", "Absence", "[true*. Q (not Q)*](([true*. Q]false) => [true*. P]false)");
-	   addPattern("After Q variant", "Absence", "[true*. Q (not Q)*](([true*. Q]false) => [true*. (P + Q)]false)"); 
+	   addPattern("After Q variant", "Absence", "[true*. Q](([true*. Q]false) => [true*. (P + Q)]false)"); 
 	   addPattern("Between Q and R", "Absence", "[true*. Q. (not R)*. P. (not R)*. R] false" );
-	   addPattern("Between Q and R variant", "Absence", "TODO" ); 
+	   addPattern("Between Q and R variant", "Absence", "[true*. Q](([true*. Q]false) => [(not R)*. P. (not R)*. R] false) " ); 
 	   addPattern("After Q until R", "Absence", "[true*. Q. (not R)*. P] false");
-	   addPattern("After Q until R variant", "Absence", "TODO");
+	   addPattern("After Q until R variant", "Absence", "[true*. Q](([true*. Q]false) => [(not R)*. P] false)");
 
 	   addPattern("Globally", "Existence","mu X. <true> true and [not P] X" );
 	   addPattern("Before R", "Existence", "[(not P)*. R] false");
@@ -60,9 +60,9 @@ public class Pattern {
 //	   addPattern("After Q variant", "Existence", "[true*. Q](([true*. Q] false) => mu X. ([not P]X and <true>true)");
 	   addPattern("After Q variant", "Existence", "[true*. Q](([true*. Q] false) => mu X. ([not P]X and <true>true) and [Q]false)");
 	   addPattern("Between Q and R", "Existence", "[true*. Q. (not (P or R))*. R] false");
-	   addPattern("Between Q and R variant", "Existence", "[true*. Q. (not (P or R))*. R] false");
+	   addPattern("Between Q and R variant","Existence", "[true*. Q](([true*. Q] false) => [(not (P or R))*. R] false)");
 	   addPattern("After Q until R", "Existence", "[true*. Q] mu X. <true> true and [R] false and [not P] X");
-	   addPattern("After Q until R variant", "Existence", "TODO");
+	   addPattern("After Q until R variant", "Existence", "[true*. Q](([true*. Q] false) =>  mu X. <true> true and [R] false and [not P] X) ");
 	   
 	   //TODO: missing Universality scope variations!!!
 	   addPattern("Globally", "Universality", "[true*. not P] false ");
@@ -73,13 +73,13 @@ public class Pattern {
 	   
 	   addPattern("Globally", "Precedence", "[(not P)*. S] false ");
 	   addPattern("Before R" , "Precedence" , "[(not (P or R))*. S. (not R)*. R] false " );
-	   addPattern("Before R variant" , "Precedence" , "[ (not (S or R))*. P] false " );
-	   addPattern("After Q", "Precedence", "[true*. Q](([true*. Q]false) => [(not S)*. P] false) ");
-	   addPattern("After Q variant", "Precedence", "[true*. Q](([true*. Q]false) => [(not S)*. P] false)  ");
+	   addPattern("Before R variant" , "Precedence" , "[ (not (P or R))*. S] false " );
+	   addPattern("After Q", "Precedence", "[(not Q)*. Q. (not P)*. S] false "); 
+	   addPattern("After Q variant", "Precedence", "[true*. Q](([true*. Q]false) => [(not P)*. S] false)  ");
 	   addPattern("Between Q and R", "Precedence", "[true*. Q. (not (P or R))*. S. (not R)*. R] false");
-	   addPattern("Between Q and R variant", "Precedence", "TODO");
+	   addPattern("Between Q and R variant", "Precedence", "[true*. Q](([true*. Q]false) => [(not (P or R))*. S. (not R)*. R] false)");
 	   addPattern("After Q until R", "Precedence", "[true*. Q. (not (P or R))*. S] false ");
-	   addPattern("After Q until R variant", "Precedence", "TODO");
+	   addPattern("After Q until R variant", "Precedence", "[true*. Q](([true*. Q]false) => [(not (P or R))*. S] false )");
 	
 	   addPattern("Globally", "Precedence variant", "TODO");
 	   addPattern("Before R" , "Precedence variant" , "TODO" );
@@ -97,19 +97,19 @@ public class Pattern {
 	   addPattern("After Q", "Response", "[(not Q)*. Q. true*. P] mu X. <true> true and [not S] X " );
 	   addPattern("After Q variant", "Response", "[true*. Q]( ([true*. Q]false) => [true*. P] (mu X. <true>true and [not S] X ) ) " );
 	   addPattern("Between Q and R", "Response", "[true*. Q. (not R)*. P. (not (S or R))*. R] false");
-	   addPattern("Between Q and R variant", "Response", "TODO");
+	   addPattern("Between Q and R variant", "Response", "[true*. Q]( ([true*. Q]false) => [(not R)*. P. (not (S or R))*. R] false)");
 	   addPattern("After Q until R", "Response", "[true*. Q. (not R)*. P] mu X. <true> true and [R] false and [not S] X");
-	   addPattern("After Q until R variant", "Response", "TODO");
+	   addPattern("After Q until R variant", "Response", "[true*. Q]( ([true*. Q]false) => [(not R)*. P] (mu X. <true> true and [R] false and [not S] X)) ");
 	   
-	   addPattern("Globally", "Response variant", "TODO");
-	   addPattern("Before R", "Response variant", "TODO");
-	   addPattern("Before R variant", "Response variant", "TODO");
-	   addPattern("After Q", "Response variant", "TODO");
-	   addPattern("After Q variant", "Response variant", "TODO");
-	   addPattern("Between Q and R", "Response variant", "TODO");
-	   addPattern("Between Q and R variant", "Response variant", "TODO");
-	   addPattern("After Q until R", "Response variant", "TODO");
-	   addPattern("After Q until R variant", "Response variant", "TODO");
+	   addPattern("Globally", "Response variant", "mu X.( [not P]X and <true>true and [true*.P](mu Y. [not S]Y and <true>true))");
+	   addPattern("Before R", "Response variant", "((mu X. [not (R or P)]X and <true>true) and [true*. P. (not (R or S))*. R]false )");
+	   addPattern("Before R variant", "Response variant", "mu X. ( [not P]X and <true>true and [true*.P](mu Y.<true> true and [R]false and [not S] Y))");
+	   addPattern("After Q", "Response variant", "[(not Q)*.Q]( (mu X. [not P]X && <true>true) and [true*.P](mu Y. <true>true and [not S] Y) )");
+	   addPattern("After Q variant", "Response variant", "[true*. Q]( ([true*.Q]false) => ( mu X.( [not P]X and <true>true and [true*.P](mu Y. [not S]Y and <true>true)))");
+	   addPattern("Between Q and R", "Response variant", "[(not Q)*.Q]((mu X. [not (P or R)]X and <true>true) and [(not R)*. P. (not (R or S))*. R]false )");
+	   addPattern("Between Q and R variant", "Response variant", "[true*. Q](([true*. Q]false) => ((mu X. [not (P or R)]X and <true>true) and [(not R)*. P. (not (R or S))*. R]false ))");
+	   addPattern("After Q until R", "Response variant", "[true*.Q]( mu X. ( [not (P or R)]X and <true>true and [true*. P](mu Y.<true> true and [R]false and [not S] Y)) )");
+	   addPattern("After Q until R variant", "Response variant", "[true*.Q](([true*. Q]false) =>  mu X. ( [not (P or R)]X and <true>true and [true*.P](mu Y.<true> true and [R]false and [not S] Y)))");
 	   
 	   addPattern("Globally", "Precedence Chain 1", "[(not S)*. (nil | (S. (not T)*)). P] false " );
 	   addPattern("Before R", "Precedence Chain 1", " [(not (S or R))*. (nil | (S. (not (T or R))*)). P. (not R)*. R] false ");
@@ -119,9 +119,9 @@ public class Pattern {
 	   // TODO: the above is not "or", it's |
 	   // TODO: the above can be simplified to remove the nil; example: [A*.(nil or R).Q]false = [A*.R.Q]false AND [A*.Q]false = [A*.R.Q + A*.R]false
 	   addPattern("Between Q and R", "Precedence Chain 1", "[true*. Q. (not (S or R))*. (nil | (S. (not (T or R))*)). P.(not R)*. R] false");
-	   addPattern("Between Q and R variant", "Precedence Chain 1", "TODO");
+	   addPattern("Between Q and R variant", "Precedence Chain 1", "[true*.Q](([true*. Q]false) =>[(not (S or R))*. (nil | (S. (not (T or R))*)). P.(not R)*. R] false ");
 	   addPattern("After Q until R", "Precedence Chain 1", " [true*. Q. (not (S or R))*. (nil | (S. (not (T or R))*)). P] false ");
-	   addPattern("After Q until R variant", "Precedence Chain 1", "TODO");
+	   addPattern("After Q until R variant", "Precedence Chain 1", "[true*.Q](([true*. Q]false) => [(not (S or R))*. (nil | (S. (not (T or R))*)). P] false ) ");
 	  
 	   addPattern("Globally", "Precedence Chain 2", " [(not P)*. S. (not T)*. T] false ");
 	   addPattern("Before R", "Precedence Chain 2", " [(not (P or R))*. S. (not (T or R))*. T. (not R)*. R] false ");
@@ -129,9 +129,9 @@ public class Pattern {
 	   addPattern("After Q", "Precedence Chain 2", "[(not Q)*. Q. (not P)*. S. (not T)*. T] false ");
 	   addPattern("After Q variant", "Precedence Chain 2", "[true*. Q]( ([true*. Q]false) => [ (not P)*. S. (not T)*. T] false) ");
 	   addPattern("Between Q and R", "Precedence Chain 2", "  [true*. Q. (not (P or R))*. S. (not (T or R))*. T. (not R)*. R] false ");
-	   addPattern("Between Q and R variant", "Precedence Chain 2", "TODO ");
+	   addPattern("Between Q and R variant", "Precedence Chain 2", "[true*. Q]( ([true*. Q]false) => [(not (P or R))*. S. (not (T or R))*. T. (not R)*. R] false ) ");
 	   addPattern("After Q until R", "Precedence Chain 2", " [true*. Q. (not (P or R))*. S. (not (T or R))*. T] false ");
-	   addPattern("After Q until R variant", "Precedence Chain 2", "TODO");
+	   addPattern("After Q until R variant", "Precedence Chain 2", "[true*. Q]( ([true*. Q]false) => [(not (P or R))*. S. (not (T or R))*. T] false )");
 	   
 	   addPattern("Globally", "Response Chain 1", " [true*. S. (not T)*. T] mu X. <true> true and [not P] X ");
 	   addPattern("Before R", "Response Chain 1", " [true*. S. (not T)*. T. (not P)*. R] false ");
@@ -139,9 +139,9 @@ public class Pattern {
 	   addPattern("After Q", "Response Chain 1", " [(not Q)*. Q. true*. S. (not T)*. T] mu X. <true> true and [not P] X " );
 	   addPattern("After Q variant", "Response Chain 1", " [true*. Q](([true*. Q]false) => [ true*. S. (not T)*. T] (mu X. <true> true and [not P] X)) " );
 	   addPattern("Between Q and R", "Response Chain 1", "[true*. Q. (not (S or R))*. S. (not (T or R))*. T.(not (P or R))*. R] false");
-	   addPattern("Between Q and R variant", "Response Chain 1", "TODO");
+	   addPattern("Between Q and R variant", "Response Chain 1", "[true*. Q](([true*. Q]false) => [(not (S or R))*. S. (not (T or R))*. T.(not (P or R))*. R] false)");
 	   addPattern("After Q until R", "Response Chain 1", "[true*. Q. (not (S or R))*. S. (not (T or R))*. T] mu X. <true> true and [R] false and [not P] X ");
-	   addPattern("After Q until R variant", "Response Chain 1", "TODO");
+	   addPattern("After Q until R variant", "Response Chain 1", "[true*. Q](([true*. Q]false) => [(not (S or R))*. S. (not (T or R))*. T] mu X. <true> true and [R] false and [not P] X )");
 	   
 	   addPattern("Globally", "Response Chain 2", "[true*. P] mu X. <true> true and [S] mu Y. (<true> true and [not T] Y) and [not S] X " );
 	   addPattern("Before R", "Response Chain 2", "[(not R)*. P. (not (S or R))*. (nil | (S. (not (T or R))*)). R] false ");
@@ -149,9 +149,9 @@ public class Pattern {
 	   addPattern("After Q", "Response Chain 2", "[(not Q)*. Q. true*. P] mu X. <true> true and [S] mu Y. (<true> true and [not T] Y) and [not S] X ");
 	   addPattern("After Q variant", "Response Chain 2", "[true*. Q]( ([true*. Q]false) => [true*. P] (mu X. <true> true and [S] mu Y. (<true> true and [not T] Y) and [not S] X)) ");
 	   addPattern("Between Q and R", "Response Chain 2", "[true*. Q. (not R)*. P. (not (S or R))*. (nil | (S. (not (T or R))*)). R] false ");
-	   addPattern("Between Q and R variant", "Response Chain 2", "TODO");
+	   addPattern("Between Q and R variant", "Response Chain 2", "[true*. Q]( ([true*. Q]false) => [(not R)*. P. (not (S or R))*. (nil | (S. (not (T or R))*)). R] false )");
 	   addPattern("After Q until R", "Response Chain 2", "[true*. Q. (not R)*. P] mu X. <true> true and [R] false and [S] mu Y. (<true> true and [R] false and [not T] Y) and [not S] X ");
-	   addPattern("After Q until R variant", "Response Chain 2", "TODO");
+	   addPattern("After Q until R variant", "Response Chain 2", "[true*. Q]( ([true*. Q]false) => [(not R)*. P] mu X. <true> true and [R] false and [S] mu Y. (<true> true and [R] false and [not T] Y) and [not S] X) ");
 	   
 	   
 	   addPattern("Globally", "Constrained Response Chain 2", "[true*. P] mu X . <true> true and [S] mu Y. (<true> true and [Z] false and [not T] Y) and [not S] X " );
@@ -160,9 +160,9 @@ public class Pattern {
 	   addPattern("After Q", "Constrained Response Chain 2", "[(not Q)*. Q. true*. P] mu X. <true> true and [S] mu Y. (<true> true and [Z] false and [not T] Y) and [not S] X");
 	   addPattern("After Q variant", "Constrained Response Chain 2", "[true*. Q]( ([true*. Q]false) => [true*. P]( mu X. <true> true and [S] mu Y. (<true> true and [Z] false and [not T] Y) and [not S] X))");
 	   addPattern("Between Q and R", "Constrained Response Chain 2", "[true*. Q. (not R)*. P. (not (S or R))*. (nil | (S. (nil | ((not (T or R))*. Z)). (not (T or R))*)). R] false ");
-	   addPattern("Between Q and R variant", "Constrained Response Chain 2", "TODO");
+	   addPattern("Between Q and R variant", "Constrained Response Chain 2", "[true*. Q]( ([true*. Q]false) => [(not R)*. P. (not (S or R))*. (nil | (S. (nil | ((not (T or R))*. Z)). (not (T or R))*)). R] false )");
 	   addPattern("After Q until R", "Constrained Response Chain 2", "[true*. Q. (not R)*. P] mu X. <true> true and [R] false and [S] mu Y. (<true> true and [Z or R] false and [not T] Y) and [not S] X ");
-	   addPattern("After Q until R variant", "Constrained Response Chain 2", "TODO");
+	   addPattern("After Q until R variant", "Constrained Response Chain 2", "[true*. Q]( ([true*. Q]false) => [(not R)*. P] mu X. <true> true and [R] false and [S] mu Y. (<true> true and [Z or R] false and [not T] Y) and [not S] X) ");
 	   
 	   
 	  addPattern("Globally", "Bounded Existence", " [(not P)*. P. (not P)*. P] false ");
@@ -171,9 +171,9 @@ public class Pattern {
 	  addPattern("After Q", "Bounded Existence", " [(not Q)*. Q. (not P)*. P. (not P)*. P] false ");
 	  addPattern("After Q variant", "Bounded Existence", "[true*. Q]( ([true*.Q]false) => [(not P)*. P. (not P)*. P] false )");
 	  addPattern("Between Q and R", "Bounded Existence", " [true*. Q. (not R)*. P. (not R)*. P. (not R)*. R] false ");
-	  addPattern("Between Q and R variant", "Bounded Existence", "TODO");
+	  addPattern("Between Q and R variant", "Bounded Existence", "[true*. Q]( ([true*.Q]false) => [(not R)*. P. (not R)*. P. (not R)*. R] false )");
 	  addPattern("After Q until R", "Bounded Existence" , " [true*. Q. (not R)*. P. (not R)*. P] false ");
-	  addPattern("After Q until R variant", "Bounded Existence" , "TODO");
+	  addPattern("After Q until R variant", "Bounded Existence" , "[true*. Q]( ([true*.Q]false) => [(not R)*. P. (not R)*. P] false ) ");
 	  ////  ////  ////  ////  ////  ////  ////  ////  ////  ////  ////  ////  ////  ////
 	   addPatternMonitorable("Globally", "Absence", Boolean.TRUE );
 	   addPatternMonitorable("Before R", "Absence", Boolean.TRUE );
