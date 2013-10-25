@@ -30,6 +30,8 @@ public class Pattern {
 			  patterns.put("Between Q and R", new HashMap<String, String>());
 			  patterns.put("Between Q and R variant", new HashMap<String, String>());
 			  patterns.put("After Q until R", new HashMap<String, String>());
+			  patterns.put("After Q until R variant", new HashMap<String, String>());
+
 			  patternsMonitorable = new HashMap<String,HashMap<String,Boolean>>();
 //			  System.out.println(patterns.keySet());
 			  patternsMonitorable.put("Globally", new HashMap<String, Boolean>());
