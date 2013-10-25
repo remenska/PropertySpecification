@@ -83,15 +83,15 @@ public class Pattern {
 	   addPattern("After Q until R", "Precedence", "[true*. Q. (not (P or R))*. S] false ");
 	   addPattern("After Q until R variant", "Precedence", "[true*. Q](([true*. Q]false) => [(not (P or R))*. S] false )");
 	
-	   addPattern("Globally", "Precedence variant", "TODO");
-	   addPattern("Before R" , "Precedence variant" , "TODO" );
-	   addPattern("Before R variant", "Precedence variant" , "TODO" );
-	   addPattern("After Q",  "Precedence variant" , "TODO" );
-	   addPattern("After Q variant", "Precedence variant" , "TODO" );
-	   addPattern("Between Q and R", "Precedence variant" , "TODO" );
-	   addPattern("Between Q and R variant",  "Precedence variant" , "TODO" );
-	   addPattern("After Q until R", "Precedence variant" , "TODO" );
-	   addPattern("After Q until R variant", "Precedence variant" , "TODO" );
+	   addPattern("Globally", "Precedence variant", "mu X. ([not P] X and <true>true and [S]false)");
+	   addPattern("Before R" , "Precedence variant" , "mu X.[not (P or R)]X and <true>true and [S. (not R). R] false" );
+	   addPattern("Before R variant", "Precedence variant" , "mu X.[not (P or R)]X and <true>true and [S] false" );
+	   addPattern("After Q",  "Precedence variant" , "[(not Q)*. Q] mu X. ([not P] X and <true>true and [S]false)" );
+	   addPattern("After Q variant", "Precedence variant" , "[true*. Q](([true*. Q]false) => mu X. ([not P] X and <true>true and [S]false)" );
+	   addPattern("Between Q and R", "Precedence variant" , "[(not Q)*. Q] mu X.[not (P or R)]X and <true>true and [S. (not R). R] false" );
+	   addPattern("Between Q and R variant",  "Precedence variant" , "[true*. Q](([true*. Q]false) => mu X.[not (P or R)]X and <true>true and [S. (not R). R] false" );
+	   addPattern("After Q until R", "Precedence variant" , "[(not Q)*. Q] mu X. ([not (P or R)] X and <true>true and [S]false)" );
+	   addPattern("After Q until R variant", "Precedence variant" , "[true*. Q](([true*. Q]false) => mu X.[not (P or R)]X and <true>true and [S] false" );
 	   
 	   addPattern("Globally", "Response", "[true*. P] mu X. <true> true and [not S] X ");
 	   addPattern("Before R", "Response", "[(not R)*. P. (not (S or R))*. R] false ");
@@ -227,6 +227,16 @@ public class Pattern {
 	   addPatternMonitorable("Between Q and R variant", "Response", Boolean.TRUE ); //TODO
 	   addPatternMonitorable("After Q until R", "Response", Boolean.FALSE );
 	   addPatternMonitorable("After Q until R variant", "Response", Boolean.FALSE ); //TODO
+	   
+	   addPatternMonitorable("Globally", "Response variant", Boolean.FALSE );
+	   addPatternMonitorable("Before R", "Response variant", Boolean.FALSE );
+	   addPatternMonitorable("Before R variant", "Response variant", Boolean.FALSE );
+	   addPatternMonitorable("After Q", "Response variant", Boolean.FALSE );
+	   addPatternMonitorable("After Q variant", "Response variant", Boolean.FALSE );//TODO: check After Q variants if they are...
+	   addPatternMonitorable("Between Q and R", "Response variant", Boolean.FALSE );
+	   addPatternMonitorable("Between Q and R variant", "Response variant", Boolean.FALSE ); //TODO
+	   addPatternMonitorable("After Q until R", "Response variant", Boolean.FALSE );
+	   addPatternMonitorable("After Q until R variant", "Response variant", Boolean.FALSE ); //TODO
 	   
 	   addPatternMonitorable("Globally", "Precedence Chain 1", Boolean.TRUE );
 	   addPatternMonitorable("Before R", "Precedence Chain 1", Boolean.TRUE);

@@ -164,12 +164,16 @@ public class CapturePropertyWizard extends Wizard {
 										 	propPattern = new BoundedExistence(model);
 									 else if(QuestionTreePage.behavior.equals("Precedence"))
 										 	propPattern = new Precedence(model);
+									 else if(QuestionTreePage.behavior.equals("Precedence variant"))
+										 	propPattern = new Precedence(model);
 									 else if(QuestionTreePage.behavior.equals("Precedence Chain 1"))
 											 propPattern = new PrecedenceChain(model);
 									 else if(QuestionTreePage.behavior.equals("Precedence Chain 2"))
 										 	 propPattern = new PrecedenceChain2(model);
 									 else if(QuestionTreePage.behavior.equals("Response"))
 										 	propPattern = new Response(model);
+									 else if(QuestionTreePage.behavior.equals("Response variant"))
+										 	propPattern = new ResponseVariant(model);
 									 else if(QuestionTreePage.behavior.equals("Response Chain 1"))
 										   propPattern = new ResponseChain(model);
 									 else if(QuestionTreePage.behavior.equals("Response Chain 2"))
@@ -194,7 +198,7 @@ public class CapturePropertyWizard extends Wizard {
 									 else if(QuestionTreePage.scope.equals("Between Q and R variant"))
 										 propPattern.draw(PropertyPattern.BETWEEN_LAST);
 									 else if(QuestionTreePage.scope.equals("After Q until R variant"))
-										 propPattern.draw(PropertyPattern.AFTER_LAST);
+										 propPattern.draw(PropertyPattern.AFTER_LAST_UNTIL);
 								}
 							}
 						}

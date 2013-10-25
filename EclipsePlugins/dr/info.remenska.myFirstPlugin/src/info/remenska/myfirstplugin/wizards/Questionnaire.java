@@ -33,8 +33,7 @@ public class Questionnaire {
 			public static TreeNode<String> aansw11 = behaviorQuestionTree.addChild("One event.", false);
 			public static 	TreeNode<String> qquest111 = aansw11.addChild("Which of the following choices best describes the restriction on A?", true);
 			public static 		TreeNode<String> aansw1111 = qquest111.addChild("A is never allowed to occur", false); // ABSENCE
-			public static 		TreeNode<String> aansw1112 = qquest111.addChild("A is allowed to occur at least once.", false);	// EXISTENCE			
-					
+			public static 		TreeNode<String> aansw1112 = qquest111.addChild("A must eventually occur at least once.", false);	// EXISTENCE			
 			public static 		TreeNode<String> aansw1113 = qquest111.addChild("A is allowed to occur at most once.", false); // BOUNDED EXISTENCE 
 					
 			public static TreeNode<String> aansw12 = behaviorQuestionTree.addChild("Two events.", false);
