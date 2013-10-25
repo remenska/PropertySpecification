@@ -108,8 +108,8 @@ public class Pattern {
 	   addPattern("Before R variant", "Response variant", "mu X. ( [not P]X and <true>true and [true*.P](mu Y.<true> true and [R]false and [not S] Y))");
 	   addPattern("After Q", "Response variant", "[(not Q)*.Q]( (mu X. [not P]X && <true>true) and [true*.P](mu Y. <true>true and [not S] Y) )");
 	   addPattern("After Q variant", "Response variant", "[true*. Q]( ([true*.Q]false) => ( mu X.( [not P]X and <true>true and [true*.P](mu Y. [not S]Y and <true>true)))");
-	   addPattern("Between Q and R", "Response variant", "[(not Q)*.Q]((mu X. [not (P or R)]X and <true>true) and [(not R)*. P. (not (R or S))*. R]false )");
-	   addPattern("Between Q and R variant", "Response variant", "[true*. Q](([true*. Q]false) => ((mu X. [not (P or R)]X and <true>true) and [(not R)*. P. (not (R or S))*. R]false ))");
+	   addPattern("Between Q and R", "Response variant", "[(not Q)*.Q]((mu X. [not (P or R)]X and <true>true) and [true*. P. (not (R or S))*. R]false )");
+	   addPattern("Between Q and R variant", "Response variant", "[true*. Q](([true*. Q]false) => ((mu X. [not (P or R)]X and <true>true) and [true*. P. (not (R or S))*. R]false ))");
 	   addPattern("After Q until R", "Response variant", "[true*.Q]( mu X. ( [not (P or R)]X and <true>true and [true*. P](mu Y.<true> true and [R]false and [not S] Y)) )");
 	   addPattern("After Q until R variant", "Response variant", "[true*.Q](([true*. Q]false) =>  mu X. ( [not (P or R)]X and <true>true and [true*.P](mu Y.<true> true and [R]false and [not S] Y)))");
 	   
