@@ -18,6 +18,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.gmf.runtime.common.ui.services.elementselection.ElementSelectionScope;
 import org.eclipse.jface.viewers.CellEditor.LayoutData;
 import org.eclipse.jface.window.Window;
@@ -45,8 +47,13 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.internal.Workbench;
 import org.eclipse.uml2.uml.Message;
+import org.eclipse.uml2.uml.MessageOccurrenceSpecification;
 import org.eclipse.uml2.uml.MessageSort;
 import org.eclipse.uml2.uml.Operation;
+import org.eclipse.uml2.uml.Parameter;
+import org.eclipse.uml2.uml.ParameterDirectionKind;
+import org.eclipse.uml2.uml.SendOperationEvent;
+import org.eclipse.uml2.uml.ValueSpecification;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ExpandAdapter;
 import org.eclipse.swt.events.ExpandEvent;
@@ -285,7 +292,7 @@ public class QuestionTreePage extends WizardPage {
 	public static LinkedHashMap<TreeNode<String>, LinkedList<Text>> fieldMap;
 	public static HashMap<Text,TraceLine> traceLineMap;
 	public static void fillTreeMap(){
-		String path = "/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/ScopeTimelineView/";
+		String path = "/home/daniela/git/PropertySpecification/ScopeTimelineView/";
 		scopeImage.put(Questionnaire.answ12, path+ "1.png");
 		scopeImage.put(Questionnaire.answ11, null);
 		scopeImage.put(Questionnaire.answ1111, path + "3.png");
@@ -434,6 +441,7 @@ public class QuestionTreePage extends WizardPage {
 
 							System.out.println("Selected message:"+ selected.get(0));
 							
+							
 							TraceLine trObj = new TraceLine();
 							trObj.setOriginMessage(selected.get(0));
 							trObj.setMethodCall(selected.get(0).getName());
@@ -441,6 +449,29 @@ public class QuestionTreePage extends WizardPage {
 							trObj.setObjectName(selected.get(0).getConnector().getEnds().get(1).getRole().getName());
 							trObj.setClassNameSource(selected.get(0).getConnector().getEnds().get(0).getRole().getType().getName());
 							trObj.setObjectNameSource(selected.get(0).getConnector().getEnds().get(0).getRole().getName());
+							
+							
+							Operation operation = ((SendOperationEvent) ((MessageOccurrenceSpecification) selected.get(0).getSendEvent()).getEvent()).getOperation();
+							EList<Parameter> parameters = operation.getOwnedParameters();
+							LinkedList<String> paramsList = new LinkedList<String>();
+							LinkedList<String> paramsListReturn = new LinkedList<String>();
+
+							if(parameters.size()>0){
+								for(Parameter argument:parameters){
+									if(argument.getDirection().equals(ParameterDirectionKind.RETURN_LITERAL) 
+											|| argument.getDirection().equals(ParameterDirectionKind.OUT_LITERAL)){
+										paramsListReturn.add(argument.getName());
+									}
+									else {
+										paramsList.add(argument.getName());
+									}
+								}
+								if(paramsList.size()!=0)
+									trObj.setParameters(paramsList.toArray(new String[paramsList.size()]));
+								if(paramsListReturn.size()!=0)
+								trObj.setReturnParams(paramsListReturn.toArray(new String[paramsListReturn.size()]));
+							}
+							
 							if (selected.get(0).getMessageSort().getLiteral().equals("reply"))
 								trObj.setIsReply(true);
 	
@@ -583,7 +614,18 @@ public class QuestionTreePage extends WizardPage {
 class TraceLine{
 	public boolean isReply = false;
 	public String className;
-	public String[] parameters;
+	public String[] parameters = null;
+	public String[] returnParams = null;
+	public String[] getReturnParams() {
+		return returnParams;
+	}
+
+	public void setReturnParams(String[] returnParams) {
+		this.returnParams = returnParams;
+	}
+
+
+
 	public String methodCall;
 	public boolean isAsynchronous = false;
 	Message originMessage;
@@ -682,10 +724,30 @@ class TraceLine{
 		tmp.append(getClassName()+", ");
 		tmp.append(getObjectName()+", ");
 		
-		if (isReply())
-			tmp.append(getMethodCall()+"_return"+")");
+		if (isReply()){
+			if(returnParams!=null){
+				StringBuffer params = new StringBuffer(Arrays.toString(returnParams));
+				params = new StringBuffer(params.substring(1));
+				params = new StringBuffer(params.substring(0, params.length()-1));
+				tmp.append(getMethodCall()+"_return"+"("+params+"))");
+			}
+			else
+				tmp.append(getMethodCall()+"_return"+")");
+		}
 		else
-			tmp.append(getMethodCall()+")");
+		{
+			if(parameters!=null){
+				StringBuffer params = new StringBuffer(Arrays.toString(parameters));
+				params = new StringBuffer(params.substring(1));
+				params = new StringBuffer(params.substring(0, params.length()-1));
+				tmp.append(getMethodCall()+"("+params + "))");
+
+			}
+			else
+				tmp.append(getMethodCall()+")");
+
+		}
+			
 		
 		return tmp.toString();
 	}
