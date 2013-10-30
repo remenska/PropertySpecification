@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
 
+import org.eclipse.ocl.ecore.impl.PrimitiveTypeImpl;
 import org.eclipse.swt.widgets.Control;
 
 import org.eclipse.core.resources.IProject;
@@ -291,8 +292,40 @@ public class QuestionTreePage extends WizardPage {
 	public static LinkedHashMap<TreeNode<String>, String> scopeImage; 
 	public static LinkedHashMap<TreeNode<String>, LinkedList<Text>> fieldMap;
 	public static HashMap<Text,TraceLine> traceLineMap;
+	
+	public static String determinePrimitiveType(PrimitiveTypeImpl typearg) {
+		// System.out.println("typeArg:"+typearg+";"+typearg.eIsProxy());
+		if (typearg.eIsProxy()) {
+			if (typearg.eProxyURI().toString().contains("Integer"))
+				return "Int";
+			else if (typearg.eProxyURI().toString().contains("Boolean"))
+				return "Bool";
+			else if (typearg.eProxyURI().toString().contains("Natural"))
+				return "Nat";
+			else if (typearg.eProxyURI().toString().contains("String"))
+				return "SortString";
+			else
+				return "Unknown %FIXME";
+		} else {
+			if (typearg.getName() != null) {
+				String nameOfArg = typearg.getName().toString();
+				if (nameOfArg.contains("float") || nameOfArg.contains("double"))
+					return "Real";
+				else if (nameOfArg.contains("long")
+						|| nameOfArg.contains("short")
+						|| nameOfArg.contains("byte"))
+					return "Int";
+				else if (nameOfArg.contains("char"))
+					return "SortString";
+			} else
+				return "Unknown %FIXME";
+		}
+		return "Unknown %FIXME";
+	}
+
+	
 	public static void fillTreeMap(){
-		String path = "/home/daniela/git/PropertySpecification/ScopeTimelineView/";
+		String path = "/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/ScopeTimelineView/";
 		scopeImage.put(Questionnaire.answ12, path+ "1.png");
 		scopeImage.put(Questionnaire.answ11, null);
 		scopeImage.put(Questionnaire.answ1111, path + "3.png");
@@ -458,9 +491,19 @@ public class QuestionTreePage extends WizardPage {
 
 							if(parameters.size()>0){
 								for(Parameter argument:parameters){
+									System.out.println("argument.getType() = " + argument.getType());
+//									System.out.println("argument.getType().getClass() = " + argument.getType().getClass());
+									if(argument.getType()!=null && argument.getType().getClass().equals(PrimitiveTypeImpl.class)){ //convert type from UML to mCRL2
+										String type = determinePrimitiveType((PrimitiveTypeImpl)argument.getType());
+										trObj.parameterTypes.put(argument.getName(), type);
+									} else {
+										trObj.parameterTypes.put(argument.getName(), "ClassObject");
+									}
+									
 									if(argument.getDirection().equals(ParameterDirectionKind.RETURN_LITERAL) 
 											|| argument.getDirection().equals(ParameterDirectionKind.OUT_LITERAL)){
 										paramsListReturn.add(argument.getName());
+										
 									}
 									else {
 										paramsList.add(argument.getName());
@@ -616,6 +659,8 @@ class TraceLine{
 	public String className;
 	public String[] parameters = null;
 	public String[] returnParams = null;
+	public LinkedHashMap<String, String> parameterTypes = new LinkedHashMap<String,String>(); 
+
 	public String[] getReturnParams() {
 		return returnParams;
 	}
