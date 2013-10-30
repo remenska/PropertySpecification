@@ -13,7 +13,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
 
-import org.eclipse.ocl.ecore.impl.PrimitiveTypeImpl;
+import org.eclipse.ocl.uml.PrimitiveType;
+//import org.eclipse.ocl.uml.impl.PrimitiveTypeImpl;
+//import org.eclipse.ocl.ecore.impl.PrimitiveTypeImpl;
 import org.eclipse.swt.widgets.Control;
 
 import org.eclipse.core.resources.IProject;
@@ -55,6 +57,7 @@ import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.ParameterDirectionKind;
 import org.eclipse.uml2.uml.SendOperationEvent;
 import org.eclipse.uml2.uml.ValueSpecification;
+import org.eclipse.uml2.uml.internal.impl.PrimitiveTypeImpl;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ExpandAdapter;
 import org.eclipse.swt.events.ExpandEvent;
@@ -293,39 +296,25 @@ public class QuestionTreePage extends WizardPage {
 	public static LinkedHashMap<TreeNode<String>, LinkedList<Text>> fieldMap;
 	public static HashMap<Text,TraceLine> traceLineMap;
 	
-	public static String determinePrimitiveType(PrimitiveTypeImpl typearg) {
+	public static String determinePrimitiveType(org.eclipse.uml2.uml.internal.impl.PrimitiveTypeImpl typearg) {
 		// System.out.println("typeArg:"+typearg+";"+typearg.eIsProxy());
-		if (typearg.eIsProxy()) {
-			if (typearg.eProxyURI().toString().contains("Integer"))
+		System.out.println("inside determinePrimitive type: " + typearg.getName());
+			if (typearg.getName().equals("Integer"))
 				return "Int";
-			else if (typearg.eProxyURI().toString().contains("Boolean"))
+			else if (typearg.getName().equals("Boolean"))
 				return "Bool";
-			else if (typearg.eProxyURI().toString().contains("Natural"))
+			else if (typearg.getName().equals("Natural"))
 				return "Nat";
-			else if (typearg.eProxyURI().toString().contains("String"))
+			else if (typearg.getName().equals("String"))
 				return "SortString";
 			else
 				return "Unknown %FIXME";
-		} else {
-			if (typearg.getName() != null) {
-				String nameOfArg = typearg.getName().toString();
-				if (nameOfArg.contains("float") || nameOfArg.contains("double"))
-					return "Real";
-				else if (nameOfArg.contains("long")
-						|| nameOfArg.contains("short")
-						|| nameOfArg.contains("byte"))
-					return "Int";
-				else if (nameOfArg.contains("char"))
-					return "SortString";
-			} else
-				return "Unknown %FIXME";
-		}
-		return "Unknown %FIXME";
+		
 	}
 
 	
 	public static void fillTreeMap(){
-		String path = "/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/ScopeTimelineView/";
+		String path = "/home/daniela/git/PropertySpecification/ScopeTimelineView/";
 		scopeImage.put(Questionnaire.answ12, path+ "1.png");
 		scopeImage.put(Questionnaire.answ11, null);
 		scopeImage.put(Questionnaire.answ1111, path + "3.png");
@@ -491,14 +480,19 @@ public class QuestionTreePage extends WizardPage {
 
 							if(parameters.size()>0){
 								for(Parameter argument:parameters){
-									System.out.println("argument.getType() = " + argument.getType());
-//									System.out.println("argument.getType().getClass() = " + argument.getType().getClass());
-									if(argument.getType()!=null && argument.getType().getClass().equals(PrimitiveTypeImpl.class)){ //convert type from UML to mCRL2
-										String type = determinePrimitiveType((PrimitiveTypeImpl)argument.getType());
-										trObj.parameterTypes.put(argument.getName(), type);
-									} else {
+									if(argument.getType()!=null){ //convert type from UML to mCRL2
+										try{
+											System.out.println("OKAY THEN WHAT IS THE TYPE: " + argument.getType().getClass().getInterfaces());
+											String type = determinePrimitiveType((org.eclipse.uml2.uml.internal.impl.PrimitiveTypeImpl) argument.getType());
+											System.out.println("determined type = " + type);
+											trObj.parameterTypes.put(argument.getName(), type);
+										}catch(ClassCastException ex){
+											System.out.println("Caught the exception..." + ex);
+											trObj.parameterTypes.put(argument.getName(), "ClassObject");
+										}
+									
+									} else 
 										trObj.parameterTypes.put(argument.getName(), "ClassObject");
-									}
 									
 									if(argument.getDirection().equals(ParameterDirectionKind.RETURN_LITERAL) 
 											|| argument.getDirection().equals(ParameterDirectionKind.OUT_LITERAL)){
