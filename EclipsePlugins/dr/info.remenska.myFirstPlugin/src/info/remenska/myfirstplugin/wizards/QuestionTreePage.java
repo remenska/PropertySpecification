@@ -715,11 +715,11 @@ class TraceLine{
 	public String toString(){
 		StringBuffer tmp = new StringBuffer();
 		if(this.isAsynchronous)
-			tmp.append("asynch_call(");
+			tmp.append("asynch_call(1, ");
 		else if(isReply())
-			tmp.append("synch_reply(");
+			tmp.append("synch_reply(1, ");
 		else
-			tmp.append("synch_call(");
+			tmp.append("synch_call(1, ");
 		
 		tmp.append(getClassName()+", ");
 		tmp.append(getObjectName()+", ");
