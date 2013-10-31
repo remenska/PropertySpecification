@@ -258,9 +258,11 @@ public class DisciplinedEnglishPage  extends WizardPage  {
 	    if(traceLinesToChange.size()!=0){
 	    final Button setThem = new Button(parametersComposite, SWT.PUSH);
 	    setThem.setText("Assign them!");
-	    
+
 	    setThem.addSelectionListener(new SelectionAdapter() {
 		      public void widgetSelected(SelectionEvent event) {
+		  		StringBuffer quantifiers = new StringBuffer();
+
 		    	  Control[] events =  parametersComposite.getChildren();
 		    	  for(Text tl:traceLinesToChange){
 		    		  for(Control group:events){
@@ -275,18 +277,49 @@ public class DisciplinedEnglishPage  extends WizardPage  {
 			    				  TraceLine toChangeTL = QuestionTreePage.traceLineMap.get(tl);
 			    				  Control[] argumentsText = ((Group)group).getChildren();
 			    				  String[] argsString = new String[argumentsText.length];
+
+		    					  String[] paramNames;
+		    					  if (toChangeTL.isReply)
+		    						  paramNames = toChangeTL.getReturnParamNames();
+		    					  else
+		    						  paramNames = toChangeTL.getParamNames(); 
+		    					  
 			    				  int i=0;
 			    				  for(Control argsText:argumentsText){
 			    					  
-			    					  if(((Text)argsText).getText().equals("*"))
-			    						   argsString[i++] = parameterTypes.get((Text)argsText);
-			    						  else 	  
-			    							 argsString[i++] = ((Text)argsText).getText(); //new argument values taken from text fields	  
+//			    					  if(((Text)argsText).getText().equals("*"))
+//			    						   argsString[i++] = parameterTypes.get((Text)argsText);
+//			    						  else 	  
+			    					  
+//			    							 for(String paramName:paramNames){
+			    								 if(((Text)argsText).getText().equals("*"))	{
+			    									 if(quantifiers.indexOf(paramNames[i])!=-1){ //that parameter name already exists, add some randomness in the name
+			    										 int random = (int )(Math.random() * 100 + 1);
+			    										 quantifiers.append("forall " + paramNames[i] + random + ":" + parameterTypes.get((Text)argsText) +". ");
+						    							 argsString[i] = paramNames[i] + random ;	 
+			    									 }else {
+			    										 quantifiers.append("forall " + paramNames[i] + ":" + parameterTypes.get((Text)argsText) +". ");
+						    							 argsString[i] = paramNames[i];	 
+			    									 }
+					    						 }else
+					    							 argsString[i] = ((Text)argsText).getText(); //new argument values taken from text fields	  
+				    							 
+//					    					  }
+			    							 i++;
 			    				  }
-			    				  if(toChangeTL.isReply)
+			    				  if(toChangeTL.isReply){
+			    					  // if it's a value, we don't need a quantifier, otherwise we need to pre
+			    					  // the formula with forall nameParam:DomainParam
+			    					  
 			    					  toChangeTL.setReturnParams(argsString);
-			    				  else
+
+			    				  }
+			    				  else {
+			    					  
 			    					  toChangeTL.setParameters(argsString);
+			    					  
+			    				  }
+			    				  
 			    				  QuestionTreePage.traceLineMap.put(tl, toChangeTL);
 			    				  
 			    			  }
@@ -296,8 +329,7 @@ public class DisciplinedEnglishPage  extends WizardPage  {
 		    		  }
 		    	  }  
 		    		  //and again
-		    		  
-		    		  
+		    	  	
 		    			StringBuffer modifiedBuffer = new StringBuffer();
 		    			modifiedBuffer.append(Pattern.patterns.get(QuestionTreePage.scope).get(QuestionTreePage.behavior));
 		    			modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll(" Q ", " "+QuestionTreePage.traceLineMap.get(QuestionTreePage.textStartEvent).toString())+"  ");
@@ -355,7 +387,7 @@ public class DisciplinedEnglishPage  extends WizardPage  {
 		    				modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll(" Z ", " "+QuestionTreePage.traceLineMap.get(QuestionTreePage.textEventX).toString())+"  ");
 
 		    			}
-		    			
+		    			modifiedBuffer = new StringBuffer(quantifiers + "" + modifiedBuffer);
 		    			textFormula.setText(modifiedBuffer.toString());
 		    		  //END and again
 		    	  

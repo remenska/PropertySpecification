@@ -298,7 +298,6 @@ public class QuestionTreePage extends WizardPage {
 	
 	public static String determinePrimitiveType(org.eclipse.uml2.uml.internal.impl.PrimitiveTypeImpl typearg) {
 		// System.out.println("typeArg:"+typearg+";"+typearg.eIsProxy());
-		System.out.println("inside determinePrimitive type: " + typearg.getName());
 			if (typearg.getName().equals("Integer"))
 				return "Int";
 			else if (typearg.getName().equals("Boolean"))
@@ -314,7 +313,7 @@ public class QuestionTreePage extends WizardPage {
 
 	
 	public static void fillTreeMap(){
-		String path = "/home/daniela/git/PropertySpecification/ScopeTimelineView/";
+		String path = "/home/daniela/IBM/rationalsdp/workspace1/git/PropertySpecification/ScopeTimelineView/";
 		scopeImage.put(Questionnaire.answ12, path+ "1.png");
 		scopeImage.put(Questionnaire.answ11, null);
 		scopeImage.put(Questionnaire.answ1111, path + "3.png");
@@ -482,12 +481,10 @@ public class QuestionTreePage extends WizardPage {
 								for(Parameter argument:parameters){
 									if(argument.getType()!=null){ //convert type from UML to mCRL2
 										try{
-											System.out.println("OKAY THEN WHAT IS THE TYPE: " + argument.getType().getClass().getInterfaces());
 											String type = determinePrimitiveType((org.eclipse.uml2.uml.internal.impl.PrimitiveTypeImpl) argument.getType());
-											System.out.println("determined type = " + type);
 											trObj.parameterTypes.put(argument.getName(), type);
 										}catch(ClassCastException ex){
-											System.out.println("Caught the exception..." + ex);
+											System.out.println("Not a primitive type" + ex);
 											trObj.parameterTypes.put(argument.getName(), "ClassObject");
 										}
 									
@@ -503,10 +500,16 @@ public class QuestionTreePage extends WizardPage {
 										paramsList.add(argument.getName());
 									}
 								}
-								if(paramsList.size()!=0)
+								if(paramsList.size()!=0){
 									trObj.setParameters(paramsList.toArray(new String[paramsList.size()]));
-								if(paramsListReturn.size()!=0)
-								trObj.setReturnParams(paramsListReturn.toArray(new String[paramsListReturn.size()]));
+									trObj.setParamNames(paramsList.toArray(new String[paramsList.size()]));
+
+								}
+								if(paramsListReturn.size()!=0){
+									trObj.setReturnParams(paramsListReturn.toArray(new String[paramsListReturn.size()]));
+									trObj.setReturnParamNames(paramsListReturn.toArray(new String[paramsListReturn.size()]));
+
+								}
 							}
 							
 							if (selected.get(0).getMessageSort().getLiteral().equals("reply"))
@@ -653,6 +656,26 @@ class TraceLine{
 	public String className;
 	public String[] parameters = null;
 	public String[] returnParams = null;
+	public String[] getParamNames() {
+		return paramNames;
+	}
+
+	public void setParamNames(String[] paramNames) {
+		this.paramNames = paramNames;
+	}
+
+	public String[] getReturnParamNames() {
+		return returnParamNames;
+	}
+
+	public void setReturnParamNames(String[] returnParamNames) {
+		this.returnParamNames = returnParamNames;
+	}
+
+
+
+	public String[] paramNames = null;
+	public String[] returnParamNames = null;
 	public LinkedHashMap<String, String> parameterTypes = new LinkedHashMap<String,String>(); 
 
 	public String[] getReturnParams() {
