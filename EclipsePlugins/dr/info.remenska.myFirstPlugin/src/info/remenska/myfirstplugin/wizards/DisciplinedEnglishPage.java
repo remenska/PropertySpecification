@@ -262,8 +262,9 @@ public class DisciplinedEnglishPage  extends WizardPage  {
 	    setThem.addSelectionListener(new SelectionAdapter() {
 		      public void widgetSelected(SelectionEvent event) {
 		  		StringBuffer quantifiers = new StringBuffer();
-
+		  	
 		    	  Control[] events =  parametersComposite.getChildren();
+		    	  
 		    	  for(Text tl:traceLinesToChange){
 		    		  for(Control group:events){
 		    			  if(group instanceof Group && QuestionTreePage.traceLineMap.get(tl).getMethodCall()!=null){
@@ -290,7 +291,17 @@ public class DisciplinedEnglishPage  extends WizardPage  {
 //			    					  if(((Text)argsText).getText().equals("*"))
 //			    						   argsString[i++] = parameterTypes.get((Text)argsText);
 //			    						  else 	  
-			    					  
+			    					  if(toChangeTL.equals(QuestionTreePage.traceLineMap.get(QuestionTreePage.textEventA))){
+			    						if (QuestionTreePage.behavior.equals("Universality")) { // special treatment 
+			    							argsString[i] = ((Text)argsText).getText();
+			    							quantifiers.insert(0,"forall " + paramNames[i] + ":" + parameterTypes.get((Text)argsText) +".val( " + paramNames[i] + "!= " + argsString[i] + "). ");
+			    							i++;
+			    							if(i == argumentsText.length){
+			    								quantifiers = new StringBuffer(quantifiers.substring(0, quantifiers.length()-2));
+			    								quantifiers.append(" => ");
+			    							}
+			    				  		} 
+			    					  }else{
 //			    							 for(String paramName:paramNames){
 			    								 if(((Text)argsText).getText().equals("*"))	{
 			    									 if(quantifiers.indexOf(paramNames[i])!=-1){ //that parameter name already exists, add some randomness in the name
@@ -306,6 +317,7 @@ public class DisciplinedEnglishPage  extends WizardPage  {
 				    							 
 //					    					  }
 			    							 i++;
+			    				  		}
 			    				  }
 			    				  if(toChangeTL.isReply){
 			    					  // if it's a value, we don't need a quantifier, otherwise we need to pre
@@ -327,9 +339,9 @@ public class DisciplinedEnglishPage  extends WizardPage  {
 		    			 
 		    			  		
 		    		  }
-		    	  }  
+		    	   
 		    		  //and again
-		    	  	
+		      }	
 		    			StringBuffer modifiedBuffer = new StringBuffer();
 		    			modifiedBuffer.append(Pattern.patterns.get(QuestionTreePage.scope).get(QuestionTreePage.behavior));
 		    			modifiedBuffer = new StringBuffer(modifiedBuffer.toString().replaceAll(" Q ", " "+QuestionTreePage.traceLineMap.get(QuestionTreePage.textStartEvent).toString())+"  ");

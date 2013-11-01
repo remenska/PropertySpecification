@@ -67,11 +67,16 @@ public class Pattern {
 	   addPattern("After Q until R variant", "Existence", "[true*. Q ](([true*. Q ] false) =>  mu X. <true> true and [ R ] false and [not P ] X) ");
 	   
 	   //TODO: missing Universality scope variations!!!
-	   addPattern("Globally", "Universality", "[true*. not P ] false ");
-	   addPattern("Before R", "Universality", "[(not R )*. not ( P or R ). (not R )*. R ] false ");
-	   addPattern("After Q", "Universality", "[(not Q )*. Q . true*. not P ] false ");
-	   addPattern("Between Q and R", "Universality", "[true*. Q . (not R )*. not ( P or R ). (not R )*. R ] false");
-	   addPattern("After Q until R", "Universality", "[true*. Q . (not R )*. not ( P or R )] false ");
+	   // actually it's the same as absence, but we're just using val(xx)  instead of false
+	   
+	   addPattern("Globally", "Universality", "[true*. P ] false ");
+	   addPattern("Before R", "Universality", "[(not R )*. P . (not R )*. R ] false ");
+	   addPattern("Before R variant", "Universality", "[(not R )*. P ] false "); 
+	   addPattern("After Q", "Universality", "[(not Q )*. Q . true*. P ] false ");
+	   addPattern("Between Q and R", "Universality", "[true*. Q . (not R )*. P . (not R )*. R ] false ");
+	   addPattern("After Q variant", "Universality", "[true*. Q ](([true*. Q ]false) => [true*. ( P + Q )]false )"); 
+	   addPattern("After Q until R", "Universality", "[true*. Q . (not R )*. P ] false ");
+	   addPattern("Between Q and R variant", "Universality", "[true*. Q ](([true*. Q ]false ) => [(not R )*. P . (not R )*. R ] false) " ); 
 	   
 	   addPattern("Globally", "Precedence", "[(not P )*. S ] false ");
 	   addPattern("Before R" , "Precedence" , "[(not ( P or R ))*. S . (not R )*. R ] false " );
@@ -329,10 +334,12 @@ public class Pattern {
 	  Questionnaire.aansw1112.setBehavior("Existence");
 	  Questionnaire.aansw1113.setBehavior("Bounded Existence");
 	  Questionnaire.aansw121212.setBehavior("Precedence"); 
-	  Questionnaire.aansw121211.setBehavior("Precedence variant"); // can it be implemented?
+	  Questionnaire.aansw121211.setBehavior("Precedence variant");
 //	  Questionnaire.aansw1222.setBehavior("Response");
 	  Questionnaire.aansw121112.setBehavior("Response");
-	  Questionnaire.aansw121111.setBehavior("Response variant"); // can it be implemented?
+	  Questionnaire.aansw121111.setBehavior("Response variant"); 
+	  Questionnaire.aansw1114.setBehavior("Universality");
+
 	  // OK
 	  Questionnaire.aansw131111.setBehavior("Response Chain 2");
 	  Questionnaire.aansw131112.setBehavior("Constrained Response Chain 2");
